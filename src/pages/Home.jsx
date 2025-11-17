@@ -39,7 +39,7 @@ const Home = () => {
           }`}
           style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
         >
-          Build your future, one opportunity at a time
+          Build Your Future, One Opportunity At a Time
         </p>
         
         {/* Description with better readability */}
@@ -49,7 +49,7 @@ const Home = () => {
           }`}
           style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
         >
-          Your all-in-one tracker for internships, hackathons, deadlines, and progress.
+          Your All-In-One Tracker for internships, hackathons, deadlines, and progress.
         </p>
         
         {/* Premium CTA Button with gradient and glow */}
