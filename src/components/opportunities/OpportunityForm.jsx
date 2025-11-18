@@ -72,10 +72,10 @@ const OpportunityForm = ({ initialData = {}, onSubmit, isEdit = false }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-6">
       {/* Title */}
       <div>
-        <label htmlFor="title" className="block text-sm font-medium text-gray-300 mb-1">
+        <label htmlFor="title" className="block text-sm font-medium text-gray-200 mb-1">
           Title <span className="text-red-400">*</span>
         </label>
         <input
@@ -84,8 +84,8 @@ const OpportunityForm = ({ initialData = {}, onSubmit, isEdit = false }) => {
           name="title"
           value={formData.title}
           onChange={handleChange}
-          className={`w-full px-3 py-2 bg-gray-700 border rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-            errors.title ? 'border-red-500' : 'border-gray-600'
+          className={`w-full px-3 py-2 bg-slate-800/60 border rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all ${
+            errors.title ? 'border-red-500' : 'border-slate-700'
           }`}
           placeholder="e.g., React Intern at ABC Company"
         />
@@ -94,7 +94,7 @@ const OpportunityForm = ({ initialData = {}, onSubmit, isEdit = false }) => {
 
       {/* Description */}
       <div>
-        <label htmlFor="description" className="block text-sm font-medium text-gray-300 mb-1">
+        <label htmlFor="description" className="block text-sm font-medium text-gray-200 mb-1">
           Description
         </label>
         <textarea
@@ -103,14 +103,14 @@ const OpportunityForm = ({ initialData = {}, onSubmit, isEdit = false }) => {
           value={formData.description}
           onChange={handleChange}
           rows="3"
-          className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-3 py-2 bg-slate-800/60 border border-slate-700 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
           placeholder="Brief description of the opportunity"
         />
       </div>
 
       {/* Link */}
       <div>
-        <label htmlFor="link" className="block text-sm font-medium text-gray-300 mb-1">
+        <label htmlFor="link" className="block text-sm font-medium text-gray-200 mb-1">
           Link
         </label>
         <input
@@ -119,14 +119,14 @@ const OpportunityForm = ({ initialData = {}, onSubmit, isEdit = false }) => {
           name="link"
           value={formData.link}
           onChange={handleChange}
-          className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-3 py-2 bg-slate-800/60 border border-slate-700 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
           placeholder="https://example.com/apply"
         />
       </div>
 
       {/* Deadline */}
       <div>
-        <label htmlFor="deadline" className="block text-sm font-medium text-gray-300 mb-1">
+        <label htmlFor="deadline" className="block text-sm font-medium text-gray-200 mb-1">
           Deadline <span className="text-red-400">*</span>
         </label>
         <input
@@ -135,8 +135,8 @@ const OpportunityForm = ({ initialData = {}, onSubmit, isEdit = false }) => {
           name="deadline"
           value={formData.deadline}
           onChange={handleChange}
-          className={`w-full px-3 py-2 bg-gray-700 border rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-            errors.deadline ? 'border-red-500' : 'border-gray-600'
+          className={`w-full px-3 py-2 bg-slate-800/60 border rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all ${
+            errors.deadline ? 'border-red-500' : 'border-slate-700'
           }`}
         />
         {errors.deadline && <p className="text-red-400 text-sm mt-1">{errors.deadline}</p>}
@@ -144,29 +144,29 @@ const OpportunityForm = ({ initialData = {}, onSubmit, isEdit = false }) => {
 
       {/* Category */}
       <div>
-        <label className="block text-sm font-medium text-gray-300 mb-2">
+        <label className="block text-sm font-medium text-gray-200 mb-2">
           Category <span className="text-red-400">*</span>
         </label>
-        <div className="flex gap-4">
-          <label className="flex items-center">
+        <div className="flex items-center gap-6">
+          <label className="flex items-center cursor-pointer">
             <input
               type="radio"
               name="category"
               value="internship"
               checked={formData.category === 'internship'}
               onChange={handleChange}
-              className="mr-2"
+              className="mr-2 w-4 h-4 text-blue-600"
             />
             <span className="text-sm text-gray-300">Internship</span>
           </label>
-          <label className="flex items-center">
+          <label className="flex items-center cursor-pointer">
             <input
               type="radio"
               name="category"
               value="hackathon"
               checked={formData.category === 'hackathon'}
               onChange={handleChange}
-              className="mr-2"
+              className="mr-2 w-4 h-4 text-blue-600"
             />
             <span className="text-sm text-gray-300">Hackathon</span>
           </label>
@@ -176,7 +176,7 @@ const OpportunityForm = ({ initialData = {}, onSubmit, isEdit = false }) => {
 
       {/* Status */}
       <div>
-        <label htmlFor="status" className="block text-sm font-medium text-gray-300 mb-1">
+        <label htmlFor="status" className="block text-sm font-medium text-gray-200 mb-1">
           Status
         </label>
         <select
@@ -184,7 +184,7 @@ const OpportunityForm = ({ initialData = {}, onSubmit, isEdit = false }) => {
           name="status"
           value={formData.status}
           onChange={handleChange}
-          className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-3 py-2 bg-slate-800/60 border border-slate-700 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
         >
           <option value="applied">Applied</option>
           <option value="shortlisted">Shortlisted</option>
@@ -196,7 +196,7 @@ const OpportunityForm = ({ initialData = {}, onSubmit, isEdit = false }) => {
 
       {/* Notes */}
       <div>
-        <label htmlFor="notes" className="block text-sm font-medium text-gray-300 mb-1">
+        <label htmlFor="notes" className="block text-sm font-medium text-gray-200 mb-1">
           Notes
         </label>
         <textarea
@@ -205,14 +205,14 @@ const OpportunityForm = ({ initialData = {}, onSubmit, isEdit = false }) => {
           value={formData.notes}
           onChange={handleChange}
           rows="3"
-          className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-3 py-2 bg-slate-800/60 border border-slate-700 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
           placeholder="Additional notes or preparation tasks"
         />
       </div>
 
       {/* Submit Button */}
       <div className="flex gap-3 pt-4">
-        <Button type="submit" variant="primary" className="flex-1">
+        <Button type="submit" className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-md">
           {isEdit ? 'Update Opportunity' : 'Create Opportunity'}
         </Button>
       </div>

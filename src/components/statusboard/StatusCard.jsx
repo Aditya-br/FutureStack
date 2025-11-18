@@ -1,7 +1,8 @@
 import React from 'react';
+import { FaTrash } from 'react-icons/fa';
 import { formatDate } from '../../utils/dateHelpers';
 
-const StatusCard = ({ opportunity, onStatusChange }) => {
+const StatusCard = ({ opportunity, onStatusChange, onDelete }) => {
   const categoryColors = {
     internship: 'bg-indigo-100 text-indigo-800',
     hackathon: 'bg-pink-100 text-pink-800',
@@ -16,8 +17,19 @@ const StatusCard = ({ opportunity, onStatusChange }) => {
 
   return (
     <div className="bg-gray-800 border border-gray-700 rounded-lg shadow-md p-4 mb-3 hover:shadow-lg hover:border-gray-600 transition-all">
-      {/* Title */}
-      <h4 className="font-semibold text-white mb-2">{opportunity.title}</h4>
+      {/* Header with Title and Delete Button */}
+      <div className="flex items-start justify-between mb-2">
+        <h4 className="font-semibold text-white flex-1">{opportunity.title}</h4>
+        {onDelete && (
+          <button
+            onClick={() => onDelete(opportunity.id)}
+            className="text-red-400 hover:text-red-300 transition-colors p-1 rounded-md hover:bg-red-900 hover:bg-opacity-30 ml-2"
+            aria-label="Delete opportunity"
+          >
+            <FaTrash size={14} />
+          </button>
+        )}
+      </div>
 
       {/* Category Badge */}
       <span

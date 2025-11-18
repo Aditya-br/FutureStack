@@ -1,7 +1,7 @@
 import React from 'react';
 import StatusCard from './StatusCard';
 
-const StatusColumn = ({ status, opportunities, onStatusChange }) => {
+const StatusColumn = ({ status, opportunities, onStatusChange, onDelete }) => {
   // Status display configuration
   const statusConfig = {
     applied: {
@@ -40,19 +40,19 @@ const StatusColumn = ({ status, opportunities, onStatusChange }) => {
   const count = opportunities.length;
 
   return (
-    <div className="flex-shrink-0 w-80">
+    <div className="flex-shrink-0 w-72 sm:w-80">
       {/* Column Header */}
-      <div className={`${config.headerColor} text-white rounded-t-lg p-4`}>
-        <h3 className="font-semibold text-lg flex items-center justify-between">
+      <div className={`${config.headerColor} text-white rounded-t-lg p-3 sm:p-4`}>
+        <h3 className="font-semibold text-base sm:text-lg flex items-center justify-between">
           <span>{config.title}</span>
-          <span className="bg-white bg-opacity-30 px-2 py-1 rounded-full text-sm">
+          <span className="bg-white bg-opacity-30 px-2 py-1 rounded-full text-xs sm:text-sm font-bold">
             {count}
           </span>
         </h3>
       </div>
 
       {/* Column Content */}
-      <div className={`${config.color} border-2 border-t-0 rounded-b-lg p-4 min-h-[400px] max-h-[600px] overflow-y-auto bg-opacity-10`}>
+      <div className={`${config.color} border-2 border-t-0 rounded-b-lg p-3 sm:p-4 min-h-[400px] max-h-[600px] overflow-y-auto bg-opacity-10`}>
         {opportunities.length === 0 ? (
           <p className="text-gray-400 text-sm text-center py-8">No opportunities</p>
         ) : (
@@ -61,6 +61,7 @@ const StatusColumn = ({ status, opportunities, onStatusChange }) => {
               key={opportunity.id}
               opportunity={opportunity}
               onStatusChange={onStatusChange}
+              onDelete={onDelete}
             />
           ))
         )}

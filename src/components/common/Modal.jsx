@@ -45,19 +45,19 @@ const Modal = ({
       />
 
       {/* Modal Container */}
-      <div className="flex min-h-full items-center justify-center p-4">
+      <div className="flex min-h-full items-end sm:items-center justify-center p-0 sm:p-4">
         <div 
-          className={`relative bg-gray-800 rounded-lg shadow-xl border border-gray-700 max-w-lg w-full ${className}`}
+          className={`relative bg-gray-800 rounded-t-2xl sm:rounded-lg shadow-xl border border-gray-700 max-w-lg w-full ${className} transform transition-all`}
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
           {(title || showCloseButton) && (
-            <div className="flex items-center justify-between p-4 border-b border-gray-700">
-              {title && <h3 className="text-lg font-semibold text-white">{title}</h3>}
+            <div className="flex items-center justify-between p-4 sm:p-5 border-b border-gray-700">
+              {title && <h3 className="text-lg sm:text-xl font-semibold text-white">{title}</h3>}
               {showCloseButton && (
                 <button
                   onClick={onClose}
-                  className="text-gray-400 hover:text-gray-200 transition-colors p-1 rounded-md hover:bg-gray-700"
+                  className="text-gray-400 hover:text-gray-200 transition-colors p-2 rounded-md hover:bg-gray-700"
                   aria-label="Close modal"
                 >
                   <FaTimes size={20} />
@@ -67,7 +67,7 @@ const Modal = ({
           )}
 
           {/* Content */}
-          <div className="p-4">
+          <div className="p-4 sm:p-5 max-h-[70vh] overflow-y-auto">
             {children}
           </div>
         </div>

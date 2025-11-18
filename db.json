@@ -1,3 +1,54 @@
 {
-  "opportunities": []
+  "opportunities": [
+    {
+      "id": "3913",
+      "title": "SDE 1 at Google",
+      "description": "",
+      "link": "https://www.google.com/about/careers/applications/jobs/results?location=India",
+      "deadline": "2025-11-28",
+      "category": "internship",
+      "status": "applied",
+      "notes": ""
+    },
+    {
+      "id": "8d34",
+      "title": "Smart India Hackathon",
+      "description": "",
+      "link": "",
+      "deadline": "2025-12-01",
+      "category": "hackathon",
+      "status": "interviewed",
+      "notes": ""
+    },
+    {
+      "id": "f0b4",
+      "title": "Technical Intern at Barclays",
+      "description": "",
+      "link": "",
+      "deadline": "2025-11-27",
+      "category": "internship",
+      "status": "shortlisted",
+      "notes": ""
+    },
+    {
+      "id": "7737",
+      "title": "NxtWave Hackathon",
+      "description": "",
+      "link": "",
+      "deadline": "2026-01-01",
+      "category": "hackathon",
+      "status": "selected",
+      "notes": ""
+    },
+    {
+      "id": "bed4",
+      "title": "React Intern at AB Company",
+      "description": "",
+      "link": "",
+      "deadline": "2025-11-18",
+      "category": "internship",
+      "status": "applied",
+      "notes": ""
+    }
+  ]
 }

@@ -24,15 +24,15 @@ const OpportunityCard = ({ opportunity, onEdit, onDelete }) => {
   };
 
   return (
-    <Card hover className="p-4">
+    <Card hover className="p-5">
       <div className="flex flex-col h-full">
         {/* Header with badges */}
         <div className="flex items-start justify-between mb-3">
-          <h3 className="text-lg font-semibold text-white flex-1 mr-2">
+          <h3 className="text-lg font-semibold text-white flex-1 mr-2 hover:text-blue-400 transition-colors">
             {opportunity.title}
           </h3>
           <span
-            className={`px-2 py-1 rounded-full text-xs font-medium ${
+            className={`px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap ${
               categoryColors[opportunity.category] || 'bg-gray-700 text-gray-300'
             }`}
           >
@@ -78,29 +78,29 @@ const OpportunityCard = ({ opportunity, onEdit, onDelete }) => {
             href={opportunity.link}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-blue-400 hover:text-blue-300 text-sm flex items-center mb-4"
+            className="text-blue-400 hover:text-blue-300 hover:underline text-sm flex items-center mb-4 transition-all"
           >
-            <FaExternalLinkAlt className="mr-1" size={12} />
+            <FaExternalLinkAlt className="mr-1.5" size={12} />
             View Opportunity
           </a>
         )}
 
         {/* Action Buttons */}
-        <div className="flex gap-2 mt-auto">
+        <div className="flex gap-2 mt-auto pt-2">
           <Button
             variant="primary"
             onClick={() => onEdit(opportunity.id)}
-            className="flex-1 flex items-center justify-center"
+            className="flex-1 flex items-center justify-center text-sm"
           >
-            <FaEdit className="mr-1" />
+            <FaEdit className="mr-1.5" size={14} />
             Edit
           </Button>
           <Button
             variant="danger"
             onClick={() => onDelete(opportunity.id)}
-            className="flex-1 flex items-center justify-center"
+            className="flex-1 flex items-center justify-center text-sm"
           >
-            <FaTrash className="mr-1" />
+            <FaTrash className="mr-1.5" size={14} />
             Delete
           </Button>
         </div>

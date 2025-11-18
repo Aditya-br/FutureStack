@@ -7,8 +7,8 @@ const Card = ({
   onClick,
   ...props 
 }) => {
-  const baseStyles = 'bg-gray-800 rounded-lg shadow-md border border-gray-700 transition-all';
-  const hoverStyles = hover ? 'hover:shadow-lg hover:border-gray-600 cursor-pointer' : '';
+  const baseStyles = 'bg-gray-800 rounded-lg shadow-md border border-gray-700 transition-all duration-200';
+  const hoverStyles = hover ? 'hover:shadow-xl hover:border-gray-600 hover:-translate-y-1 cursor-pointer' : '';
   
   return (
     <div

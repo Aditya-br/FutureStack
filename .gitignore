@@ -24,3 +24,11 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Testing documentation
+INTEGRATION_TEST_RESULTS.md
+MANUAL_TESTING_GUIDE.md
+TESTING_SUMMARY.md
+QUICK_START.md
+REQUIREMENTS_VERIFICATION.md
+
