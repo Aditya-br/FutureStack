@@ -6,34 +6,34 @@ const StatusColumn = ({ status, opportunities, onStatusChange, onDelete }) => {
   const statusConfig = {
     applied: {
       title: 'Applied',
-      color: 'bg-blue-100 border-blue-500',
+      color: 'bg-blue-500/5 border-blue-500/20',
       headerColor: 'bg-blue-600',
     },
     shortlisted: {
       title: 'Shortlisted',
-      color: 'bg-yellow-100 border-yellow-500',
-      headerColor: 'bg-yellow-500',
+      color: 'bg-yellow-500/5 border-yellow-500/20',
+      headerColor: 'bg-yellow-600',
     },
     interviewed: {
       title: 'Interviewed',
-      color: 'bg-purple-100 border-purple-500',
+      color: 'bg-purple-500/5 border-purple-500/20',
       headerColor: 'bg-purple-600',
     },
     selected: {
       title: 'Selected',
-      color: 'bg-green-100 border-green-500',
+      color: 'bg-green-500/5 border-green-500/20',
       headerColor: 'bg-green-600',
     },
     rejected: {
       title: 'Rejected',
-      color: 'bg-red-100 border-red-500',
+      color: 'bg-red-500/5 border-red-500/20',
       headerColor: 'bg-red-600',
     },
   };
 
   const config = statusConfig[status] || {
     title: status,
-    color: 'bg-gray-100 border-gray-500',
+    color: 'bg-gray-500/5 border-gray-500/20',
     headerColor: 'bg-gray-600',
   };
 
@@ -52,7 +52,7 @@ const StatusColumn = ({ status, opportunities, onStatusChange, onDelete }) => {
       </div>
 
       {/* Column Content */}
-      <div className={`${config.color} border-2 border-t-0 rounded-b-lg p-3 sm:p-4 min-h-[400px] max-h-[600px] overflow-y-auto bg-opacity-10`}>
+      <div className={`${config.color} border-2 border-t-0 rounded-b-lg p-3 sm:p-4 min-h-[400px] max-h-[600px] overflow-y-auto`}>
         {opportunities.length === 0 ? (
           <p className="text-gray-400 text-sm text-center py-8">No opportunities</p>
         ) : (

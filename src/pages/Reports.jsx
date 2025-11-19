@@ -106,7 +106,7 @@ const Reports = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-900 p-4 sm:p-6">
+      <div className="min-h-screen bg-black p-4 sm:p-6">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col items-center justify-center py-20">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500 mb-4"></div>
@@ -118,7 +118,7 @@ const Reports = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 p-4 sm:p-6">
+    <div className="min-h-screen bg-black p-4 sm:p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-6 sm:mb-8">
@@ -270,13 +270,12 @@ const Reports = () => {
                     previewOpportunities.map((opp) => (
                       <div
                         key={opp.id}
-                        className={`p-4 rounded-lg border ${
-                          exportType === 'selected'
-                            ? selectedIds.includes(opp.id)
-                              ? 'border-blue-500 bg-blue-900 bg-opacity-10'
-                              : 'border-gray-700 bg-gray-800 bg-opacity-30'
-                            : 'border-gray-700 bg-gray-800 bg-opacity-30'
-                        }`}
+                        className={`p-4 rounded-lg border ${exportType === 'selected'
+                          ? selectedIds.includes(opp.id)
+                            ? 'border-blue-500 bg-blue-500/10'
+                            : 'border-white/10 bg-white/5'
+                          : 'border-white/10 bg-white/5'
+                          }`}
                       >
                         <div className="flex items-start">
                           {exportType === 'selected' && (

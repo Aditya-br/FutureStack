@@ -10,17 +10,17 @@ const OpportunityCard = ({ opportunity, onEdit, onDelete }) => {
 
   // Status badge colors
   const statusColors = {
-    applied: 'bg-blue-100 text-blue-800',
-    shortlisted: 'bg-yellow-100 text-yellow-800',
-    interviewed: 'bg-purple-100 text-purple-800',
-    selected: 'bg-green-100 text-green-800',
-    rejected: 'bg-red-100 text-red-800',
+    applied: 'bg-blue-500/10 text-blue-400 border border-blue-500/20',
+    shortlisted: 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/20',
+    interviewed: 'bg-purple-500/10 text-purple-400 border border-purple-500/20',
+    selected: 'bg-green-500/10 text-green-400 border border-green-500/20',
+    rejected: 'bg-red-500/10 text-red-400 border border-red-500/20',
   };
 
   // Category badge colors
   const categoryColors = {
-    internship: 'bg-indigo-100 text-indigo-800',
-    hackathon: 'bg-pink-100 text-pink-800',
+    internship: 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20',
+    hackathon: 'bg-pink-500/10 text-pink-400 border border-pink-500/20',
   };
 
   return (
@@ -32,9 +32,8 @@ const OpportunityCard = ({ opportunity, onEdit, onDelete }) => {
             {opportunity.title}
           </h3>
           <span
-            className={`px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap ${
-              categoryColors[opportunity.category] || 'bg-gray-700 text-gray-300'
-            }`}
+            className={`px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap ${categoryColors[opportunity.category] || 'bg-gray-500/10 text-gray-400 border border-gray-500/20'
+              }`}
           >
             {opportunity.category}
           </span>
@@ -53,9 +52,8 @@ const OpportunityCard = ({ opportunity, onEdit, onDelete }) => {
             Deadline: <span className="font-medium text-gray-300">{formatDate(opportunity.deadline)}</span>
           </p>
           <p
-            className={`text-sm font-medium ${
-              overdue ? 'text-red-400' : 'text-gray-300'
-            }`}
+            className={`text-sm font-medium ${overdue ? 'text-red-400' : 'text-gray-300'
+              }`}
           >
             {overdue ? `Overdue by ${Math.abs(daysRemaining)} days` : `${daysRemaining} days remaining`}
           </p>
@@ -64,9 +62,8 @@ const OpportunityCard = ({ opportunity, onEdit, onDelete }) => {
         {/* Status Badge */}
         <div className="mb-4">
           <span
-            className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${
-              statusColors[opportunity.status] || 'bg-gray-700 text-gray-300'
-            }`}
+            className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${statusColors[opportunity.status] || 'bg-gray-500/10 text-gray-400 border border-gray-500/20'
+              }`}
           >
             {opportunity.status.charAt(0).toUpperCase() + opportunity.status.slice(1)}
           </span>

@@ -22,12 +22,16 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex justify-between items-center h-16">
           {/* Logo/Brand with improved typography */}
-          <Link 
-            to="/" 
-            className="text-xl font-semibold tracking-tight text-white hover:text-blue-400 transition-colors"
-            style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
+          <Link
+            to="/"
+            className="flex items-center gap-2 group"
           >
-            FutureStack
+            <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center group-hover:scale-105 transition-transform">
+              <span className="font-bold text-black text-xl">F</span>
+            </div>
+            <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400 transition-all">
+              FutureStack
+            </span>
           </Link>
 
           {/* Desktop Navigation with improved spacing */}
@@ -36,11 +40,10 @@ const Navbar = () => {
               <Link
                 key={link.path}
                 to={link.path}
-                className={`text-sm font-medium transition-all duration-200 ${
-                  isActive(link.path)
-                    ? 'text-white font-semibold'
-                    : 'text-gray-300 hover:text-white'
-                }`}
+                className={`text-sm font-medium transition-all duration-200 ${isActive(link.path)
+                  ? 'text-white font-semibold'
+                  : 'text-gray-300 hover:text-white'
+                  }`}
                 style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
               >
                 {link.label}
@@ -68,11 +71,10 @@ const Navbar = () => {
                 key={link.path}
                 to={link.path}
                 onClick={() => setIsOpen(false)}
-                className={`block py-3 px-4 rounded-md text-base font-medium transition-colors ${
-                  isActive(link.path)
-                    ? 'bg-blue-600/20 text-blue-400 font-semibold'
-                    : 'text-gray-300 hover:bg-white/10 hover:text-white'
-                }`}
+                className={`block py-3 px-4 rounded-md text-base font-medium transition-colors ${isActive(link.path)
+                  ? 'bg-white/10 text-white font-semibold'
+                  : 'text-gray-300 hover:bg-white/10 hover:text-white'
+                  }`}
                 style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
               >
                 {link.label}

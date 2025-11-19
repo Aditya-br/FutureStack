@@ -1,54 +1,104 @@
 {
   "opportunities": [
     {
-      "id": "3913",
-      "title": "SDE 1 at Google",
-      "description": "",
-      "link": "https://www.google.com/about/careers/applications/jobs/results?location=India",
-      "deadline": "2025-11-28",
+      "id": "1",
+      "title": "Software Engineering Intern at Google",
+      "description": "Work on cutting-edge projects with the Search team",
+      "link": "https://careers.google.com",
+      "deadline": "2025-12-15",
       "category": "internship",
       "status": "applied",
-      "notes": ""
+      "notes": "Submitted application with referral from John Doe"
     },
     {
-      "id": "8d34",
-      "title": "Smart India Hackathon",
-      "description": "",
-      "link": "",
-      "deadline": "2025-12-01",
-      "category": "hackathon",
-      "status": "interviewed",
-      "notes": ""
-    },
-    {
-      "id": "f0b4",
-      "title": "Technical Intern at Barclays",
-      "description": "",
-      "link": "",
-      "deadline": "2025-11-27",
+      "id": "2",
+      "title": "Frontend Developer Intern at Meta",
+      "description": "Build user interfaces for Facebook and Instagram",
+      "link": "https://www.metacareers.com",
+      "deadline": "2025-12-20",
       "category": "internship",
       "status": "shortlisted",
-      "notes": ""
+      "notes": "Completed online assessment, waiting for interview"
     },
     {
-      "id": "7737",
-      "title": "NxtWave Hackathon",
-      "description": "",
-      "link": "",
-      "deadline": "2026-01-01",
+      "id": "3",
+      "title": "HackMIT 2025",
+      "description": "Annual hackathon at MIT with $50k in prizes",
+      "link": "https://hackmit.org",
+      "deadline": "2025-11-25",
       "category": "hackathon",
-      "status": "selected",
-      "notes": ""
+      "status": "applied",
+      "notes": "Team formed with 3 members, project idea: AI-powered study assistant"
     },
     {
-      "id": "bed4",
-      "title": "React Intern at AB Company",
-      "description": "",
-      "link": "",
-      "deadline": "2025-11-18",
+      "id": "4",
+      "title": "Data Science Intern at Microsoft",
+      "description": "Work with Azure ML team on predictive analytics",
+      "link": "https://careers.microsoft.com",
+      "deadline": "2025-12-10",
+      "category": "internship",
+      "status": "interviewed",
+      "notes": "Had first round interview, technical round scheduled for next week"
+    },
+    {
+      "id": "5",
+      "title": "MLH Fellowship",
+      "description": "12-week remote internship program for open source",
+      "link": "https://fellowship.mlh.io",
+      "deadline": "2025-11-30",
       "category": "internship",
       "status": "applied",
-      "notes": ""
+      "notes": "Applied for Fall 2025 batch"
+    },
+    {
+      "id": "6",
+      "title": "TreeHacks Stanford",
+      "description": "Stanford University's premier hackathon",
+      "link": "https://www.treehacks.com",
+      "deadline": "2025-12-05",
+      "category": "hackathon",
+      "status": "shortlisted",
+      "notes": "Accepted! Travel reimbursement approved"
+    },
+    {
+      "id": "7",
+      "title": "Backend Engineer Intern at Stripe",
+      "description": "Build scalable payment infrastructure",
+      "link": "https://stripe.com/jobs",
+      "deadline": "2025-12-18",
+      "category": "internship",
+      "status": "applied",
+      "notes": "Submitted application, strong match for required skills"
+    },
+    {
+      "id": "8",
+      "title": "CalHacks",
+      "description": "UC Berkeley's largest collegiate hackathon",
+      "link": "https://calhacks.io",
+      "deadline": "2025-11-28",
+      "category": "hackathon",
+      "status": "applied",
+      "notes": "Working on healthcare project idea"
+    },
+    {
+      "id": "9",
+      "title": "Full Stack Intern at Airbnb",
+      "description": "Work on host and guest experience features",
+      "link": "https://careers.airbnb.com",
+      "deadline": "2025-12-22",
+      "category": "internship",
+      "status": "selected",
+      "notes": "Offer received! Negotiating start date"
+    },
+    {
+      "id": "10",
+      "title": "Mobile Dev Intern at Uber",
+      "description": "Develop features for Uber and Uber Eats apps",
+      "link": "https://www.uber.com/careers",
+      "deadline": "2025-12-08",
+      "category": "internship",
+      "status": "rejected",
+      "notes": "Received rejection email, will apply again next year"
     }
   ]
 }

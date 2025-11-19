@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+import './Calendar.css';
 import { opportunityService } from '../services/api';
 import { getDaysRemaining } from '../utils/dateHelpers';
 import Modal from '../components/common/Modal';
@@ -76,7 +77,7 @@ const CalendarPage = () => {
     setSelectedDate(date);
     const dateKey = date.toDateString();
     const oppsOnDate = deadlineMap[dateKey] || [];
-    
+
     if (oppsOnDate.length > 0) {
       setSelectedDateOpportunities(oppsOnDate);
       setShowModal(true);
@@ -97,7 +98,7 @@ const CalendarPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-900 p-4 sm:p-6">
+      <div className="min-h-screen bg-black p-4 sm:p-6">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col items-center justify-center py-20">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mb-4"></div>
@@ -109,7 +110,7 @@ const CalendarPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 p-4 sm:p-6">
+    <div className="min-h-screen bg-black p-4 sm:p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-6 sm:mb-8">
@@ -200,9 +201,8 @@ const CalendarPage = () => {
                     <h4 className="text-lg font-semibold text-white mb-1">{opp.title}</h4>
                     <div className="flex flex-wrap items-center gap-2 mb-2">
                       <span
-                        className={`px-2 py-1 rounded text-xs font-medium text-white ${
-                          opp.category === 'internship' ? 'bg-blue-600' : 'bg-green-600'
-                        }`}
+                        className={`px-2 py-1 rounded text-xs font-medium text-white ${opp.category === 'internship' ? 'bg-blue-600' : 'bg-green-600'
+                          }`}
                       >
                         {opp.category === 'internship' ? (
                           <span className="flex items-center gap-1">
@@ -264,123 +264,7 @@ const CalendarPage = () => {
         </Modal>
       </div>
 
-      {/* Custom Calendar Styles */}
-      <style jsx>{`
-        .calendar-container {
-          display: flex;
-          justify-content: center;
-        }
 
-        :global(.custom-calendar) {
-          width: 100%;
-          max-width: 100%;
-          background: transparent;
-          border: none;
-          color: white;
-          font-family: inherit;
-        }
-
-        :global(.custom-calendar .react-calendar__navigation) {
-          display: flex;
-          margin-bottom: 1rem;
-        }
-
-        :global(.custom-calendar .react-calendar__navigation button) {
-          color: white;
-          background: #374151;
-          border: 1px solid #4b5563;
-          border-radius: 0.375rem;
-          padding: 0.5rem 1rem;
-          font-size: 1rem;
-          font-weight: 600;
-          transition: all 0.2s;
-        }
-
-        :global(.custom-calendar .react-calendar__navigation button:hover:not(:disabled)) {
-          background: #4b5563;
-          border-color: #6b7280;
-        }
-
-        :global(.custom-calendar .react-calendar__navigation button:disabled) {
-          opacity: 0.5;
-          cursor: not-allowed;
-        }
-
-        :global(.custom-calendar .react-calendar__month-view__weekdays) {
-          text-align: center;
-          font-weight: 600;
-          font-size: 0.875rem;
-          color: #9ca3af;
-          margin-bottom: 0.5rem;
-        }
-
-        :global(.custom-calendar .react-calendar__month-view__weekdays__weekday) {
-          padding: 0.5rem;
-        }
-
-        :global(.custom-calendar .react-calendar__month-view__weekdays__weekday abbr) {
-          text-decoration: none;
-        }
-
-        :global(.custom-calendar .react-calendar__tile) {
-          background: #1f2937;
-          border: 1px solid #374151;
-          color: white;
-          padding: 0.75rem;
-          font-size: 0.875rem;
-          border-radius: 0.375rem;
-          margin: 2px;
-          transition: all 0.2s;
-          cursor: pointer;
-          min-height: 60px;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: flex-start;
-        }
-
-        :global(.custom-calendar .react-calendar__tile:hover:not(:disabled)) {
-          background: #374151;
-          border-color: #4b5563;
-        }
-
-        :global(.custom-calendar .react-calendar__tile--active) {
-          background: #3b82f6 !important;
-          border-color: #2563eb !important;
-        }
-
-        :global(.custom-calendar .react-calendar__tile--now) {
-          background: #1e3a5f;
-          border-color: #3b82f6;
-        }
-
-        :global(.custom-calendar .react-calendar__tile--now:hover) {
-          background: #2d4a6f;
-        }
-
-        :global(.custom-calendar .react-calendar__month-view__days__day--neighboringMonth) {
-          color: #6b7280;
-          opacity: 0.5;
-        }
-
-        :global(.custom-calendar .react-calendar__tile:disabled) {
-          opacity: 0.3;
-          cursor: not-allowed;
-        }
-
-        @media (max-width: 640px) {
-          :global(.custom-calendar .react-calendar__tile) {
-            padding: 0.5rem;
-            font-size: 0.75rem;
-            min-height: 50px;
-          }
-
-          :global(.custom-calendar .react-calendar__navigation button) {
-            padding: 0.375rem 0.75rem;
-            font-size: 0.875rem;
-          }
-        }
-      `}</style>
     </div>
   );
 };

@@ -65,7 +65,7 @@ const OpportunityForm = ({ initialData = {}, onSubmit, isEdit = false }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     if (validateForm()) {
       onSubmit(formData);
     }
@@ -84,9 +84,8 @@ const OpportunityForm = ({ initialData = {}, onSubmit, isEdit = false }) => {
           name="title"
           value={formData.title}
           onChange={handleChange}
-          className={`w-full px-3 py-2 bg-slate-800/60 border rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all ${
-            errors.title ? 'border-red-500' : 'border-slate-700'
-          }`}
+          className={`w-full px-3 py-2.5 bg-white/5 border rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all ${errors.title ? 'border-red-500' : 'border-white/10'
+            }`}
           placeholder="e.g., React Intern at ABC Company"
         />
         {errors.title && <p className="text-red-400 text-sm mt-1">{errors.title}</p>}
@@ -103,7 +102,7 @@ const OpportunityForm = ({ initialData = {}, onSubmit, isEdit = false }) => {
           value={formData.description}
           onChange={handleChange}
           rows="3"
-          className="w-full px-3 py-2 bg-slate-800/60 border border-slate-700 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+          className="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
           placeholder="Brief description of the opportunity"
         />
       </div>
@@ -119,7 +118,7 @@ const OpportunityForm = ({ initialData = {}, onSubmit, isEdit = false }) => {
           name="link"
           value={formData.link}
           onChange={handleChange}
-          className="w-full px-3 py-2 bg-slate-800/60 border border-slate-700 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+          className="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
           placeholder="https://example.com/apply"
         />
       </div>
@@ -135,9 +134,8 @@ const OpportunityForm = ({ initialData = {}, onSubmit, isEdit = false }) => {
           name="deadline"
           value={formData.deadline}
           onChange={handleChange}
-          className={`w-full px-3 py-2 bg-slate-800/60 border rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all ${
-            errors.deadline ? 'border-red-500' : 'border-slate-700'
-          }`}
+          className={`w-full px-3 py-2.5 bg-white/5 border rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all ${errors.deadline ? 'border-red-500' : 'border-white/10'
+            }`}
         />
         {errors.deadline && <p className="text-red-400 text-sm mt-1">{errors.deadline}</p>}
       </div>
@@ -184,7 +182,7 @@ const OpportunityForm = ({ initialData = {}, onSubmit, isEdit = false }) => {
           name="status"
           value={formData.status}
           onChange={handleChange}
-          className="w-full px-3 py-2 bg-slate-800/60 border border-slate-700 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+          className="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
         >
           <option value="applied">Applied</option>
           <option value="shortlisted">Shortlisted</option>
@@ -205,7 +203,7 @@ const OpportunityForm = ({ initialData = {}, onSubmit, isEdit = false }) => {
           value={formData.notes}
           onChange={handleChange}
           rows="3"
-          className="w-full px-3 py-2 bg-slate-800/60 border border-slate-700 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+          className="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
           placeholder="Additional notes or preparation tasks"
         />
       </div>

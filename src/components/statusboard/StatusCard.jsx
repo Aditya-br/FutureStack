@@ -4,8 +4,8 @@ import { formatDate } from '../../utils/dateHelpers';
 
 const StatusCard = ({ opportunity, onStatusChange, onDelete }) => {
   const categoryColors = {
-    internship: 'bg-indigo-100 text-indigo-800',
-    hackathon: 'bg-pink-100 text-pink-800',
+    internship: 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20',
+    hackathon: 'bg-pink-500/10 text-pink-400 border border-pink-500/20',
   };
 
   const handleStatusChange = (e) => {
@@ -16,14 +16,14 @@ const StatusCard = ({ opportunity, onStatusChange, onDelete }) => {
   };
 
   return (
-    <div className="bg-gray-800 border border-gray-700 rounded-lg shadow-md p-4 mb-3 hover:shadow-lg hover:border-gray-600 transition-all">
+    <div className="bg-[#0A0A0A] border border-white/10 rounded-xl shadow-lg p-4 mb-3 hover:shadow-blue-900/20 hover:border-blue-500/30 transition-all">
       {/* Header with Title and Delete Button */}
       <div className="flex items-start justify-between mb-2">
         <h4 className="font-semibold text-white flex-1">{opportunity.title}</h4>
         {onDelete && (
           <button
             onClick={() => onDelete(opportunity.id)}
-            className="text-red-400 hover:text-red-300 transition-colors p-1 rounded-md hover:bg-red-900 hover:bg-opacity-30 ml-2"
+            className="text-red-400 hover:text-red-300 transition-colors p-1 rounded-md hover:bg-red-500/10 ml-2"
             aria-label="Delete opportunity"
           >
             <FaTrash size={14} />
@@ -33,9 +33,8 @@ const StatusCard = ({ opportunity, onStatusChange, onDelete }) => {
 
       {/* Category Badge */}
       <span
-        className={`inline-block px-2 py-1 rounded-full text-xs font-medium mb-3 ${
-          categoryColors[opportunity.category] || 'bg-gray-700 text-gray-300'
-        }`}
+        className={`inline-block px-2 py-1 rounded-full text-xs font-medium mb-3 ${categoryColors[opportunity.category] || 'bg-gray-500/10 text-gray-400 border border-gray-500/20'
+          }`}
       >
         {opportunity.category}
       </span>
@@ -54,7 +53,7 @@ const StatusCard = ({ opportunity, onStatusChange, onDelete }) => {
           id={`status-${opportunity.id}`}
           value={opportunity.status}
           onChange={handleStatusChange}
-          className="w-full px-2 py-1 text-sm bg-gray-700 border border-gray-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-2 py-1.5 text-sm bg-white/5 border border-white/10 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="applied">Applied</option>
           <option value="shortlisted">Shortlisted</option>

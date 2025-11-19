@@ -45,7 +45,7 @@ const EditOpportunity = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-900 p-4 sm:p-6">
+      <div className="min-h-screen bg-black p-4 sm:p-6">
         <div className="max-w-3xl mx-auto">
           <div className="flex flex-col items-center justify-center py-20">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mb-4"></div>
@@ -57,20 +57,20 @@ const EditOpportunity = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 p-4 sm:p-6">
+    <div className="min-h-screen bg-black p-4 sm:p-6">
       <div className="max-w-2xl mx-auto">
-        <div className="bg-gray-800 rounded-lg shadow-lg shadow-black/30 p-6 sm:p-8 border border-gray-700">
-          <h2 className="text-lg font-semibold text-white mb-4 border-b border-slate-700 pb-2">
+        <div className="bg-[#0A0A0A] rounded-xl shadow-lg p-6 sm:p-8 border border-white/10">
+          <h2 className="text-lg font-semibold text-white mb-4 border-b border-white/10 pb-2">
             Edit Opportunity
           </h2>
-          
-          <OpportunityForm 
-            initialData={opportunity} 
-            onSubmit={handleSubmit} 
-            isEdit={true} 
+
+          <OpportunityForm
+            initialData={opportunity}
+            onSubmit={handleSubmit}
+            isEdit={true}
           />
-          
-          <div className="mt-6 pt-4 border-t border-slate-700">
+
+          <div className="mt-6 pt-4 border-t border-white/10">
             <button
               onClick={handleCancel}
               className="w-full px-4 py-2 text-gray-400 hover:text-gray-200 transition-colors text-sm font-medium"

@@ -43,7 +43,7 @@ const StatusBoard = () => {
     try {
       // Find the opportunity to update
       const opportunityToUpdate = opportunities.find((opp) => opp.id === opportunityId);
-      
+
       if (!opportunityToUpdate) {
         toast.error('Opportunity not found');
         return;
@@ -102,7 +102,7 @@ const StatusBoard = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-900 p-4 sm:p-6">
+      <div className="min-h-screen bg-black p-4 sm:p-6">
         <div className="flex flex-col items-center justify-center py-20">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mb-4"></div>
           <p className="text-white text-lg">Loading status board...</p>
@@ -112,7 +112,7 @@ const StatusBoard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 p-4 sm:p-6">
+    <div className="min-h-screen bg-black p-4 sm:p-6">
       {/* Page Header */}
       <div className="mb-6 sm:mb-8">
         <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">Status Board</h1>

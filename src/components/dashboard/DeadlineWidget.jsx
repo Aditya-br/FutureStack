@@ -30,13 +30,12 @@ const DeadlineWidget = ({ deadlines, onDelete }) => {
           return (
             <div
               key={opportunity.id}
-              className={`p-3 sm:p-4 rounded-lg border-l-4 transition-all hover:shadow-md ${
-                overdue
-                  ? 'bg-red-900 bg-opacity-20 border-red-500'
+              className={`p-3 sm:p-4 rounded-lg border-l-4 transition-all hover:shadow-md ${overdue
+                  ? 'bg-red-500/10 border-red-500'
                   : daysRemaining <= 3
-                  ? 'bg-yellow-900 bg-opacity-20 border-yellow-500'
-                  : 'bg-blue-900 bg-opacity-20 border-blue-500'
-              }`}
+                    ? 'bg-yellow-500/10 border-yellow-500'
+                    : 'bg-blue-500/10 border-blue-500'
+                }`}
             >
               <div className="flex items-start justify-between gap-2 sm:gap-3">
                 <div className="flex-1 min-w-0">
@@ -54,9 +53,8 @@ const DeadlineWidget = ({ deadlines, onDelete }) => {
                       </div>
                     ) : (
                       <span
-                        className={`text-xs sm:text-sm font-semibold whitespace-nowrap ${
-                          daysRemaining <= 3 ? 'text-yellow-400' : 'text-blue-400'
-                        }`}
+                        className={`text-xs sm:text-sm font-semibold whitespace-nowrap ${daysRemaining <= 3 ? 'text-yellow-400' : 'text-blue-400'
+                          }`}
                       >
                         {daysRemaining} {daysRemaining === 1 ? 'day' : 'days'}
                       </span>

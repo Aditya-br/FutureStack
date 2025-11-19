@@ -1,72 +1,186 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { FiActivity, FiBriefcase, FiCode, FiArrowRight, FiGithub, FiLinkedin, FiTwitter } from 'react-icons/fi';
 
 const Home = () => {
   const navigate = useNavigate();
-  const [titleVisible, setTitleVisible] = useState(false);
-  const [taglineVisible, setTaglineVisible] = useState(false);
-  const [buttonVisible, setButtonVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    // Staggered fade-in animation
-    setTimeout(() => setTitleVisible(true), 300);
-    setTimeout(() => setTaglineVisible(true), 500);
-    setTimeout(() => setButtonVisible(true), 700);
+    setIsVisible(true);
   }, []);
 
   return (
-    <div className="relative min-h-screen bg-black flex items-center justify-center px-4 overflow-hidden">
-      {/* Subtle background glow - more visible */}
-      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-br from-purple-500/30 via-blue-500/25 to-pink-500/20 rounded-full filter blur-[100px]"></div>
-      <div className="absolute top-1/3 left-1/3 w-[400px] h-[400px] bg-blue-600/20 rounded-full filter blur-[80px] animate-pulse"></div>
-      
-      {/* Hero Section */}
-      <div className="relative z-10 text-center max-w-2xl mx-auto min-h-screen flex flex-col justify-center pt-8">
-        {/* Title with staggered fade-in */}
-        <h1 
-          className={`text-6xl md:text-8xl font-extrabold text-white mb-8 tracking-tight transition-all duration-700 ${
-            titleVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-          }`}
-          style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
-        >
-          FutureStack
-        </h1>
-        
-        {/* Tagline with improved spacing and contrast */}
-        <p 
-          className={`text-2xl md:text-3xl text-gray-300 font-medium mb-6 tracking-wide transition-all duration-700 ${
-            taglineVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-          }`}
-          style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
-        >
-          Build Your Future, One Opportunity At a Time
-        </p>
-        
-        {/* Description with better readability */}
-        <p 
-          className={`text-base md:text-lg text-gray-400 font-light mb-12 max-w-xl mx-auto leading-relaxed transition-all duration-700 ${
-            taglineVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-          }`}
-          style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
-        >
-          Your All-In-One Tracker for internships, hackathons, deadlines, and progress.
-        </p>
-        
-        {/* Premium CTA Button with gradient and glow */}
-        <div 
-          className={`transition-all duration-700 ${
-            buttonVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-          }`}
-        >
+    <div className="min-h-screen bg-black text-white font-sans selection:bg-blue-500 selection:text-white overflow-x-hidden">
+      {/* Background Effects */}
+      {/* Background Effects */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        {/* Grid Pattern */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
+        <div className="absolute top-0 left-0 right-0 h-[500px] bg-gradient-to-b from-black via-transparent to-transparent" />
+
+        {/* Subtle Glows */}
+        <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-white/5 rounded-full blur-[120px]" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-white/5 rounded-full blur-[120px]" />
+      </div>
+
+      {/* Navbar */}
+      <nav className="fixed top-0 w-full z-50 border-b border-white/10 bg-black/50 backdrop-blur-md">
+        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
+              <span className="font-bold text-black text-xl">F</span>
+            </div>
+            <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">
+              FutureStack
+            </span>
+          </div>
+
+          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-400">
+            <a href="#features" className="hover:text-white transition-colors">Features</a>
+            <a href="#about" className="hover:text-white transition-colors">About</a>
+            <a href="https://github.com/Venkat-Kolasani/FutureStack" target="_blank" rel="noreferrer" className="hover:text-white transition-colors">GitHub</a>
+          </div>
+
           <button
             onClick={() => navigate('/dashboard')}
-            className="relative w-full md:w-auto px-8 py-4 text-lg font-semibold text-black bg-white rounded-lg shadow-lg hover:shadow-[0_0_40px_rgba(255,255,255,0.4)] hover:bg-gray-100 transition-all duration-300 transform hover:scale-105"
+            className="px-5 py-2.5 bg-white text-black text-sm font-semibold rounded-full hover:bg-gray-200 transition-all transform hover:scale-105 active:scale-95"
           >
-            Get Started
+            Launch App
           </button>
         </div>
+      </nav>
+
+      {/* Hero Section */}
+      {/* Hero Section */}
+      <main className="relative z-10 min-h-screen flex flex-col justify-center pt-20 px-6">
+        <div className="max-w-5xl mx-auto text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-8 leading-tight">
+              Build Your Future, <br />
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-gray-400">
+                One Opportunity at a Time
+              </span>
+            </h1>
+
+            <p className="text-xl text-gray-400 mb-12 max-w-2xl mx-auto leading-relaxed">
+              The all-in-one workspace for students and developers to track internships,
+              manage hackathons, and visualize career progress.
+            </p>
+
+            <div className="flex items-center justify-center">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => navigate('/dashboard')}
+                className="px-8 py-4 bg-white hover:bg-gray-100 text-black rounded-xl font-semibold text-lg transition-all flex items-center justify-center gap-2 group shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.5)]"
+              >
+                Get Started Free
+                <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
+              </motion.button>
+            </div>
+          </motion.div>
+        </div>
+      </main>
+
+      {/* Stats/Social Proof */}
+      <div id="about" className="mt-20 border-y border-white/5 bg-white/[0.02] backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+          {[
+            { label: 'Organized', value: '100%' },
+            { label: 'Missed Deadlines', value: '0' },
+            { label: 'Opportunities', value: '∞' },
+          ].map((stat, index) => (
+            <div key={index}>
+              <div className="text-5xl md:text-6xl font-bold text-white mb-2">{stat.value}</div>
+              <div className="text-sm text-gray-400 font-medium tracking-wide">{stat.label}</div>
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
+
+      {/* Features Grid */}
+      <div id="features" className="max-w-7xl mx-auto mt-32">
+        <div className="text-center mb-20">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6">Everything you need to succeed</h2>
+          <p className="text-gray-400 max-w-2xl mx-auto">
+            Stop using spreadsheets. FutureStack gives you a powerful, dedicated environment
+            to manage your career growth.
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-8">
+          {[
+            {
+              icon: <FiBriefcase className="w-6 h-6 text-white" />,
+              title: "Internship Tracker",
+              desc: "Keep track of applications, deadlines, and interview stages in one organized board.",
+              gradient: "from-white/10 to-white/5"
+            },
+            {
+              icon: <FiCode className="w-6 h-6 text-white" />,
+              title: "Hackathon Manager",
+              desc: "Manage teams, project ideas, and submission deadlines for your next hackathon.",
+              gradient: "from-white/10 to-white/5"
+            },
+            {
+              icon: <FiActivity className="w-6 h-6 text-white" />,
+              title: "Progress Analytics",
+              desc: "Visualize your application rates and success metrics with beautiful charts.",
+              gradient: "from-white/10 to-white/5"
+            }
+          ].map((feature, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.1 }}
+              className="group relative p-8 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all duration-300 hover:-translate-y-1"
+            >
+              <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-100 rounded-2xl transition-opacity duration-500`} />
+              <div className="relative z-10">
+                <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                  {feature.icon}
+                </div>
+                <h3 className="text-xl font-bold mb-3 text-white">{feature.title}</h3>
+                <p className="text-gray-400 leading-relaxed">
+                  {feature.desc}
+                </p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+      {/* Footer */}
+      <footer className="border-t border-white/10 bg-black mt-32">
+        <div className="max-w-7xl mx-auto px-6 py-12">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 bg-white rounded-md flex items-center justify-center">
+                <span className="font-bold text-black text-xs">F</span>
+              </div>
+              <span className="font-bold text-gray-300">FutureStack</span>
+            </div>
+
+            <div className="flex gap-6">
+              <a href="#" className="text-gray-500 hover:text-white transition-colors"><FiGithub className="w-5 h-5" /></a>
+              <a href="#" className="text-gray-500 hover:text-white transition-colors"><FiTwitter className="w-5 h-5" /></a>
+              <a href="#" className="text-gray-500 hover:text-white transition-colors"><FiLinkedin className="w-5 h-5" /></a>
+            </div>
+
+            <div className="text-sm text-gray-600">
+              © 2025 FutureStack. All rights reserved.
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div >
   );
 };
 
