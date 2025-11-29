@@ -23,7 +23,7 @@ const StatusCard = ({ opportunity, onStatusChange, onDelete }) => {
         {onDelete && (
           <button
             onClick={() => onDelete(opportunity.id)}
-            className="text-red-400 hover:text-red-300 transition-colors p-1 rounded-md hover:bg-red-500/10 ml-2"
+            className="text-gray-500 hover:text-white transition-colors p-1.5 rounded-md hover:bg-red-500 ml-2"
             aria-label="Delete opportunity"
           >
             <FaTrash size={14} />
