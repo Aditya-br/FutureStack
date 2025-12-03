@@ -263,9 +263,9 @@ For production, replace JSON Server with:
 
 ## Demonstration Video
 
-You can watch a walkthrough of how to use the website in the following video:
+You can watch a walkthrough of how to use the website at the link below:
 
-**DemonstrationVideo.mp4**
+[Demonstration Video (Google Drive)](https://drive.google.com/file/d/1qL-gTfaE4hcs98NN6SgJ33D8HyKBz06t/view?usp=sharing)
 
 > This video shows how to use the website end-to-end.
 

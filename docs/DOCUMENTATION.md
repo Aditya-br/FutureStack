@@ -21,6 +21,7 @@
 11. [Deployment Guide](#11-deployment-guide)
 12. [Future Enhancements](#12-future-enhancements)
 13. [Pitch Guide](#13-pitch-guide)
+14. [Demonstration Video](#14-demonstration-video)
 
 ---
 
@@ -1851,3 +1852,13 @@ export default api;
 ---
 
 *This documentation is a living document and will be updated as the project evolves.*
+
+---
+
+## 14. Demonstration Video
+
+The full walkthrough video is available here:
+
+[Demonstration Video (Google Drive)](https://drive.google.com/file/d/1qL-gTfaE4hcs98NN6SgJ33D8HyKBz06t/view?usp=sharing)
+
+> This video shows how to use the website end-to-end, covering the dashboard, status board, calendar, and reports.
