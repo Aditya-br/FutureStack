@@ -230,7 +230,7 @@ DELETE /opportunities/:id
 
 ### Landing Page
 Clean, modern landing page with animated hero section
-![alt text](image.png)
+![alt text](docs/readme-images/image.png)
 
 ### Dashboard
 Real-time statistics with color-coded cards:
@@ -238,19 +238,19 @@ Real-time statistics with color-coded cards:
 - **Hackathons** (Orange)
 - **Shortlisted** (Yellow)
 - **Selected** (Green)
-![alt text](image-1.png)
+![alt text](docs/readme-images/image-1.png)
 
 ### Status Board
 Kanban-style board with 5 columns for visual progress tracking
-![alt text](image-2.png)
+![alt text](docs/readme-images/image-2.png)
 
 ### Calendar View
 Interactive calendar with deadline visualization
-![alt text](image-3.png)
+![alt text](docs/readme-images/image-3.png)
 
 ### Reports
 Flexible PDF export with multiple options
-![alt text](image-4.png)
+![alt text](docs/readme-images/image-4.png)
 
 ## 🎨 Design System
 
