@@ -5,19 +5,21 @@
 [![React](https://img.shields.io/badge/React-19.2.0-blue.svg)](https://reactjs.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4.18-38B2AC.svg)](https://tailwindcss.com/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Vercel-black.svg)](https://futurestack.venkatkolasani.xyz/)
+[![Docs on Devin](https://img.shields.io/badge/Docs-Devin-6C63FF.svg)](https://app.devin.ai/wiki/Venkat-Kolasani/FutureStack)
 
 ## 📋 Table of Contents
 
 - [Overview](#overview)
+- [Demonstration Videos](#demonstration-videos)
 - [Features](#features)
 - [Tech Stack](#tech-stack)
+- [Documentation](#-documentation)
 - [Getting Started](#getting-started)
 - [Project Structure](#project-structure)
 - [Available Scripts](#available-scripts)
 - [API Documentation](#api-documentation)
 - [Screenshots](#screenshots)
-- [Contributing](#contributing)
-- [License](#license)
 - [Demonstration Video](#demonstration-video)
 
 ## 🎯 Overview
@@ -31,6 +33,11 @@ FutureStack is a modern, full-featured web application designed to help students
 - **Deadline Management**: Never miss an important deadline with calendar integration
 - **Comprehensive Reports**: Export detailed PDF reports for your records
 - **Responsive Design**: Works seamlessly on desktop, tablet, and mobile devices
+
+### Demonstration Videos
+
+- [Website Demonstration Video](https://drive.google.com/file/d/1qL-gTfaE4hcs98NN6SgJ33D8HyKBz06t/view?usp=drive_link) – walk through the UI, navigation, and primary flows.
+- [Code Demonstration Video](https://drive.google.com/file/d/1aIHa0MnmIom3yrpk1rDdPfCrVDMuheT7/view?usp=sharing) – review the repository layout, component architecture, and deployment steps.
 
 ## ✨ Features
 
@@ -76,6 +83,11 @@ FutureStack is a modern, full-featured web application designed to help students
 - **React Scripts 5.0.1** - Build tooling
 - **PostCSS 8.5.6** - CSS processing
 - **Autoprefixer 10.4.22** - CSS vendor prefixing
+
+## 📚 Documentation
+
+- [Devin Wiki](https://app.devin.ai/wiki/Venkat-Kolasani/FutureStack) – canonical, always-current runbook with high-level decisions, architecture diagrams, and demo notes.
+- Local references: `docs/ARCHITECTURE.md`, `docs/DOCUMENTATION.md`, `docs/INTEGRATION_TEST_RESULTS.md`, and `docs/PROJECT_SUMMARY.md` provide offline deep dives, test evidence, and executive summaries.
 
 ## 🚀 Getting Started
 
@@ -218,6 +230,7 @@ DELETE /opportunities/:id
 
 ### Landing Page
 Clean, modern landing page with animated hero section
+![alt text](image.png)
 
 ### Dashboard
 Real-time statistics with color-coded cards:
@@ -225,15 +238,19 @@ Real-time statistics with color-coded cards:
 - **Hackathons** (Orange)
 - **Shortlisted** (Yellow)
 - **Selected** (Green)
+![alt text](image-1.png)
 
 ### Status Board
 Kanban-style board with 5 columns for visual progress tracking
+![alt text](image-2.png)
 
 ### Calendar View
 Interactive calendar with deadline visualization
+![alt text](image-3.png)
 
 ### Reports
 Flexible PDF export with multiple options
+![alt text](image-4.png)
 
 ## 🎨 Design System
 
@@ -253,21 +270,12 @@ Flexible PDF export with multiple options
 - **Body**: Regular, sm-base
 - **Labels**: Medium, sm
 
-### Backend Deployment
-
-For production, replace JSON Server with:
-- **Node.js + Express + MongoDB**
-- **Firebase Realtime Database**
-- **Supabase**
-- **AWS DynamoDB**
-
 ## Demonstration Video
 
-You can watch a walkthrough of how to use the website at the link below:
+You can watch both the live website demo and an annotated code walkthrough below:
 
-[Demonstration Video (Google Drive)](https://drive.google.com/file/d/1qL-gTfaE4hcs98NN6SgJ33D8HyKBz06t/view?usp=sharing)
-
-> This video shows how to use the website end-to-end.
+- [Website Demonstration Video](https://drive.google.com/file/d/1qL-gTfaE4hcs98NN6SgJ33D8HyKBz06t/view?usp=drive_link) – end-to-end tour of the FutureStack UI, navigation, and feature flows.
+- [Code Demonstration Video](https://drive.google.com/file/d/1aIHa0MnmIom3yrpk1rDdPfCrVDMuheT7/view?usp=sharing) – explanation of the source structure, key components, and build/deployment steps.
 
 
 ---
