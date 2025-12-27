@@ -15,7 +15,7 @@ const api = axios.create({
 let getAuthToken = null;
 
 /**
- * Set the token getter function (called from ClerkProvider context)
+ * Set the token getter function (called from useAuthToken hook)
  */
 export const setAuthTokenGetter = (getter) => {
     getAuthToken = getter;

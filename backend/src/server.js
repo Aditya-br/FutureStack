@@ -29,8 +29,8 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-// Parse JSON bodies
-app.use(express.json());
+// Parse JSON bodies with size limit to prevent DoS
+app.use(express.json({ limit: '1mb' }));
 
 // Request logging (development only)
 if (process.env.NODE_ENV === 'development') {

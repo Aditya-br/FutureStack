@@ -63,41 +63,41 @@ const requireAuth = async (req, res, next) => {
 
 /**
  * Ensure user exists in Supabase (create on first login)
+ * Uses upsert to handle race conditions from concurrent requests
  */
 async function ensureUserExists(auth) {
     const { userId, email } = auth;
 
-    // Check if user already exists
-    const { data: existingUser, error: selectError } = await supabase
+    // Use upsert to handle race conditions - if user exists, just return their id
+    // If they don't exist, create them. onConflict handles duplicate key violations.
+    const { data: user, error } = await supabase
         .from('users')
+        .upsert(
+            { clerk_id: userId, email: email || null },
+            { onConflict: 'clerk_id', ignoreDuplicates: true }
+        )
         .select('id')
-        .eq('clerk_id', userId)
-        .maybeSingle();
+        .single();
 
-    if (selectError) throw selectError;
+    // If upsert with ignoreDuplicates returns no data, fetch the existing user
+    if (!user) {
+        const { data: existingUser, error: selectError } = await supabase
+            .from('users')
+            .select('id')
+            .eq('clerk_id', userId)
+            .single();
 
-    if (existingUser) {
-        // Attach internal user ID to auth object
+        if (selectError) throw selectError;
         auth.internalUserId = existingUser.id;
         return;
     }
 
-    // Create new user
-    const { data: newUser, error } = await supabase
-        .from('users')
-        .insert({
-            clerk_id: userId,
-            email: email || null
-        })
-        .select('id')
-        .single();
-
     if (error) {
-        console.error('Error creating user:', error.message);
+        console.error('Error upserting user:', error.message);
         throw error;
     }
 
-    auth.internalUserId = newUser.id;
+    auth.internalUserId = user.id;
 }
 
 module.exports = { requireAuth };

@@ -62,8 +62,8 @@ router.post('/', async (req, res) => {
         const { title, description, link, deadline, category, status, notes } = req.body;
 
         // Validation
-        if (!title) {
-            return res.status(400).json({ error: 'Title is required' });
+        if (!title || !title.trim()) {
+            return res.status(400).json({ error: 'Title is required and cannot be empty' });
         }
 
         if (category && !['internship', 'hackathon'].includes(category)) {
@@ -107,6 +107,10 @@ const updateHandler = async (req, res) => {
         const { title, description, link, deadline, category, status, notes } = req.body;
 
         // Validation
+        if (title !== undefined && !title.trim()) {
+            return res.status(400).json({ error: 'Title cannot be empty' });
+        }
+
         if (category && !['internship', 'hackathon'].includes(category)) {
             return res.status(400).json({ error: 'Category must be internship or hackathon' });
         }
