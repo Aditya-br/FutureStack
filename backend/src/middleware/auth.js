@@ -1,6 +1,11 @@
 const { verifyToken } = require('@clerk/express');
 const { supabase } = require('../lib/supabase');
 
+// In-memory cache for user IDs to avoid database lookups on every request
+// Key: clerk_id, Value: { internalUserId, timestamp }
+const userCache = new Map();
+const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
+
 /**
  * Clerk JWT Authentication Middleware
  * Validates Bearer token and attaches user info to request
@@ -37,7 +42,7 @@ const requireAuth = async (req, res, next) => {
             email: payload.email
         };
 
-        // Ensure user exists in our database (sync from Clerk on first request)
+        // Get or create user (with caching)
         await ensureUserExists(req.auth);
 
         next();
@@ -63,41 +68,62 @@ const requireAuth = async (req, res, next) => {
 
 /**
  * Ensure user exists in Supabase (create on first login)
- * Uses upsert to handle race conditions from concurrent requests
+ * Uses caching to avoid database lookups on every request
  */
 async function ensureUserExists(auth) {
     const { userId, email } = auth;
 
-    // Use upsert to handle race conditions - if user exists, just return their id
-    // If they don't exist, create them. onConflict handles duplicate key violations.
-    const { data: user, error } = await supabase
+    // Check cache first
+    const cached = userCache.get(userId);
+    if (cached && (Date.now() - cached.timestamp) < CACHE_TTL_MS) {
+        auth.internalUserId = cached.internalUserId;
+        return;
+    }
+
+    // Try to find existing user first (faster than upsert for existing users)
+    const { data: existingUser, error: selectError } = await supabase
         .from('users')
-        .upsert(
-            { clerk_id: userId, email: email || null },
-            { onConflict: 'clerk_id', ignoreDuplicates: true }
-        )
         .select('id')
-        .single();
+        .eq('clerk_id', userId)
+        .maybeSingle();
 
-    // If upsert with ignoreDuplicates returns no data, fetch the existing user
-    if (!user) {
-        const { data: existingUser, error: selectError } = await supabase
-            .from('users')
-            .select('id')
-            .eq('clerk_id', userId)
-            .single();
+    if (selectError) throw selectError;
 
-        if (selectError) throw selectError;
+    if (existingUser) {
+        // Cache and return
+        userCache.set(userId, { internalUserId: existingUser.id, timestamp: Date.now() });
         auth.internalUserId = existingUser.id;
         return;
     }
 
-    if (error) {
-        console.error('Error upserting user:', error.message);
-        throw error;
+    // User doesn't exist, create them
+    const { data: newUser, error: insertError } = await supabase
+        .from('users')
+        .insert({ clerk_id: userId, email: email || null })
+        .select('id')
+        .single();
+
+    if (insertError) {
+        // Handle race condition - another request may have created the user
+        if (insertError.code === '23505') { // Unique violation
+            const { data: raceUser } = await supabase
+                .from('users')
+                .select('id')
+                .eq('clerk_id', userId)
+                .single();
+            if (raceUser) {
+                userCache.set(userId, { internalUserId: raceUser.id, timestamp: Date.now() });
+                auth.internalUserId = raceUser.id;
+                return;
+            }
+        }
+        throw insertError;
     }
 
-    auth.internalUserId = user.id;
+    // Cache and return
+    userCache.set(userId, { internalUserId: newUser.id, timestamp: Date.now() });
+    auth.internalUserId = newUser.id;
 }
 
 module.exports = { requireAuth };
+
