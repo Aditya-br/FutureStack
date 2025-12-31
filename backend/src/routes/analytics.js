@@ -14,10 +14,10 @@ router.get('/', async (req, res) => {
     try {
         const userId = req.auth.internalUserId;
 
-        // Get all opportunities for the user
+        // Get all opportunities for the user with deadline included
         const { data: opportunities, error } = await supabase
             .from('opportunities')
-            .select('status, category, created_at')
+            .select('status, category, created_at, deadline')
             .eq('user_id', userId);
 
         if (error) throw error;
@@ -60,8 +60,31 @@ router.get('/', async (req, res) => {
             ? roundToOneDecimal((totalRejected / totalApplied) * 100)
             : 0;
 
-        // Monthly breakdown (last 6 months)
+        // Weekly breakdown (last 8 weeks)
         const now = new Date();
+        const weeklyData = [];
+        for (let i = 7; i >= 0; i--) {
+            const weekStart = new Date(now);
+            weekStart.setDate(now.getDate() - (i * 7) - now.getDay());
+            weekStart.setHours(0, 0, 0, 0);
+
+            const weekEnd = new Date(weekStart);
+            weekEnd.setDate(weekStart.getDate() + 6);
+            weekEnd.setHours(23, 59, 59, 999);
+
+            const weekOpps = opportunities.filter(opp => {
+                const created = new Date(opp.created_at);
+                return created >= weekStart && created <= weekEnd;
+            });
+
+            weeklyData.push({
+                week: `W${8 - i}`,
+                weekStart: weekStart.toISOString().split('T')[0],
+                count: weekOpps.length
+            });
+        }
+
+        // Monthly breakdown (last 6 months) - keep for backward compatibility
         const monthlyData = [];
         for (let i = 5; i >= 0; i--) {
             const monthStart = new Date(now.getFullYear(), now.getMonth() - i, 1);
@@ -78,6 +101,36 @@ router.get('/', async (req, res) => {
             });
         }
 
+        // Deadline distribution (next 30 days heatmap data)
+        const deadlineDistribution = [];
+        for (let i = 0; i < 30; i++) {
+            const date = new Date(now);
+            date.setDate(now.getDate() + i);
+            date.setHours(0, 0, 0, 0);
+
+            const dateStr = date.toISOString().split('T')[0];
+            const count = opportunities.filter(opp => {
+                if (!opp.deadline) return false;
+                const deadline = new Date(opp.deadline);
+                return deadline.toISOString().split('T')[0] === dateStr;
+            }).length;
+
+            deadlineDistribution.push({
+                date: dateStr,
+                day: date.getDate(),
+                dayOfWeek: date.getDay(),
+                count
+            });
+        }
+
+        // Funnel data for conversion visualization
+        const funnelData = [
+            { stage: 'Applied', count: totalApplied, percentage: 100 },
+            { stage: 'Shortlisted', count: statusCounts.shortlisted + statusCounts.interviewed + totalSelected, percentage: totalApplied > 0 ? roundToOneDecimal(((statusCounts.shortlisted + statusCounts.interviewed + totalSelected) / totalApplied) * 100) : 0 },
+            { stage: 'Interviewed', count: statusCounts.interviewed + totalSelected, percentage: totalApplied > 0 ? roundToOneDecimal(((statusCounts.interviewed + totalSelected) / totalApplied) * 100) : 0 },
+            { stage: 'Selected', count: totalSelected, percentage: totalApplied > 0 ? roundToOneDecimal((totalSelected / totalApplied) * 100) : 0 }
+        ];
+
         res.json({
             total: totalApplied,
             statusCounts,
@@ -90,7 +143,10 @@ router.get('/', async (req, res) => {
                     ? roundToOneDecimal((totalSelected / (totalSelected + totalRejected)) * 100)
                     : 0
             },
-            monthlyBreakdown: monthlyData
+            weeklyBreakdown: weeklyData,
+            monthlyBreakdown: monthlyData,
+            deadlineDistribution,
+            funnelData
         });
     } catch (error) {
         console.error('Error fetching analytics:', error.message);

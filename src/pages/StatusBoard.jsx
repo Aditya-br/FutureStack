@@ -1,22 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { toast } from 'react-toastify';
+import { useAuth } from '@clerk/clerk-react';
 import StatusColumn from '../components/statusboard/StatusColumn';
 import Modal from '../components/common/Modal';
 import Button from '../components/common/Button';
 import { opportunityService } from '../services/api';
+import { supabase } from '../lib/supabase';
 
 const StatusBoard = () => {
   const [opportunities, setOpportunities] = useState([]);
   const [loading, setLoading] = useState(true);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [opportunityToDelete, setOpportunityToDelete] = useState(null);
+  const { userId } = useAuth();
 
-  // Fetch all opportunities on component mount
-  useEffect(() => {
-    fetchOpportunities();
-  }, []);
-
-  const fetchOpportunities = async () => {
+  // Memoized fetch function for realtime callback
+  const fetchOpportunities = useCallback(async () => {
     try {
       setLoading(true);
       const data = await opportunityService.getAll();
@@ -27,7 +26,41 @@ const StatusBoard = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  // Fetch opportunities and set up realtime subscription
+  useEffect(() => {
+    fetchOpportunities();
+
+    // Set up Supabase realtime subscription for live updates
+    if (!supabase || !userId) return;
+
+    // Subscribe to realtime changes (uses anon key with permissive RLS policy)
+    const channel = supabase
+      .channel('kanban-realtime')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'opportunities',
+        },
+        (payload) => {
+          console.log('Realtime update received:', payload.eventType);
+          // Refetch opportunities on any change
+          fetchOpportunities();
+        }
+      )
+      .subscribe((status, err) => {
+        console.log('Supabase realtime subscription status:', status);
+        if (err) console.error('Subscription error:', err);
+      });
+
+    // Cleanup subscription on unmount
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [userId, fetchOpportunities]);
 
   // Group opportunities by status
   const groupedOpportunities = {

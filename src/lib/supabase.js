@@ -10,14 +10,35 @@ if (!supabaseUrl || !supabaseAnonKey) {
 /**
  * Frontend Supabase client (using anon key)
  * 
- * NOTE: This client is not currently used in the application since all API calls
- * go through the backend Express server. It's preserved for potential future use cases:
+ * Used for:
  * - Real-time subscriptions (Supabase Realtime)
  * - Direct file storage access (Supabase Storage)
- * - Client-side caching with Supabase
  * 
- * If none of these features are needed, consider removing this file to reduce bundle size.
+ * The access token can be set via setSupabaseAccessToken() to authenticate
+ * with Clerk JWT for RLS-protected realtime subscriptions.
  */
 export const supabase = supabaseUrl && supabaseAnonKey
-    ? createClient(supabaseUrl, supabaseAnonKey)
+    ? createClient(supabaseUrl, supabaseAnonKey, {
+        realtime: {
+            params: {
+                eventsPerSecond: 10
+            }
+        }
+    })
     : null;
+
+/**
+ * Set the access token for authenticated Supabase operations
+ * Call this with the Clerk token to enable RLS-authenticated realtime
+ */
+export const setSupabaseAccessToken = async (token) => {
+    if (!supabase) return;
+
+    if (token) {
+        await supabase.auth.setSession({
+            access_token: token,
+            refresh_token: '',
+        });
+    }
+};
+

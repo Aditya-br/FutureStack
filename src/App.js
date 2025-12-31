@@ -5,6 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 // Components
 import Navbar from './components/common/Navbar';
 import ProtectedRoute from './components/auth/ProtectedRoute';
+import ErrorBoundary from './components/common/ErrorBoundary';
 
 // Hooks
 import { useAuthToken } from './hooks/useAuthToken';
@@ -19,6 +20,7 @@ import EditOpportunity from './pages/EditOpportunity';
 import StatusBoard from './pages/StatusBoard';
 import Calendar from './pages/Calendar';
 import Reports from './pages/Reports';
+import Analytics from './pages/Analytics';
 
 function AppContent() {
   const location = useLocation();
@@ -72,6 +74,11 @@ function AppContent() {
             <Reports />
           </ProtectedRoute>
         } />
+        <Route path="/analytics" element={
+          <ProtectedRoute>
+            <Analytics />
+          </ProtectedRoute>
+        } />
       </Routes>
       <ToastContainer
         position="top-right"
@@ -91,9 +98,11 @@ function AppContent() {
 
 function App() {
   return (
-    <Router>
-      <AppContent />
-    </Router>
+    <ErrorBoundary>
+      <Router>
+        <AppContent />
+      </Router>
+    </ErrorBoundary>
   );
 }
 

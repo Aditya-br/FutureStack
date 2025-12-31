@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 // API base URL - uses environment variable or defaults to localhost
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
@@ -9,6 +10,7 @@ const api = axios.create({
     headers: {
         'Content-Type': 'application/json',
     },
+    timeout: 15000, // 15 second timeout
 });
 
 // Token getter function - will be set by the auth hook
@@ -39,14 +41,45 @@ api.interceptors.request.use(
     (error) => Promise.reject(error)
 );
 
-// Response interceptor for error handling
+// Response interceptor for error handling with toast notifications
 api.interceptors.response.use(
     (response) => response,
     (error) => {
-        if (error.response?.status === 401) {
-            // Log the error but let the ProtectedRoute component or Clerk handle redirects
-            console.error('Unauthorized - 401 response received');
+        // Handle network errors
+        if (!error.response) {
+            toast.error('Network error. Please check your connection.');
+            return Promise.reject(error);
         }
+
+        const status = error.response?.status;
+        const message = error.response?.data?.message || error.response?.data?.error;
+
+        switch (status) {
+            case 401:
+                toast.error('Session expired. Please sign in again.');
+                // Redirect to home after a short delay
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 1500);
+                break;
+            case 403:
+                toast.error('You don\'t have permission to do that.');
+                break;
+            case 404:
+                toast.error(message || 'Resource not found.');
+                break;
+            case 422:
+                toast.error(message || 'Invalid data provided.');
+                break;
+            case 500:
+                toast.error('Server error. Please try again later.');
+                break;
+            default:
+                if (status >= 400) {
+                    toast.error(message || 'Something went wrong.');
+                }
+        }
+
         return Promise.reject(error);
     }
 );
