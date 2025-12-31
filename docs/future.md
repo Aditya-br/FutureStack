@@ -6,21 +6,59 @@
 
 ## 🔧 Technical Improvements
 
+### 🚨 CRITICAL: Fix Permissive RLS Policy
+**Current Issue**: The `opportunities` table has a world-readable SELECT policy:
+```sql
+CREATE POLICY "Allow realtime subscriptions" ON opportunities FOR SELECT USING (true);
+```
+
+**Security Risk**: Anyone with the public `REACT_APP_SUPABASE_ANON_KEY` (extractable from frontend bundle) can run `select('*')` against the entire `opportunities` table, bypassing backend per-user filtering and reading ALL users' data.
+
+**Solution Options**:
+1. Remove this policy and use Supabase's broadcast/presence channels instead of postgres_changes
+2. Keep RLS conditions tied to authenticated user via JWT claims
+3. Create a separate "realtime_notifications" table with minimal data that can be world-readable
+
+**Priority**: CRITICAL (security vulnerability)
+
+---
+
 ### Redis Cache for Production
 **Current Issue**: In-memory user cache in `auth.js` is lost on server restart and not shared across instances.
 
 ```javascript
-// Current implementation (auth.js lines 4-7)
 const userCache = new Map();
-const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
+const CACHE_TTL_MS = 5 * 60 * 1000;
 ```
 
-**Solution**: Implement Redis for distributed caching
-- Use `ioredis` or `redis` npm package
-- Store user ID mappings with TTL
-- Benefits: Persistence across restarts, works with load balancing
+**Solution**: Implement Redis for distributed caching (`ioredis` package)
 
 **Priority**: High (before production deployment)
+
+---
+
+### Analytics Performance Optimization
+**Current Issue**: Analytics calculations iterate through all opportunities multiple times in JavaScript. With thousands of opportunities, this causes slow response times.
+
+**Solution**:
+- Move aggregations to PostgreSQL queries (GROUP BY, COUNT, DATE_TRUNC)
+- Implement server-side caching for analytics results (5-minute TTL)
+- Consider materialized views for complex metrics
+
+**Priority**: Medium (when users exceed ~500 opportunities)
+
+---
+
+### API Token Isolation
+**Current Issue**: Global `getAuthToken` in `api.js` could mix tokens in SSR/testing scenarios.
+
+```javascript
+let getAuthToken = null; // Global state
+```
+
+**Solution**: For SSR, use factory pattern to create per-request Axios instances. For SPA-only (current), this is acceptable.
+
+**Priority**: Low (only if adding SSR)
 
 ---
 
