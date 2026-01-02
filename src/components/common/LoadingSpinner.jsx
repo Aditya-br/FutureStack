@@ -1,9 +1,5 @@
 import React from 'react';
 
-/**
- * Loading Spinner Component
- * Reusable spinner with different sizes and variants
- */
 const LoadingSpinner = ({
     size = 'md',
     color = 'purple',
@@ -25,12 +21,7 @@ const LoadingSpinner = ({
         white: 'border-white'
     };
 
-    const spinnerClasses = `
-    animate-spin rounded-full 
-    ${sizeClasses[size]} 
-    ${colorClasses[color]} 
-    border-t-transparent
-  `;
+    const spinnerClasses = `animate-spin rounded-full ${sizeClasses[size]} ${colorClasses[color]} border-t-transparent`;
 
     if (fullScreen) {
         return (
@@ -51,9 +42,6 @@ const LoadingSpinner = ({
     );
 };
 
-/**
- * Skeleton Loader for cards
- */
 export const SkeletonCard = ({ className = '' }) => (
     <div className={`animate-pulse bg-gray-800/50 rounded-lg p-4 ${className}`}>
         <div className="h-4 bg-gray-700 rounded w-3/4 mb-3"></div>
@@ -62,9 +50,6 @@ export const SkeletonCard = ({ className = '' }) => (
     </div>
 );
 
-/**
- * Skeleton Loader for charts
- */
 export const SkeletonChart = ({ className = '' }) => (
     <div className={`animate-pulse bg-gray-800/30 rounded-xl p-6 ${className}`}>
         <div className="h-4 bg-gray-700 rounded w-1/3 mb-6"></div>
@@ -78,12 +63,9 @@ export const SkeletonChart = ({ className = '' }) => (
     </div>
 );
 
-/**
- * Button Spinner for inline loading states
- */
 export const ButtonSpinner = ({ size = 'sm' }) => (
-    <div className={`animate-spin rounded-full border-2 border-white/30 border-t-white ${size === 'sm' ? 'h-4 w-4' : 'h-5 w-5'
-        }`}></div>
+    <div className={`animate-spin rounded-full border-2 border-white/30 border-t-white ${size === 'sm' ? 'h-4 w-4' : 'h-5 w-5'}`}></div>
 );
 
 export default LoadingSpinner;
+

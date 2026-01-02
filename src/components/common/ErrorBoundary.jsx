@@ -1,10 +1,6 @@
 import React from 'react';
 import { FaExclamationTriangle, FaRedo } from 'react-icons/fa';
 
-/**
- * Error Boundary Component
- * Catches JavaScript errors and displays a fallback UI
- */
 class ErrorBoundary extends React.Component {
     constructor(props) {
         super(props);

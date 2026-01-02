@@ -3,17 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { FaPlus, FaChartLine, FaCalendarAlt, FaBoxOpen } from 'react-icons/fa';
 import Button from './Button';
 
-/**
- * Empty State Component
- * Displays friendly message when no data is available
- */
 const EmptyState = ({
     icon: Icon = FaBoxOpen,
     title = 'No data yet',
     description = 'Get started by adding your first item.',
     actionLabel = null,
     actionPath = null,
-    variant = 'default' // 'default', 'opportunities', 'analytics', 'calendar'
+    variant = 'default'
 }) => {
     const navigate = useNavigate();
 
