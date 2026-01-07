@@ -1,22 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { toast } from 'react-toastify';
+import { useAuth } from '@clerk/clerk-react';
 import StatusColumn from '../components/statusboard/StatusColumn';
 import Modal from '../components/common/Modal';
 import Button from '../components/common/Button';
 import { opportunityService } from '../services/api';
+import { supabase, isRealtimeAvailable } from '../lib/supabase';
 
 const StatusBoard = () => {
   const [opportunities, setOpportunities] = useState([]);
   const [loading, setLoading] = useState(true);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [opportunityToDelete, setOpportunityToDelete] = useState(null);
+  const [realtimeConnected, setRealtimeConnected] = useState(false);
+  const { userId } = useAuth();
 
-  // Fetch all opportunities on component mount
-  useEffect(() => {
-    fetchOpportunities();
-  }, []);
-
-  const fetchOpportunities = async () => {
+  // Memoized fetch function for realtime callback
+  const fetchOpportunities = useCallback(async () => {
     try {
       setLoading(true);
       const data = await opportunityService.getAll();
@@ -27,7 +27,55 @@ const StatusBoard = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  // Fetch opportunities and set up realtime subscription
+  useEffect(() => {
+    fetchOpportunities();
+
+    // Set up Supabase realtime subscription for live updates
+    if (!isRealtimeAvailable || !supabase || !userId) {
+      if (!isRealtimeAvailable) {
+        console.warn('Realtime features unavailable: Supabase environment variables not configured');
+      }
+      return;
+    }
+
+    // Subscribe to realtime changes (uses anon key with permissive RLS policy)
+    const channel = supabase
+      .channel('kanban-realtime')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'opportunities',
+        },
+        (payload) => {
+          console.log('Realtime update received:', payload.eventType);
+          // Refetch opportunities on any change
+          fetchOpportunities();
+        }
+      )
+      .subscribe((status, err) => {
+        console.log('Supabase realtime subscription status:', status);
+        if (status === 'SUBSCRIBED') {
+          setRealtimeConnected(true);
+        } else if (status === 'CLOSED' || status === 'CHANNEL_ERROR') {
+          setRealtimeConnected(false);
+        }
+        if (err) {
+          console.error('Subscription error:', err);
+          setRealtimeConnected(false);
+        }
+      });
+
+    // Cleanup subscription on unmount
+    return () => {
+      supabase.removeChannel(channel);
+      setRealtimeConnected(false);
+    };
+  }, [userId, fetchOpportunities]);
 
   // Group opportunities by status
   const groupedOpportunities = {
@@ -115,7 +163,24 @@ const StatusBoard = () => {
     <div className="min-h-screen bg-black p-4 sm:p-6">
       {/* Page Header */}
       <div className="mb-6 sm:mb-8">
-        <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">Status Board</h1>
+        <div className="flex items-center gap-3 mb-2">
+          <h1 className="text-2xl sm:text-3xl font-bold text-white">Status Board</h1>
+          {/* Realtime status indicator */}
+          {isRealtimeAvailable ? (
+            <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium ${realtimeConnected
+                ? 'bg-green-500/20 text-green-400'
+                : 'bg-yellow-500/20 text-yellow-400'
+              }`}>
+              <span className={`w-1.5 h-1.5 rounded-full ${realtimeConnected ? 'bg-green-400' : 'bg-yellow-400 animate-pulse'}`}></span>
+              {realtimeConnected ? 'Live' : 'Connecting...'}
+            </span>
+          ) : (
+            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium bg-gray-500/20 text-gray-400">
+              <span className="w-1.5 h-1.5 rounded-full bg-gray-400"></span>
+              Offline
+            </span>
+          )}
+        </div>
         <p className="text-sm sm:text-base text-gray-400">Track your application progress across different stages</p>
       </div>
 

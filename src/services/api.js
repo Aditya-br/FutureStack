@@ -1,201 +1,113 @@
 import axios from 'axios';
-import { getSampleData } from '../data/sampleData';
+import { toast } from 'react-toastify';
 
-const API_BASE_URL = 'http://localhost:3001';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
 
 const api = axios.create({
-  baseURL: API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
+    baseURL: API_BASE_URL,
+    headers: { 'Content-Type': 'application/json' },
+    timeout: 15000,
 });
 
-// Demo mode state
-let isDemoMode = false;
-let demoData = [];
+let getAuthToken = null;
 
-// Initialize demo data from localStorage or sample data
-const initDemoData = () => {
-  const stored = localStorage.getItem('futurestack_demo_data');
-  if (stored) {
-    try {
-      demoData = JSON.parse(stored);
-    } catch (e) {
-      demoData = getSampleData();
+export const setAuthTokenGetter = (getter) => {
+    getAuthToken = getter;
+};
+
+api.interceptors.request.use(
+    async (config) => {
+        if (getAuthToken) {
+            try {
+                const token = await getAuthToken();
+                if (token) {
+                    config.headers.Authorization = `Bearer ${token}`;
+                }
+            } catch (error) {
+                console.error('Error getting auth token:', error);
+            }
+        }
+        return config;
+    },
+    (error) => Promise.reject(error)
+);
+
+api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (!error.response) {
+            toast.error('Network error. Please check your connection.');
+            return Promise.reject(error);
+        }
+
+        const status = error.response?.status;
+        const message = error.response?.data?.message || error.response?.data?.error;
+
+        switch (status) {
+            case 401:
+                toast.error('Session expired. Please sign in again.');
+                setTimeout(() => { window.location.href = '/'; }, 1500);
+                break;
+            case 403:
+                toast.error('You don\'t have permission to do that.');
+                break;
+            case 404:
+                toast.error(message || 'Resource not found.');
+                break;
+            case 422:
+                toast.error(message || 'Invalid data provided.');
+                break;
+            case 500:
+                toast.error('Server error. Please try again later.');
+                break;
+            default:
+                if (status >= 400) {
+                    toast.error(message || 'Something went wrong.');
+                }
+        }
+
+        return Promise.reject(error);
     }
-  } else {
-    demoData = getSampleData();
-  }
-  saveDemoData();
-};
-
-// Save demo data to localStorage
-const saveDemoData = () => {
-  localStorage.setItem('futurestack_demo_data', JSON.stringify(demoData));
-};
-
-// Check if backend is available
-const checkBackendAvailability = async () => {
-  try {
-    await api.get('/opportunities', { timeout: 2000 });
-    isDemoMode = false;
-    return true;
-  } catch (error) {
-    isDemoMode = true;
-    initDemoData();
-    return false;
-  }
-};
-
-// Initialize on load
-checkBackendAvailability();
-
-// Error handling wrapper
-const handleApiError = (error) => {
-  if (error.response) {
-    console.error('API Error:', error.response.status, error.response.data);
-    throw new Error(error.response.data.message || 'An error occurred');
-  } else if (error.request) {
-    console.error('Network Error - Switching to demo mode');
-    isDemoMode = true;
-    initDemoData();
-    throw new Error('DEMO_MODE');
-  } else {
-    console.error('Error:', error.message);
-    throw new Error(error.message);
-  }
-};
+);
 
 export const opportunityService = {
-  // Get all opportunities
-  getAll: async () => {
-    try {
-      if (isDemoMode) {
-        return Promise.resolve([...demoData]);
-      }
-      const response = await api.get('/opportunities');
-      return response.data;
-    } catch (error) {
-      try {
-        handleApiError(error);
-      } catch (e) {
-        if (e.message === 'DEMO_MODE') {
-          return Promise.resolve([...demoData]);
-        }
-        throw e;
-      }
-    }
-  },
+    getAll: async () => {
+        const response = await api.get('/opportunities');
+        return response.data;
+    },
 
-  // Get single opportunity by ID
-  getById: async (id) => {
-    try {
-      if (isDemoMode) {
-        const item = demoData.find(opp => opp.id === id);
-        return Promise.resolve(item || null);
-      }
-      const response = await api.get(`/opportunities/${id}`);
-      return response.data;
-    } catch (error) {
-      try {
-        handleApiError(error);
-      } catch (e) {
-        if (e.message === 'DEMO_MODE') {
-          const item = demoData.find(opp => opp.id === id);
-          return Promise.resolve(item || null);
-        }
-        throw e;
-      }
-    }
-  },
+    getById: async (id) => {
+        const response = await api.get(`/opportunities/${id}`);
+        return response.data;
+    },
 
-  // Create new opportunity
-  create: async (data) => {
-    try {
-      if (isDemoMode) {
-        const newItem = {
-          ...data,
-          id: String(Date.now()),
-        };
-        demoData.push(newItem);
-        saveDemoData();
-        return Promise.resolve(newItem);
-      }
-      const response = await api.post('/opportunities', data);
-      return response.data;
-    } catch (error) {
-      try {
-        handleApiError(error);
-      } catch (e) {
-        if (e.message === 'DEMO_MODE') {
-          const newItem = {
-            ...data,
-            id: String(Date.now()),
-          };
-          demoData.push(newItem);
-          saveDemoData();
-          return Promise.resolve(newItem);
-        }
-        throw e;
-      }
-    }
-  },
+    create: async (data) => {
+        const response = await api.post('/opportunities', data);
+        return response.data;
+    },
 
-  // Update existing opportunity
-  update: async (id, data) => {
-    try {
-      if (isDemoMode) {
-        const index = demoData.findIndex(opp => opp.id === id);
-        if (index !== -1) {
-          demoData[index] = { ...demoData[index], ...data };
-          saveDemoData();
-          return Promise.resolve(demoData[index]);
-        }
-        return Promise.resolve(null);
-      }
-      const response = await api.patch(`/opportunities/${id}`, data);
-      return response.data;
-    } catch (error) {
-      try {
-        handleApiError(error);
-      } catch (e) {
-        if (e.message === 'DEMO_MODE') {
-          const index = demoData.findIndex(opp => opp.id === id);
-          if (index !== -1) {
-            demoData[index] = { ...demoData[index], ...data };
-            saveDemoData();
-            return Promise.resolve(demoData[index]);
-          }
-          return Promise.resolve(null);
-        }
-        throw e;
-      }
-    }
-  },
+    update: async (id, data) => {
+        const response = await api.patch(`/opportunities/${id}`, data);
+        return response.data;
+    },
 
-  // Delete opportunity
-  delete: async (id) => {
-    try {
-      if (isDemoMode) {
-        demoData = demoData.filter(opp => opp.id !== id);
-        saveDemoData();
-        return Promise.resolve({ success: true });
-      }
-      const response = await api.delete(`/opportunities/${id}`);
-      return response.data;
-    } catch (error) {
-      try {
-        handleApiError(error);
-      } catch (e) {
-        if (e.message === 'DEMO_MODE') {
-          demoData = demoData.filter(opp => opp.id !== id);
-          saveDemoData();
-          return Promise.resolve({ success: true });
-        }
-        throw e;
-      }
+    delete: async (id) => {
+        const response = await api.delete(`/opportunities/${id}`);
+        return response.data;
     }
-  },
+};
+
+export const analyticsService = {
+    getAnalytics: async () => {
+        const response = await api.get('/analytics');
+        return response.data;
+    }
+};
+
+export const healthCheck = async () => {
+    const response = await api.get('/health');
+    return response.data;
 };
 
 export default api;
+

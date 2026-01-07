@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FiActivity, FiBriefcase, FiCode, FiArrowRight, FiGithub, FiLinkedin, FiTwitter } from 'react-icons/fi';
+import { SignInButton, SignUpButton, SignedIn, SignedOut, UserButton } from '@clerk/clerk-react';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -43,12 +44,29 @@ const Home = () => {
             <a href="https://github.com/Venkat-Kolasani/FutureStack" target="_blank" rel="noreferrer" className="hover:text-white transition-colors">GitHub</a>
           </div>
 
-          <button
-            onClick={() => navigate('/dashboard')}
-            className="px-5 py-2.5 bg-white text-black text-sm font-semibold rounded-full hover:bg-gray-200 transition-all transform hover:scale-105 active:scale-95"
-          >
-            Launch App
-          </button>
+          <div className="flex items-center gap-4">
+            <SignedOut>
+              <SignInButton mode="modal">
+                <button className="px-4 py-2 text-sm font-medium text-gray-300 hover:text-white transition-colors">
+                  Sign In
+                </button>
+              </SignInButton>
+              <SignUpButton mode="modal">
+                <button className="px-5 py-2.5 bg-white text-black text-sm font-semibold rounded-full hover:bg-gray-200 transition-all transform hover:scale-105 active:scale-95">
+                  Get Started
+                </button>
+              </SignUpButton>
+            </SignedOut>
+            <SignedIn>
+              <button
+                onClick={() => navigate('/dashboard')}
+                className="px-5 py-2.5 bg-white text-black text-sm font-semibold rounded-full hover:bg-gray-200 transition-all transform hover:scale-105 active:scale-95"
+              >
+                Launch App
+              </button>
+              <UserButton afterSignOutUrl="/" />
+            </SignedIn>
+          </div>
         </div>
       </nav>
 
@@ -73,16 +91,39 @@ const Home = () => {
               manage hackathons, and visualize career progress.
             </p>
 
-            <div className="flex items-center justify-center">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => navigate('/dashboard')}
-                className="px-8 py-4 bg-white hover:bg-gray-100 text-black rounded-xl font-semibold text-lg transition-all flex items-center justify-center gap-2 group shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.5)]"
-              >
-                Get Started Free
-                <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
-              </motion.button>
+            <div className="flex items-center justify-center gap-4">
+              <SignedOut>
+                <SignUpButton mode="modal">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="px-8 py-4 bg-white hover:bg-gray-100 text-black rounded-xl font-semibold text-lg transition-all flex items-center justify-center gap-2 group shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.5)]"
+                  >
+                    Get Started Free
+                    <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
+                  </motion.button>
+                </SignUpButton>
+                <SignInButton mode="modal">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="px-8 py-4 border border-white/20 hover:border-white/40 text-white rounded-xl font-semibold text-lg transition-all"
+                  >
+                    Sign In
+                  </motion.button>
+                </SignInButton>
+              </SignedOut>
+              <SignedIn>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => navigate('/dashboard')}
+                  className="px-8 py-4 bg-white hover:bg-gray-100 text-black rounded-xl font-semibold text-lg transition-all flex items-center justify-center gap-2 group shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.5)]"
+                >
+                  Go to Dashboard
+                  <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
+                </motion.button>
+              </SignedIn>
             </div>
           </motion.div>
         </div>

@@ -4,6 +4,11 @@ import 'react-toastify/dist/ReactToastify.css';
 
 // Components
 import Navbar from './components/common/Navbar';
+import ProtectedRoute from './components/auth/ProtectedRoute';
+import ErrorBoundary from './components/common/ErrorBoundary';
+
+// Hooks
+import { useAuthToken } from './hooks/useAuthToken';
 
 // Pages
 import Home from './pages/Home';
@@ -15,24 +20,65 @@ import EditOpportunity from './pages/EditOpportunity';
 import StatusBoard from './pages/StatusBoard';
 import Calendar from './pages/Calendar';
 import Reports from './pages/Reports';
+import Analytics from './pages/Analytics';
 
 function AppContent() {
   const location = useLocation();
   const isHomePage = location.pathname === '/';
+
+  // Initialize auth token getter for API calls
+  useAuthToken();
 
   return (
     <div className="min-h-screen bg-black text-white font-sans">
       {!isHomePage && <Navbar />}
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/internships" element={<InternshipList />} />
-        <Route path="/hackathons" element={<HackathonList />} />
-        <Route path="/add" element={<AddOpportunity />} />
-        <Route path="/edit/:id" element={<EditOpportunity />} />
-        <Route path="/status-board" element={<StatusBoard />} />
-        <Route path="/calendar" element={<Calendar />} />
-        <Route path="/reports" element={<Reports />} />
+        <Route path="/dashboard" element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        } />
+        <Route path="/internships" element={
+          <ProtectedRoute>
+            <InternshipList />
+          </ProtectedRoute>
+        } />
+        <Route path="/hackathons" element={
+          <ProtectedRoute>
+            <HackathonList />
+          </ProtectedRoute>
+        } />
+        <Route path="/add" element={
+          <ProtectedRoute>
+            <AddOpportunity />
+          </ProtectedRoute>
+        } />
+        <Route path="/edit/:id" element={
+          <ProtectedRoute>
+            <EditOpportunity />
+          </ProtectedRoute>
+        } />
+        <Route path="/status-board" element={
+          <ProtectedRoute>
+            <StatusBoard />
+          </ProtectedRoute>
+        } />
+        <Route path="/calendar" element={
+          <ProtectedRoute>
+            <Calendar />
+          </ProtectedRoute>
+        } />
+        <Route path="/reports" element={
+          <ProtectedRoute>
+            <Reports />
+          </ProtectedRoute>
+        } />
+        <Route path="/analytics" element={
+          <ProtectedRoute>
+            <Analytics />
+          </ProtectedRoute>
+        } />
       </Routes>
       <ToastContainer
         position="top-right"
@@ -52,10 +98,14 @@ function AppContent() {
 
 function App() {
   return (
-    <Router>
-      <AppContent />
-    </Router>
+    <ErrorBoundary>
+      <Router>
+        <AppContent />
+      </Router>
+    </ErrorBoundary>
   );
 }
 
 export default App;
+
+

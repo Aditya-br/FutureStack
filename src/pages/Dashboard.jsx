@@ -69,14 +69,19 @@ const Dashboard = () => {
   const shortlistedCount = opportunities.filter(opp => opp.status === 'shortlisted').length;
   const selectedCount = opportunities.filter(opp => opp.status === 'selected').length;
 
-  // Get upcoming deadlines (next 3, not overdue, sorted chronologically)
+  // Final statuses where deadline no longer matters
+  const finalStatuses = ['rejected', 'selected'];
+
+  // Get upcoming deadlines (next 3, not overdue, not rejected/selected, sorted chronologically)
   const upcomingDeadlines = opportunities
-    .filter(opp => !isOverdue(opp.deadline))
+    .filter(opp => !isOverdue(opp.deadline) && !finalStatuses.includes(opp.status))
     .sort((a, b) => new Date(a.deadline) - new Date(b.deadline))
     .slice(0, 3);
 
-  // Get overdue items
-  const overdueItems = opportunities.filter(opp => isOverdue(opp.deadline));
+  // Get overdue items (only for active applications, not rejected/selected)
+  const overdueItems = opportunities.filter(
+    opp => isOverdue(opp.deadline) && !finalStatuses.includes(opp.status)
+  );
 
   if (loading) {
     return (
