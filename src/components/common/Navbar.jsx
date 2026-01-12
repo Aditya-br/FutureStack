@@ -62,22 +62,14 @@ const Navbar = () => {
             />
           </div>
 
-          {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center gap-4">
-            <UserButton
-              afterSignOutUrl="/"
-              appearance={{
-                elements: {
-                  avatarBox: "w-8 h-8 ring-2 ring-white/20"
-                }
-              }}
-            />
+          {/* Mobile Menu Button - cleaner layout */}
+          <div className="md:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="p-2 rounded-md hover:bg-white/10 transition-colors"
               aria-label="Toggle menu"
             >
-              {isOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
+              {isOpen ? <FaTimes size={22} /> : <FaBars size={22} />}
             </button>
           </div>
         </div>
@@ -101,6 +93,18 @@ const Navbar = () => {
                 {link.label}
               </Link>
             ))}
+            {/* User profile at bottom of mobile menu */}
+            <div className="pt-3 mt-2 border-t border-white/10 flex items-center gap-3 px-4 py-3">
+              <UserButton
+                afterSignOutUrl="/"
+                appearance={{
+                  elements: {
+                    avatarBox: "w-9 h-9 ring-2 ring-white/20"
+                  }
+                }}
+              />
+              <span className="text-sm text-gray-300">Account</span>
+            </div>
           </div>
         </div>
       )}

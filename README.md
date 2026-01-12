@@ -5,141 +5,262 @@
 
 [![React](https://img.shields.io/badge/React-19.2.0-blue.svg)](https://reactjs.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4.18-38B2AC.svg)](https://tailwindcss.com/)
+[![Clerk](https://img.shields.io/badge/Auth-Clerk-6C47FF.svg)](https://clerk.com/)
+[![Supabase](https://img.shields.io/badge/Database-Supabase-3ECF8E.svg)](https://supabase.com/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Vercel-black.svg)](https://futurestack.venkatkolasani.xyz/)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-futuretracker.online-black.svg)](https://futuretracker.online/)
 [![Docs on Devin](https://img.shields.io/badge/Docs-Devin-6C63FF.svg)](https://app.devin.ai/wiki/Venkat-Kolasani/FutureStack)
 
 ## 📋 Table of Contents
 
 - [Overview](#overview)
-- [Demonstration Videos](#demonstration-videos)
+- [Live Demo](#-live-demo)
 - [Features](#features)
 - [Tech Stack](#tech-stack)
-- [Documentation](#-documentation)
+- [System Architecture](#system-architecture)
 - [Getting Started](#getting-started)
+- [Environment Variables](#environment-variables)
+- [Deployment](#deployment)
 - [Project Structure](#project-structure)
-- [Available Scripts](#available-scripts)
 - [API Documentation](#api-documentation)
 - [Screenshots](#screenshots)
-- [Demonstration Video](#demonstration-video)
+- [Documentation](#-documentation)
 
 ## 🎯 Overview
 
-FutureStack is a modern, full-featured web application designed to help students and professionals track their career opportunities. Whether you're applying for internships, participating in hackathons, or managing multiple job applications, FutureStack provides an intuitive interface to organize, track, and manage all your opportunities in one place.
+FutureStack is a modern, full-featured SaaS application designed to help students and professionals track their career opportunities. Whether you're applying for internships, participating in hackathons, or managing multiple job applications, FutureStack provides an intuitive interface to organize, track, and manage all your opportunities in one place.
 
 ### Why FutureStack?
 
-- **Centralized Tracking**: Keep all your opportunities in one organized dashboard
-- **Visual Management**: Kanban-style status board for easy progress tracking
-- **Deadline Management**: Never miss an important deadline with calendar integration
-- **Comprehensive Reports**: Export detailed PDF reports for your records
-- **Responsive Design**: Works seamlessly on desktop, tablet, and mobile devices
+- **🔐 Secure Authentication**: Sign in with Google, GitHub, or email via Clerk
+- **⚡ Real-time Sync**: Instant updates across all devices via Supabase Realtime
+- **📊 Visual Management**: Kanban-style status board for easy progress tracking
+- **📈 Analytics Dashboard**: Track success rates, trends, and conversion funnels
+- **📅 Deadline Management**: Never miss an important deadline with calendar integration
+- **📄 PDF Reports**: Export detailed reports for your records
+- **📱 Responsive Design**: Works seamlessly on desktop, tablet, and mobile
 
 ### Demonstration Videos
 
 - [Website Demonstration Video](https://drive.google.com/file/d/1qL-gTfaE4hcs98NN6SgJ33D8HyKBz06t/view?usp=drive_link) – walk through the UI, navigation, and primary flows.
 - [Code Demonstration Video](https://drive.google.com/file/d/1aIHa0MnmIom3yrpk1rDdPfCrVDMuheT7/view?usp=sharing) – review the repository layout, component architecture, and deployment steps.
 
+## 🌐 Live Demo
+
+**Frontend**: [https://futuretracker.online](https://futuretracker.online)  
+**Backend API**: [https://futurestack-api.onrender.com](https://futurestack-api.onrender.com)
+
 ## ✨ Features
 
 ### Core Features
 
-- **📊 Dashboard**: Real-time statistics and upcoming deadline tracking
+- **🔐 Authentication**: Secure OAuth login with Google, GitHub, and email (powered by Clerk)
+- **📊 Dashboard**: Real-time statistics, analytics, and upcoming deadline tracking
 - **➕ CRUD Operations**: Create, read, update, and delete opportunities
 - **🔍 Search & Filter**: Quickly find opportunities by title, status, or category
 - **📅 Calendar View**: Visual representation of all deadlines
 - **📋 Status Board**: Kanban-style board with drag-and-drop status updates
+- **📈 Analytics**: Charts for status distribution, weekly trends, conversion funnels, and deadline heatmaps
 - **📄 PDF Export**: Generate professional reports with multiple export options
 - **🎨 Modern UI**: Clean, dark-themed interface with smooth animations
 - **📱 Responsive**: Fully responsive design for all screen sizes
 
 ### Technical Features
 
-- **Real-time Updates**: Instant feedback with toast notifications
-- **Form Validation**: Client-side validation for data integrity
-- **Error Handling**: Comprehensive error handling with user-friendly messages
-- **Loading States**: Smooth loading indicators for better UX
-- **Confirmation Modals**: Prevent accidental deletions
-- **RESTful API**: Clean API architecture with Axios
+- **⚡ Real-time Updates**: WebSocket-powered instant sync via Supabase Realtime
+- **🔄 JWT Authentication**: Secure API access with Clerk tokens
+- **🛡️ Row-Level Security**: Data isolation at the database level
+- **📦 Error Handling**: Comprehensive error handling with user-friendly messages
+- **⏳ Loading States**: Skeleton loading indicators for premium UX
+- **🔔 Toast Notifications**: Instant feedback for all actions
+- **🎯 Auto-logout on 401**: Expired sessions handled gracefully
 
 ## 🛠 Tech Stack
 
 ### Frontend
+| Technology | Version | Purpose |
+|------------|---------|---------|
+| React | 19.2.0 | UI library with hooks |
+| React Router DOM | 7.9.6 | Client-side routing |
+| Tailwind CSS | 3.4.18 | Utility-first CSS framework |
+| Clerk React | 5.59.2 | Authentication SDK |
+| Supabase JS | 2.89.0 | Realtime subscriptions |
+| Recharts | 3.6.0 | Data visualizations |
+| Framer Motion | 12.23.24 | Animations |
+| React Calendar | 6.0.0 | Calendar component |
+| jsPDF | 3.0.3 | PDF generation |
+| Axios | 1.13.2 | HTTP client |
 
-- **React 19.2.0** - Modern UI library with hooks
-- **React Router DOM 7.9.6** - Client-side routing
-- **Tailwind CSS 3.4.18** - Utility-first CSS framework
-- **React Icons 5.5.0** - Icon library
-- **React Toastify 11.0.5** - Toast notifications
-- **React Calendar 6.0.0** - Calendar component
-- **jsPDF 3.0.3** - PDF generation
+### Backend
+| Technology | Purpose |
+|------------|---------|
+| Node.js + Express | RESTful API server |
+| Clerk SDK | JWT verification |
+| Supabase Client | PostgreSQL database access |
 
-### Backend (Development)
+### External Services
+| Service | Purpose |
+|---------|---------|
+| **Clerk** | OAuth authentication (Google, GitHub, Email) |
+| **Supabase** | PostgreSQL database + Realtime WebSockets |
+| **Vercel** | Frontend hosting |
+| **Render** | Backend hosting |
 
-- **JSON Server 1.0.0-beta.3** - Mock REST API
-- **Axios 1.13.2** - HTTP client
+## 🏗 System Architecture
 
-### Development Tools
-
-- **React Scripts 5.0.1** - Build tooling
-- **PostCSS 8.5.6** - CSS processing
-- **Autoprefixer 10.4.22** - CSS vendor prefixing
-
-## 📚 Documentation
-
-- [Devin Wiki](https://app.devin.ai/wiki/Venkat-Kolasani/FutureStack) – canonical, always-current runbook with high-level decisions, architecture diagrams, and demo notes.
-- Local references: `docs/ARCHITECTURE.md`, `docs/DOCUMENTATION.md`, `docs/INTEGRATION_TEST_RESULTS.md`, and `docs/PROJECT_SUMMARY.md` provide offline deep dives, test evidence, and executive summaries.
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                              USER BROWSER                                    │
+│  ┌─────────────────────────────────────────────────────────────────────────┐ │
+│  │  React App (Vercel)                                                     │ │
+│  │  ├── Clerk Auth (OAuth login)                                           │ │
+│  │  ├── Supabase Client (Realtime subscriptions)                          │ │
+│  │  └── Axios (API calls with JWT)                                        │ │
+│  └─────────────────────────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                    │
+                     JWT Token + API Requests
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         EXPRESS BACKEND (Render)                            │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────────────────────────────┐
+│  │ Auth         │  │ Routes       │  │ Services                            │
+│  │ Middleware   │──│ /api/*       │──│ Supabase Admin Client               │
+│  │ (Clerk JWT)  │  │              │  │ (user_id filtered queries)          │
+│  └──────────────┘  └──────────────┘  └──────────────────────────────────────┘
+└─────────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                           SUPABASE (PostgreSQL)                             │
+│  ┌──────────────────────────────────────────────────────────────────────────┐
+│  │  Tables: users, opportunities                                           │
+│  │  Features: Row-Level Security, Realtime subscriptions                   │
+│  └──────────────────────────────────────────────────────────────────────────┘
+└─────────────────────────────────────────────────────────────────────────────┘
+```
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 
-- Node.js (v14 or higher)
+- Node.js (v18 or higher)
 - npm or yarn
+- Clerk account ([clerk.com](https://clerk.com))
+- Supabase account ([supabase.com](https://supabase.com))
 
 ### Installation
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/futurestack.git
-   cd futurestack
+   git clone https://github.com/Venkat-Kolasani/FutureStack.git
+   cd FutureStack
    ```
 
-2. **Install dependencies**
+2. **Install frontend dependencies**
    ```bash
    npm install
    ```
 
-3. **Start the JSON Server (Backend)**
+3. **Install backend dependencies**
    ```bash
-   npm run server
+   cd backend
+   npm install
+   cd ..
    ```
-   The API will be available at `http://localhost:3001`
 
-4. **Start the React App (Frontend)**
+4. **Set up environment variables** (see [Environment Variables](#environment-variables))
+
+5. **Start the backend**
+   ```bash
+   cd backend
+   npm run dev
+   ```
+
+6. **Start the frontend** (in a new terminal)
    ```bash
    npm start
    ```
-   The app will open at `http://localhost:3000`
+
+The app will open at `http://localhost:3000`
+
+## 🔐 Environment Variables
+
+### Frontend (`.env` in root)
+```env
+# Clerk Authentication
+REACT_APP_CLERK_PUBLISHABLE_KEY=pk_test_...
+
+# Backend API URL
+REACT_APP_API_URL=http://localhost:3001/api
+```
+
+### Backend (`backend/.env`)
+```env
+# Server
+PORT=3001
+NODE_ENV=development
+
+# CORS (Frontend URL)
+CORS_ORIGIN=http://localhost:3000
+
+# Clerk Authentication
+CLERK_SECRET_KEY=sk_test_...
+
+# Supabase Database
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=eyJ...
+```
+
+## 🚢 Deployment
+
+### Frontend (Vercel)
+
+1. Push your code to GitHub
+2. Connect your repo to Vercel
+3. Add environment variables:
+   - `REACT_APP_CLERK_PUBLISHABLE_KEY`
+   - `REACT_APP_API_URL` (your Render backend URL + `/api`)
+4. Deploy
+
+### Backend (Render)
+
+1. Create a new Web Service on Render
+2. Connect your GitHub repo, set root directory to `backend`
+3. Add environment variables:
+   - `NODE_ENV=production`
+   - `CORS_ORIGIN` (your Vercel frontend URL)
+   - `CLERK_SECRET_KEY`
+   - `SUPABASE_URL`
+   - `SUPABASE_SERVICE_ROLE_KEY`
+4. Deploy
 
 ## 📁 Project Structure
 
 ```
 futurestack/
-├── public/                 # Static files
+├── public/                    # Static files
 ├── src/
-│   ├── components/        # Reusable components
-│   │   ├── common/       # Common UI components
+│   ├── components/           # Reusable components
+│   │   ├── auth/            # Authentication components
+│   │   │   └── ProtectedRoute.jsx
+│   │   ├── common/          # Common UI components
 │   │   │   ├── Button.jsx
 │   │   │   ├── Card.jsx
 │   │   │   ├── Modal.jsx
-│   │   │   └── Navbar.jsx
-│   │   ├── dashboard/    # Dashboard-specific components
+│   │   │   ├── Navbar.jsx
+│   │   │   └── ErrorBoundary.jsx
+│   │   ├── dashboard/       # Dashboard components
 │   │   │   ├── DeadlineWidget.jsx
 │   │   │   └── StatsCard.jsx
-│   │   └── opportunities/ # Opportunity-related components
-│   │       └── OpportunityForm.jsx
-│   ├── pages/            # Page components (routes)
+│   │   ├── opportunities/   # Opportunity components
+│   │   │   └── OpportunityForm.jsx
+│   │   └── statusboard/     # Kanban board components
+│   ├── hooks/               # Custom React hooks
+│   │   └── useAuthToken.js  # JWT token management
+│   ├── lib/                 # Library configurations
+│   │   └── supabase.js      # Supabase client
+│   ├── pages/               # Page components (routes)
 │   │   ├── Home.jsx
 │   │   ├── Dashboard.jsx
 │   │   ├── InternshipList.jsx
@@ -148,57 +269,60 @@ futurestack/
 │   │   ├── EditOpportunity.jsx
 │   │   ├── StatusBoard.jsx
 │   │   ├── Calendar.jsx
+│   │   ├── Analytics.jsx
 │   │   └── Reports.jsx
-│   ├── services/         # API services
-│   │   └── api.js
-│   ├── utils/            # Utility functions
+│   ├── services/            # API services
+│   │   └── api.js           # Axios instance + interceptors
+│   ├── utils/               # Utility functions
 │   │   ├── dateHelpers.js
 │   │   └── pdfExport.js
-│   ├── App.js            # Main app component
-│   ├── App.css           # Global styles
-│   └── index.js          # Entry point
-├── db.json               # JSON Server database
-├── tailwind.config.js    # Tailwind configuration
-├── package.json          # Dependencies
-└── README.md            # This file
+│   ├── App.js               # Main app component
+│   └── index.js             # Entry point
+├── backend/                  # Express API server
+│   ├── src/
+│   │   ├── server.js        # Express entry point
+│   │   ├── middleware/
+│   │   │   └── auth.js      # Clerk JWT verification
+│   │   ├── routes/
+│   │   │   ├── opportunities.js
+│   │   │   └── analytics.js
+│   │   └── lib/
+│   │       └── supabase.js  # Supabase admin client
+│   └── package.json
+├── docs/                     # Documentation
+├── tailwind.config.js       # Tailwind configuration
+└── package.json             # Frontend dependencies
 ```
-
-## 📜 Available Scripts
-
-### `npm start`
-Runs the React app in development mode at [http://localhost:3000](http://localhost:3000)
-
-### `npm run server`
-Starts the JSON Server API at [http://localhost:3001](http://localhost:3001)
-
-### `npm run build`
-Builds the app for production to the `build` folder
-
-### `npm test`
-Launches the test runner in interactive watch mode
 
 ## 🔌 API Documentation
 
 ### Base URL
+- **Development**: `http://localhost:3001/api`
+- **Production**: `https://futurestack-api.onrender.com/api`
+
+### Authentication
+All endpoints except `/health` require a valid Clerk JWT token:
 ```
-http://localhost:3001
+Authorization: Bearer <clerk_jwt_token>
 ```
 
 ### Endpoints
 
-#### Get All Opportunities
-```http
-GET /opportunities
-```
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| GET | `/health` | Health check | ❌ |
+| GET | `/opportunities` | List user's opportunities | ✅ |
+| GET | `/opportunities/:id` | Get single opportunity | ✅ |
+| POST | `/opportunities` | Create opportunity | ✅ |
+| PATCH | `/opportunities/:id` | Update opportunity | ✅ |
+| DELETE | `/opportunities/:id` | Delete opportunity | ✅ |
+| GET | `/analytics` | Get dashboard analytics | ✅ |
+| GET | `/me` | Get current user info | ✅ |
 
-#### Get Single Opportunity
+### Example: Create Opportunity
 ```http
-GET /opportunities/:id
-```
-
-#### Create Opportunity
-```http
-POST /opportunities
+POST /api/opportunities
+Authorization: Bearer <token>
 Content-Type: application/json
 
 {
@@ -212,26 +336,11 @@ Content-Type: application/json
 }
 ```
 
-#### Update Opportunity
-```http
-PATCH /opportunities/:id
-Content-Type: application/json
-
-{
-  "status": "shortlisted"
-}
-```
-
-#### Delete Opportunity
-```http
-DELETE /opportunities/:id
-```
-
 ## 📸 Screenshots
 
 ### Landing Page
 Clean, modern landing page with animated hero section
-![alt text](docs/readme-images/image.png)
+![Landing Page](docs/readme-images/image.png)
 
 ### Dashboard
 Real-time statistics with color-coded cards:
@@ -239,19 +348,19 @@ Real-time statistics with color-coded cards:
 - **Hackathons** (Orange)
 - **Shortlisted** (Yellow)
 - **Selected** (Green)
-![alt text](docs/readme-images/image-1.png)
+![Dashboard](docs/readme-images/image-1.png)
 
 ### Status Board
 Kanban-style board with 5 columns for visual progress tracking
-![alt text](docs/readme-images/image-2.png)
+![Status Board](docs/readme-images/image-2.png)
 
 ### Calendar View
 Interactive calendar with deadline visualization
-![alt text](docs/readme-images/image-3.png)
+![Calendar](docs/readme-images/image-3.png)
 
 ### Reports
 Flexible PDF export with multiple options
-![alt text](docs/readme-images/image-4.png)
+![Reports](docs/readme-images/image-4.png)
 
 ## 🎨 Design System
 
@@ -271,13 +380,11 @@ Flexible PDF export with multiple options
 - **Body**: Regular, sm-base
 - **Labels**: Medium, sm
 
-## Demonstration Video
+## 📚 Documentation
 
-You can watch both the live website demo and an annotated code walkthrough below:
-
-- [Website Demonstration Video](https://drive.google.com/file/d/1qL-gTfaE4hcs98NN6SgJ33D8HyKBz06t/view?usp=drive_link) – end-to-end tour of the FutureStack UI, navigation, and feature flows.
-- [Code Demonstration Video](https://drive.google.com/file/d/1aIHa0MnmIom3yrpk1rDdPfCrVDMuheT7/view?usp=sharing) – explanation of the source structure, key components, and build/deployment steps.
-
+- [Devin Wiki](https://app.devin.ai/wiki/Venkat-Kolasani/FutureStack) – canonical, always-current runbook with high-level decisions, architecture diagrams, and demo notes.
+- Local references: `docs/ARCHITECTURE.md`, `docs/DOCUMENTATION.md`, `docs/INTEGRATION_TEST_RESULTS.md`, and `docs/PROJECT_SUMMARY.md` provide offline deep dives, test evidence, and executive summaries.
 
 ---
 
+**Built with ❤️ by [Venkat Kolasani](https://github.com/Venkat-Kolasani)**

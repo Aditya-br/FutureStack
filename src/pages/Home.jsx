@@ -44,15 +44,16 @@ const Home = () => {
             <a href="https://github.com/Venkat-Kolasani/FutureStack" target="_blank" rel="noreferrer" className="hover:text-white transition-colors">GitHub</a>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 md:gap-4">
             <SignedOut>
+              {/* Sign In hidden on mobile - users can use hero CTA */}
               <SignInButton mode="modal">
-                <button className="px-4 py-2 text-sm font-medium text-gray-300 hover:text-white transition-colors">
+                <button className="hidden sm:block px-4 py-2 text-sm font-medium text-gray-300 hover:text-white transition-colors">
                   Sign In
                 </button>
               </SignInButton>
               <SignUpButton mode="modal">
-                <button className="px-5 py-2.5 bg-white text-black text-sm font-semibold rounded-full hover:bg-gray-200 transition-all transform hover:scale-105 active:scale-95">
+                <button className="px-4 py-2 sm:px-5 sm:py-2.5 bg-white text-black text-xs sm:text-sm font-semibold rounded-full hover:bg-gray-200 transition-all transform hover:scale-105 active:scale-95">
                   Get Started
                 </button>
               </SignUpButton>
@@ -60,7 +61,7 @@ const Home = () => {
             <SignedIn>
               <button
                 onClick={() => navigate('/dashboard')}
-                className="px-5 py-2.5 bg-white text-black text-sm font-semibold rounded-full hover:bg-gray-200 transition-all transform hover:scale-105 active:scale-95"
+                className="px-4 py-2 sm:px-5 sm:py-2.5 bg-white text-black text-xs sm:text-sm font-semibold rounded-full hover:bg-gray-200 transition-all transform hover:scale-105 active:scale-95"
               >
                 Launch App
               </button>

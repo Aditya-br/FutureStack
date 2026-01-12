@@ -64,13 +64,16 @@ graph TB
 
 | Layer | Technology | Purpose |
 |-------|------------|---------|
-| **Frontend** | React 18 + Vite | Modern UI with hooks |
+| **Frontend** | React 19 + CRA | Modern UI with hooks |
 | **Styling** | TailwindCSS | Utility-first responsive design |
 | **Charts** | Recharts | Premium data visualizations |
+| **Animations** | Framer Motion | Smooth transitions |
 | **Auth** | Clerk | OAuth + passwordless login |
 | **Backend** | Express.js | RESTful API server |
 | **Database** | Supabase (PostgreSQL) | Managed database with RLS |
 | **Realtime** | Supabase Realtime | WebSocket subscriptions |
+| **Frontend Hosting** | Vercel | CDN + serverless |
+| **Backend Hosting** | Render | Node.js server |
 
 ---
 
@@ -431,16 +434,38 @@ api.interceptors.response.use(
 | Lighthouse Performance | 90+ |
 | Mobile Responsive | ✅ 100% |
 | Build Status | ✅ Passing |
+| Production Status | ✅ Live |
+| Frontend URL | futuretracker.online |
+| Backend Platform | Render (Free Tier) |
 
 ---
 
 ## Quick Pitch Summary
 
-> "FutureStack is a full-stack SaaS application I built to solve my own pain point of tracking internship applications. The standout features are **real-time sync using Supabase WebSockets**, **premium analytics with Recharts**, and **production-grade error handling**. The biggest challenge was integrating Supabase Realtime with Clerk authentication - I solved it by understanding RLS policy conflicts and implementing a hybrid security model. The app is mobile-responsive, follows React best practices, and is ready for production deployment."
+> "FutureStack is a full-stack SaaS application I built to solve my own pain point of tracking internship applications. The standout features are **real-time sync using Supabase WebSockets**, **premium analytics with Recharts**, and **production-grade error handling**. The biggest challenge was integrating Supabase Realtime with Clerk authentication - I solved it by understanding RLS policy conflicts and implementing a hybrid security model. The app is mobile-responsive, follows React best practices, and is **deployed in production** at [futuretracker.online](https://futuretracker.online) with a Render-hosted Express backend."
 
 ---
 
-## Repository
+## Repository & Deployment
 
 **GitHub**: [Venkat-Kolasani/FutureStack](https://github.com/Venkat-Kolasani/FutureStack)  
-**Branch**: `phase2`
+**Branch**: `main`
+
+### Live URLs
+| Service | URL | Platform |
+|---------|-----|----------|
+| **Frontend** | [https://futuretracker.online](https://futuretracker.online) | Vercel |
+| **Backend API** | [https://futurestack-api.onrender.com](https://futurestack-api.onrender.com) | Render |
+
+### Environment Variables Required
+
+**Vercel (Frontend)**:
+- `REACT_APP_CLERK_PUBLISHABLE_KEY` - Clerk publishable key
+- `REACT_APP_API_URL` - Backend URL (https://futurestack-api.onrender.com/api)
+
+**Render (Backend)**:
+- `NODE_ENV` - Set to `production`
+- `CORS_ORIGIN` - Frontend URL (https://futuretracker.online)
+- `CLERK_SECRET_KEY` - Clerk secret key (must match frontend's publishable key environment)
+- `SUPABASE_URL` - Supabase project URL
+- `SUPABASE_SERVICE_ROLE_KEY` - Supabase service role key
