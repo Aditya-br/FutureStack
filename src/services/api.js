@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { analytics } from '../lib/analytics';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
 
@@ -83,16 +84,26 @@ export const opportunityService = {
 
     create: async (data) => {
         const response = await api.post('/opportunities', data);
+        // Track opportunity creation
+        analytics.opportunityCreated(data.category);
         return response.data;
     },
 
-    update: async (id, data) => {
+    update: async (id, data, oldStatus = null) => {
         const response = await api.patch(`/opportunities/${id}`, data);
+        // Track status changes if status was updated
+        if (data.status && oldStatus && data.status !== oldStatus) {
+            analytics.opportunityUpdated(response.data.category, oldStatus, data.status);
+        }
         return response.data;
     },
 
-    delete: async (id) => {
+    delete: async (id, category = null) => {
         const response = await api.delete(`/opportunities/${id}`);
+        // Track deletion
+        if (category) {
+            analytics.opportunityDeleted(category);
+        }
         return response.data;
     }
 };

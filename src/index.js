@@ -5,6 +5,10 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { clerkPublishableKey } from './lib/clerk';
+import { initAnalytics } from './lib/analytics';
+
+// Initialize analytics
+initAnalytics();
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

@@ -1,5 +1,7 @@
+import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
+import { useUser } from '@clerk/clerk-react';
 import 'react-toastify/dist/ReactToastify.css';
 
 // Components
@@ -9,6 +11,9 @@ import ErrorBoundary from './components/common/ErrorBoundary';
 
 // Hooks
 import { useAuthToken } from './hooks/useAuthToken';
+
+// Analytics
+import { trackPageView, identifyUser, resetAnalytics } from './lib/analytics';
 
 // Pages
 import Home from './pages/Home';
@@ -25,9 +30,24 @@ import Analytics from './pages/Analytics';
 function AppContent() {
   const location = useLocation();
   const isHomePage = location.pathname === '/';
+  const { user, isSignedIn } = useUser();
 
   // Initialize auth token getter for API calls
   useAuthToken();
+
+  // Track page views on route changes
+  useEffect(() => {
+    trackPageView(location.pathname);
+  }, [location.pathname]);
+
+  // Identify user when signed in
+  useEffect(() => {
+    if (isSignedIn && user) {
+      identifyUser(user.id, user.primaryEmailAddress?.emailAddress);
+    } else if (!isSignedIn) {
+      resetAnalytics();
+    }
+  }, [isSignedIn, user]);
 
   return (
     <div className="min-h-screen bg-black text-white font-sans">
