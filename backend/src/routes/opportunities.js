@@ -1,7 +1,23 @@
 const express = require('express');
 const { supabase } = require('../lib/supabase');
+const { validate } = require('../middleware/validate');
+const { createOpportunitySchema, updateOpportunitySchema, idParamSchema } = require('../validation/schemas');
 
 const router = express.Router();
+
+/**
+ * Audit logging helper
+ */
+function logAudit(action, userId, resourceId = null, details = {}) {
+    console.log(JSON.stringify({
+        timestamp: new Date().toISOString(),
+        type: 'AUDIT',
+        action,
+        userId,
+        resourceId,
+        details
+    }));
+}
 
 /**
  * GET /api/opportunities
@@ -57,22 +73,9 @@ router.get('/:id', async (req, res) => {
  * POST /api/opportunities
  * Create a new opportunity
  */
-router.post('/', async (req, res) => {
+router.post('/', validate(createOpportunitySchema), async (req, res) => {
     try {
         const { title, description, link, deadline, category, status, notes } = req.body;
-
-        // Validation
-        if (!title || !title.trim()) {
-            return res.status(400).json({ error: 'Title is required and cannot be empty' });
-        }
-
-        if (category && !['internship', 'hackathon'].includes(category)) {
-            return res.status(400).json({ error: 'Category must be internship or hackathon' });
-        }
-
-        if (status && !['applied', 'interviewed', 'shortlisted', 'selected', 'rejected'].includes(status)) {
-            return res.status(400).json({ error: 'Invalid status value' });
-        }
 
         const { data, error } = await supabase
             .from('opportunities')
@@ -91,6 +94,12 @@ router.post('/', async (req, res) => {
 
         if (error) throw error;
 
+        // Audit log
+        logAudit('CREATE_OPPORTUNITY', req.auth.internalUserId, data.id, {
+            title: data.title,
+            category: data.category
+        });
+
         res.status(201).json(data);
     } catch (error) {
         console.error('Error creating opportunity:', error.message);
@@ -105,19 +114,6 @@ const updateHandler = async (req, res) => {
     try {
         const { id } = req.params;
         const { title, description, link, deadline, category, status, notes } = req.body;
-
-        // Validation
-        if (title !== undefined && (title === null || !title.trim())) {
-            return res.status(400).json({ error: 'Title cannot be empty' });
-        }
-
-        if (category && !['internship', 'hackathon'].includes(category)) {
-            return res.status(400).json({ error: 'Category must be internship or hackathon' });
-        }
-
-        if (status && !['applied', 'interviewed', 'shortlisted', 'selected', 'rejected'].includes(status)) {
-            return res.status(400).json({ error: 'Invalid status value' });
-        }
 
         // Build update object with only provided fields
         const updateData = {};
@@ -144,6 +140,11 @@ const updateHandler = async (req, res) => {
             throw error;
         }
 
+        // Audit log
+        logAudit('UPDATE_OPPORTUNITY', req.auth.internalUserId, id, {
+            updatedFields: Object.keys(updateData)
+        });
+
         res.json(data);
     } catch (error) {
         console.error('Error updating opportunity:', error.message);
@@ -155,13 +156,13 @@ const updateHandler = async (req, res) => {
  * PUT /api/opportunities/:id
  * Update an existing opportunity
  */
-router.put('/:id', updateHandler);
+router.put('/:id', validate(idParamSchema, 'params'), validate(updateOpportunitySchema), updateHandler);
 
 /**
  * PATCH /api/opportunities/:id
  * Partial update (same as PUT for compatibility)
  */
-router.patch('/:id', updateHandler);
+router.patch('/:id', validate(idParamSchema, 'params'), validate(updateOpportunitySchema), updateHandler);
 
 /**
  * DELETE /api/opportunities/:id
@@ -182,6 +183,9 @@ router.delete('/:id', async (req, res) => {
         if (count === 0) {
             return res.status(404).json({ error: 'Opportunity not found' });
         }
+
+        // Audit log
+        logAudit('DELETE_OPPORTUNITY', req.auth.internalUserId, id);
 
         res.json({ success: true, message: 'Opportunity deleted' });
     } catch (error) {
