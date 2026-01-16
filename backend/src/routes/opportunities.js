@@ -1,7 +1,28 @@
 const express = require('express');
 const { supabase } = require('../lib/supabase');
+const { validate } = require('../middleware/validate');
+const { createOpportunitySchema, updateOpportunitySchema, idParamSchema } = require('../validation/schemas');
 
 const router = express.Router();
+
+/**
+ * Audit logging helper
+ * Note: Avoids logging user-supplied content (titles, descriptions) to prevent
+ * sensitive data exposure in logs. Only logs action type, user ID, resource ID, and metadata.
+ * Note: Custom error messages from Joi schemas (defined in schemas.js) will be properly
+ * propagated through the validation middleware to the client.
+ */
+function logAudit(action, userId, resourceId = null, outcome = 'success', details = {}) {
+    console.log(JSON.stringify({
+        timestamp: new Date().toISOString(),
+        type: 'AUDIT',
+        action,
+        userId,
+        resourceId,
+        outcome, // success or failure
+        details // Metadata only, no user content
+    }));
+}
 
 /**
  * GET /api/opportunities
@@ -57,22 +78,9 @@ router.get('/:id', async (req, res) => {
  * POST /api/opportunities
  * Create a new opportunity
  */
-router.post('/', async (req, res) => {
+router.post('/', validate(createOpportunitySchema), async (req, res) => {
     try {
         const { title, description, link, deadline, category, status, notes } = req.body;
-
-        // Validation
-        if (!title || !title.trim()) {
-            return res.status(400).json({ error: 'Title is required and cannot be empty' });
-        }
-
-        if (category && !['internship', 'hackathon'].includes(category)) {
-            return res.status(400).json({ error: 'Category must be internship or hackathon' });
-        }
-
-        if (status && !['applied', 'interviewed', 'shortlisted', 'selected', 'rejected'].includes(status)) {
-            return res.status(400).json({ error: 'Invalid status value' });
-        }
 
         const { data, error } = await supabase
             .from('opportunities')
@@ -91,6 +99,11 @@ router.post('/', async (req, res) => {
 
         if (error) throw error;
 
+        // Audit log (metadata only, no user content)
+        logAudit('CREATE_OPPORTUNITY', req.auth.internalUserId, data.id, 'success', {
+            category: data.category
+        });
+
         res.status(201).json(data);
     } catch (error) {
         console.error('Error creating opportunity:', error.message);
@@ -105,19 +118,6 @@ const updateHandler = async (req, res) => {
     try {
         const { id } = req.params;
         const { title, description, link, deadline, category, status, notes } = req.body;
-
-        // Validation
-        if (title !== undefined && (title === null || !title.trim())) {
-            return res.status(400).json({ error: 'Title cannot be empty' });
-        }
-
-        if (category && !['internship', 'hackathon'].includes(category)) {
-            return res.status(400).json({ error: 'Category must be internship or hackathon' });
-        }
-
-        if (status && !['applied', 'interviewed', 'shortlisted', 'selected', 'rejected'].includes(status)) {
-            return res.status(400).json({ error: 'Invalid status value' });
-        }
 
         // Build update object with only provided fields
         const updateData = {};
@@ -144,6 +144,12 @@ const updateHandler = async (req, res) => {
             throw error;
         }
 
+        // Audit log (metadata only, no user content)
+        logAudit('UPDATE_OPPORTUNITY', req.auth.internalUserId, id, 'success', {
+            updatedFields: Object.keys(updateData),
+            fieldCount: Object.keys(updateData).length
+        });
+
         res.json(data);
     } catch (error) {
         console.error('Error updating opportunity:', error.message);
@@ -155,19 +161,19 @@ const updateHandler = async (req, res) => {
  * PUT /api/opportunities/:id
  * Update an existing opportunity
  */
-router.put('/:id', updateHandler);
+router.put('/:id', validate(idParamSchema, 'params'), validate(updateOpportunitySchema), updateHandler);
 
 /**
  * PATCH /api/opportunities/:id
  * Partial update (same as PUT for compatibility)
  */
-router.patch('/:id', updateHandler);
+router.patch('/:id', validate(idParamSchema, 'params'), validate(updateOpportunitySchema), updateHandler);
 
 /**
  * DELETE /api/opportunities/:id
  * Delete an opportunity
  */
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', validate(idParamSchema, 'params'), async (req, res) => {
     try {
         const { id } = req.params;
 
@@ -182,6 +188,9 @@ router.delete('/:id', async (req, res) => {
         if (count === 0) {
             return res.status(404).json({ error: 'Opportunity not found' });
         }
+
+        // Audit log
+        logAudit('DELETE_OPPORTUNITY', req.auth.internalUserId, id, 'success');
 
         res.json({ success: true, message: 'Opportunity deleted' });
     } catch (error) {

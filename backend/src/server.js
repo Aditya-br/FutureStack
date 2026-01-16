@@ -3,6 +3,8 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+const mongoSanitize = require('express-mongo-sanitize');
 
 const { requireAuth } = require('./middleware/auth');
 const opportunitiesRoutes = require('./routes/opportunities');
@@ -12,11 +14,51 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // =============================================================================
+// Trust Proxy Configuration
+// =============================================================================
+
+// CRITICAL: Enable trust proxy for correct IP detection behind reverse proxies
+// This is essential for rate limiting and IP logging to work correctly when
+// deployed behind Nginx, load balancers, or cloud platforms (Heroku, Railway, etc.)
+// Without this, all requests appear to come from the proxy's IP address
+app.set('trust proxy', 1);
+
+// =============================================================================
 // Middleware
 // =============================================================================
 
-// Security headers
-app.use(helmet());
+// Security headers with enhanced configuration
+app.use(helmet({
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            // Note: 'unsafe-inline' for styles is required for React's runtime style injection
+            // Consider migrating to styled-components or CSS modules with nonces for stronger protection
+            styleSrc: ["'self'", "'unsafe-inline'"],
+            scriptSrc: ["'self'"],
+            imgSrc: ["'self'", "data:", "https:"],
+            connectSrc: ["'self'"],
+            fontSrc: ["'self'"],
+            objectSrc: ["'none'"],
+            mediaSrc: ["'self'"],
+            frameSrc: ["'none'"]
+        }
+    },
+    hsts: {
+        maxAge: 31536000, // 1 year in seconds
+        includeSubDomains: true,
+        preload: true
+    },
+    frameguard: {
+        action: 'deny'
+    },
+    // xssFilter deprecated - removed as it's no longer supported
+    // Modern browsers use CSP and built-in protections instead
+    noSniff: true,
+    referrerPolicy: {
+        policy: 'strict-origin-when-cross-origin'
+    }
+}));
 
 // CORS configuration
 const corsOptions = {
@@ -29,8 +71,68 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-// Parse JSON bodies with size limit to prevent DoS
+// Parse JSON bodies BEFORE sanitization (order matters!)
 app.use(express.json({ limit: '1mb' }));
+
+// Data sanitization against NoSQL injection attacks
+// Note: While we use PostgreSQL (Supabase), this provides defense-in-depth
+// and future-proofs the application if MongoDB is added later
+app.use(mongoSanitize());
+
+// Rate limiting - Generous limits to prevent abuse while allowing normal usage
+// Note: These limits are collectively shared across all users on the same IP address.
+// For a hostel with 100 users, each user averages ~20 general requests and ~15 write operations per 15 minutes.
+const generalLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 2000, // 2000 requests per 15 min (supports ~100 users sharing same IP)
+    standardHeaders: true, // Return rate limit info in `RateLimit-*` headers
+    legacyHeaders: false, // Disable `X-RateLimit-*` headers
+    // Skip health check endpoint for monitoring
+    skip: (req) => req.path === '/api/health',
+    handler: (req, res) => {
+        const resetTime = new Date(Date.now() + 15 * 60 * 1000);
+        const retryAfterSeconds = Math.ceil((resetTime - Date.now()) / 1000);
+
+        res.set('Retry-After', retryAfterSeconds.toString());
+        res.status(429).json({
+            error: 'Rate Limit Exceeded',
+            message: 'You have made too many requests. This is to prevent abuse and ensure fair usage for all users.',
+            retryAfter: resetTime.toISOString(),
+            retryAfterSeconds,
+            limit: 2000,
+            window: '15 minutes',
+            note: 'If you are on a shared network, multiple users may be affected. Please wait and try again.'
+        });
+    }
+});
+
+const writeOperationsLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 1500, // 1500 write operations per 15 min (supports ~100 users @ 15 writes each)
+    standardHeaders: true,
+    legacyHeaders: false,
+    // Only apply to write operations (POST, PUT, PATCH, DELETE)
+    // Skip read operations (GET, HEAD, OPTIONS)
+    skip: (req) => !['POST', 'PUT', 'PATCH', 'DELETE'].includes(req.method),
+    handler: (req, res) => {
+        const resetTime = new Date(Date.now() + 15 * 60 * 1000);
+        const retryAfterSeconds = Math.ceil((resetTime - Date.now()) / 1000);
+
+        res.set('Retry-After', retryAfterSeconds.toString());
+        res.status(429).json({
+            error: 'Write Rate Limit Exceeded',
+            message: 'You have made too many create/update/delete operations. This limit helps prevent abuse while allowing you to add multiple opportunities. Please wait a moment and try again.',
+            retryAfter: resetTime.toISOString(),
+            retryAfterSeconds,
+            limit: 1500,
+            window: '15 minutes',
+            note: 'If you are on a shared network (hostel, campus), this limit is shared among all users. You can add up to 1500 opportunities collectively per 15 minutes.'
+        });
+    }
+});
+
+// Apply general rate limiter to all API routes (except health check)
+app.use('/api/', generalLimiter);
 
 // Request logging (development only)
 if (process.env.NODE_ENV === 'development') {
@@ -39,6 +141,41 @@ if (process.env.NODE_ENV === 'development') {
         next();
     });
 }
+
+// Audit logging middleware for write operations
+// Logs request initiation and response outcome for comprehensive audit trail
+app.use((req, res, next) => {
+    if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(req.method)) {
+        // Get the true client IP (first IP from X-Forwarded-For when behind proxy)
+        const clientIp = req.ips && req.ips.length > 0 ? req.ips[0] : req.ip;
+
+        // Log request initiation
+        console.log(JSON.stringify({
+            timestamp: new Date().toISOString(),
+            type: 'REQUEST',
+            method: req.method,
+            path: req.path,
+            ip: clientIp
+        }));
+
+        // Capture the original res.json to log response outcome
+        const originalJson = res.json.bind(res);
+        res.json = function (body) {
+            // Log response outcome
+            console.log(JSON.stringify({
+                timestamp: new Date().toISOString(),
+                type: 'RESPONSE',
+                method: req.method,
+                path: req.path,
+                statusCode: res.statusCode,
+                success: res.statusCode >= 200 && res.statusCode < 300,
+                ip: clientIp
+            }));
+            return originalJson(body);
+        };
+    }
+    next();
+});
 
 // =============================================================================
 // Routes
@@ -53,8 +190,8 @@ app.get('/api/health', (req, res) => {
     });
 });
 
-// Protected routes - require authentication
-app.use('/api/opportunities', requireAuth, opportunitiesRoutes);
+// Protected routes - require authentication and write rate limiting
+app.use('/api/opportunities', requireAuth, writeOperationsLimiter, opportunitiesRoutes);
 app.use('/api/analytics', requireAuth, analyticsRoutes);
 
 // User info endpoint
