@@ -6,10 +6,8 @@ import { SignInButton, SignUpButton, SignedIn, SignedOut, UserButton } from '@cl
 
 const Home = () => {
   const navigate = useNavigate();
-  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    setIsVisible(true);
   }, []);
 
   return (
@@ -211,9 +209,9 @@ const Home = () => {
             </div>
 
             <div className="flex gap-6">
-              <a href="#" className="text-gray-500 hover:text-white transition-colors"><FiGithub className="w-5 h-5" /></a>
-              <a href="#" className="text-gray-500 hover:text-white transition-colors"><FiTwitter className="w-5 h-5" /></a>
-              <a href="#" className="text-gray-500 hover:text-white transition-colors"><FiLinkedin className="w-5 h-5" /></a>
+              <a href="https://github.com/Venkat-Kolasani/FutureStack" target="_blank" rel="noreferrer" className="text-gray-500 hover:text-white transition-colors"><FiGithub className="w-5 h-5" /></a>
+              <a href="https://twitter.com" target="_blank" rel="noreferrer" className="text-gray-500 hover:text-white transition-colors"><FiTwitter className="w-5 h-5" /></a>
+              <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="text-gray-500 hover:text-white transition-colors"><FiLinkedin className="w-5 h-5" /></a>
             </div>
 
             <div className="text-sm text-gray-600">

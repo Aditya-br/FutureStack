@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { FaClipboardList, FaPaperPlane, FaStar, FaCheckCircle, FaPlus, FaList, FaTrash } from 'react-icons/fa';
+import { FaClipboardList, FaStar, FaCheckCircle, FaPlus, FaList, FaTrash } from 'react-icons/fa';
 import StatsCard from '../components/dashboard/StatsCard';
 import DeadlineWidget from '../components/dashboard/DeadlineWidget';
 import Card from '../components/common/Card';
@@ -61,11 +61,10 @@ const Dashboard = () => {
     setOpportunityToDelete(null);
   };
 
+
   // Calculate statistics
-  const totalOpportunities = opportunities.length;
   const internshipsCount = opportunities.filter(opp => opp.category === 'internship').length;
   const hackathonsCount = opportunities.filter(opp => opp.category === 'hackathon').length;
-  const appliedCount = opportunities.filter(opp => opp.status === 'applied').length;
   const shortlistedCount = opportunities.filter(opp => opp.status === 'shortlisted').length;
   const selectedCount = opportunities.filter(opp => opp.status === 'selected').length;
 
