@@ -20,12 +20,12 @@ The backend implements multiple layers of security to protect against common web
 We use generous rate limits that allow normal usage patterns while preventing abuse:
 
 #### General API Endpoints
-- **Limit**: 300 requests per 15 minutes per IP address
+- **Limit**: 2000 requests per 15 minutes per IP address
 - **Applies to**: All `/api/*` endpoints
 - **Response**: HTTP 429 with clear error message and retry time
 
 #### Write Operations
-- **Limit**: 100 write operations (POST/PUT/PATCH/DELETE) per 15 minutes per IP
+- **Limit**: 1500 write operations (POST/PUT/PATCH/DELETE) per 15 minutes per IP address (shared across the same IP)
 - **Applies to**: Opportunity creation, updates, and deletions
 - **Response**: HTTP 429 with helpful tips for bulk operations
 
@@ -35,7 +35,7 @@ We use generous rate limits that allow normal usage patterns while preventing ab
   "error": "Write Rate Limit Exceeded",
   "message": "You have made too many create/update/delete operations...",
   "retryAfter": "2026-01-16T00:42:33.000Z",
-  "limit": 100,
+  "limit": 1500,
   "window": "15 minutes",
   "tip": "If you need to add many opportunities at once, you can still do so within this limit."
 }

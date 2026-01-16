@@ -80,8 +80,8 @@ app.use(express.json({ limit: '1mb' }));
 app.use(mongoSanitize());
 
 // Rate limiting - Generous limits to prevent abuse while allowing normal usage
-// Limits set to accommodate large shared networks (e.g., 100 users in a hostel)
-// Each user can make ~20 general requests and ~15 write operations per 15 minutes
+// Note: These limits are collectively shared across all users on the same IP address.
+// For a hostel with 100 users, each user averages ~20 general requests and ~15 write operations per 15 minutes.
 const generalLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 2000, // 2000 requests per 15 min (supports ~100 users sharing same IP)

@@ -27,7 +27,7 @@ All suggested fixes have been implemented:
 **Concern**: Many users from the same IP (e.g., hostel) will share rate limits.
 
 **Current Mitigation**:
-- **Generous Limits**: 300 general requests / 100 write operations per 15 minutes
+- **Generous Limits**: 2000 general requests / 1500 write operations per 15 minutes (shared across the same IP)
 - **Per-IP Basis**: Prevents single malicious actor from affecting other IPs
 
 **Recommended Future Enhancement** (not implemented yet):
@@ -47,7 +47,7 @@ const perUserLimiter = rateLimit({
 ```
 
 **Why not implemented now**:
-- Current limits are already generous (100 writes = plenty for bulk operations)
+- Current limits are already generous (1500 writes = plenty for bulk operations)
 - Adds complexity to maintain separate user and IP counters
 - Most users won't hit these limits in normal usage
 - Can be added later if becomes an issue
@@ -141,18 +141,18 @@ app.use(generalLimiter);       // 3. Then rate limit
 ### 2. Rate Limiting Strategy
 
 #### General API Limiter
-- **300 requests / 15 min** per IP
+- **2000 requests / 15 min** per IP address (shared)
 - **Skips**: `/api/health` (for monitoring)
 - **Applies to**: All API endpoints
 
 #### Write Operations Limiter
-- **100 writes / 15 min** per IP  
+- **1500 writes / 15 min** per IP address (shared)
 - **Skips**: GET, HEAD, OPTIONS
 - **Applies to**: POST, PUT, PATCH, DELETE on `/api/opportunities`
 
 **Result**: 
-- GET requests: Only count toward general limit (300)
-- POST/PUT/PATCH/DELETE: Count toward both limits (300 general + 100 write)
+- GET requests: Only count toward general limit (2000)
+- POST/PUT/PATCH/DELETE: Count toward both limits (2000 general + 1500 write)
 
 This is intentional - write operations are more expensive.
 
@@ -295,7 +295,7 @@ Create an opportunity through UI and check logs:
 | Area | Before | After |
 |------|--------|-------|
 | **IP Detection** | Proxy IP only | Real client IP with trust proxy |
-| **Rate Limiting** | Not proxy-aware | Works correctly behind proxies |
+| **Rate Limiting** | Not proxy-aware | Works correctly behind proxies (2000 general / 1500 write) |
 | **Audit Logging** | Basic action logs | Includes outcomes, no sensitive data |
 | **Input Validation** | Manual checks | Comprehensive Joi schemas |
 | **Middleware Order** | Incorrect (sanitize before parse) | Correct (parse then sanitize) |
@@ -309,7 +309,7 @@ Create an opportunity through UI and check logs:
 ## Questions & Answers
 
 **Q: Will rate limiting block legitimate users in hostels?**
-A: Unlikely with current limits (300 general, 100 writes). If it becomes an issue, we can implement per-user limits.
+A: Unlikely with current limits (2000 general, 1500 writes shared per IP). If it becomes an issue, we can implement per-user limits.
 
 **Q: Why log REQUEST and RESPONSE separately?**
 A: Allows tracking of request initiation vs completion, helps identify hung requests or errors.
@@ -321,7 +321,7 @@ A: Not strictly necessary but provides defense-in-depth and future-proofing.
 A: Yes, eventually. Requires refactoring React app to use nonces or external stylesheets.
 
 **Q: What's the performance impact of these changes?**
-A: Minimal - validation adds ~1-2ms per request, rate limiting is in-memory and very fast.
+A: Minimal - validation adds ~1-2ms per request, rate limiting tracks up to 2000 requests in-memory and is very fast.
 
 ---
 

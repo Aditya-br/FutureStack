@@ -42,8 +42,8 @@ The server should start without errors. Check the console output for:
 ## What's Different?
 
 ### 1. API Requests Are Now Rate Limited
-- General endpoints: 300 requests per 15 minutes
-- Write operations: 100 per 15 minutes
+- General endpoints: 2000 requests per 15 minutes per IP address (shared)
+- Write operations: 1500 per 15 minutes per IP address (shared)
 - Users will see helpful error messages if they exceed limits
 
 ### 2. Input Validation Is Stricter
