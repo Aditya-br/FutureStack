@@ -149,7 +149,7 @@ const idParamSchema = Joi.object({
         .uuid()
         .required()
         .messages({
-            'string.guid': 'Invalid opportunity ID format',
+            'string.uuid': 'Invalid opportunity ID format',
             'any.required': 'Opportunity ID is required'
         })
 });
