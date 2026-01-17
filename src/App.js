@@ -10,6 +10,7 @@ import Navbar from './components/common/Navbar';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import ErrorBoundary from './components/common/ErrorBoundary';
 import LoadingSpinner from './components/common/LoadingSpinner';
+import Home from './pages/Home'; // Landing page - load immediately for best UX
 
 // Hooks
 import { useAuthToken } from './hooks/useAuthToken';
@@ -17,8 +18,8 @@ import { useAuthToken } from './hooks/useAuthToken';
 // Analytics
 import { trackPageView, identifyUser, resetAnalytics } from './lib/analytics';
 
-// Lazy load pages for better performance (Code Splitting)
-const Home = lazy(() => import('./pages/Home'));
+// Lazy load authenticated pages for better performance (Code Splitting)
+// Home is NOT lazy loaded since it's the entry point for most users
 const Dashboard = lazy(() => import('./pages/Dashboard'));
 const InternshipList = lazy(() => import('./pages/InternshipList'));
 const HackathonList = lazy(() => import('./pages/HackathonList'));
@@ -61,15 +62,15 @@ function AppContent() {
   return (
     <div className="min-h-screen bg-black text-white font-sans">
       {/* Skip to main content link for accessibility */}
-      <a 
-        href="#main-content" 
+      <a
+        href="#main-content"
         className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-white focus:text-black focus:rounded-lg focus:font-semibold"
       >
         Skip to main content
       </a>
-      
+
       {!isHomePage && <Navbar />}
-      
+
       <main id="main-content" role="main">
         <Suspense fallback={<PageLoader />}>
           <Routes>
@@ -122,7 +123,7 @@ function AppContent() {
           </Routes>
         </Suspense>
       </main>
-      
+
       <ToastContainer
         position="top-right"
         autoClose={3000}
