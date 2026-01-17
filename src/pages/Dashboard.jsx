@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { FaClipboardList, FaStar, FaCheckCircle, FaPlus, FaList, FaTrash } from 'react-icons/fa';
+import SEO from '../components/seo/SEO';
 import StatsCard from '../components/dashboard/StatsCard';
 import DeadlineWidget from '../components/dashboard/DeadlineWidget';
 import Card from '../components/common/Card';
@@ -97,6 +98,12 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-black p-4 sm:p-6">
+      <SEO 
+        title="Dashboard"
+        description="View your opportunity tracking dashboard. See statistics, upcoming deadlines, and manage your internship and hackathon applications."
+        canonical="/dashboard"
+        noindex={true}
+      />
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-6 sm:mb-8">

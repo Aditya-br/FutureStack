@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import './Calendar.css';
+import SEO from '../components/seo/SEO';
 import { opportunityService } from '../services/api';
 import { getDaysRemaining } from '../utils/dateHelpers';
 import Modal from '../components/common/Modal';
@@ -111,6 +112,12 @@ const CalendarPage = () => {
 
   return (
     <div className="min-h-screen bg-black p-4 sm:p-6">
+      <SEO 
+        title="Calendar"
+        description="View all your opportunity deadlines in a calendar format. Never miss an important date."
+        canonical="/calendar"
+        noindex={true}
+      />
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-6 sm:mb-8">

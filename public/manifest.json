@@ -1,7 +1,7 @@
 {
   "short_name": "FutureTracker",
-  "name": "FutureTracker - Opportunity Tracker",
-  "description": "Track internships, hackathons, and job applications for students and developers",
+  "name": "FutureTracker - Track Internships & Hackathons",
+  "description": "Free opportunity tracker for students and developers. Track job applications, internships, and hackathon deadlines.",
   "icons": [
     {
       "src": "favicon.ico",
@@ -11,16 +11,40 @@
     {
       "src": "logo192.png",
       "type": "image/png",
-      "sizes": "192x192"
+      "sizes": "192x192",
+      "purpose": "any maskable"
     },
     {
       "src": "logo512.png",
       "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "512x512",
+      "purpose": "any maskable"
     }
   ],
-  "start_url": ".",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
+  "orientation": "portrait-primary",
   "theme_color": "#000000",
-  "background_color": "#000000"
+  "background_color": "#000000",
+  "categories": ["productivity", "education", "utilities"],
+  "lang": "en-US",
+  "dir": "ltr",
+  "prefer_related_applications": false,
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "short_name": "Dashboard",
+      "description": "View your dashboard",
+      "url": "/dashboard",
+      "icons": [{ "src": "logo192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Add Opportunity",
+      "short_name": "Add",
+      "description": "Add a new opportunity",
+      "url": "/add",
+      "icons": [{ "src": "logo192.png", "sizes": "192x192" }]
+    }
+  ]
 }

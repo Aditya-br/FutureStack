@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { FaDownload, FaFileAlt, FaCheckSquare, FaSquare } from 'react-icons/fa';
+import SEO from '../components/seo/SEO';
 import Card from '../components/common/Card';
 import Button from '../components/common/Button';
 import { opportunityService } from '../services/api';
@@ -119,6 +120,12 @@ const Reports = () => {
 
   return (
     <div className="min-h-screen bg-black p-4 sm:p-6">
+      <SEO 
+        title="Reports"
+        description="Generate and download PDF reports of your opportunities. Export your application data for record keeping."
+        canonical="/reports"
+        noindex={true}
+      />
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-6 sm:mb-8">
