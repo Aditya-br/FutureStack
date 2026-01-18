@@ -5,6 +5,7 @@ import {
     BarChart, Bar
 } from 'recharts';
 import { FaChartPie, FaChartLine, FaFilter, FaCalendarAlt, FaTrophy } from 'react-icons/fa';
+import SEO from '../components/seo/SEO';
 import Card from '../components/common/Card';
 import EmptyState from '../components/common/EmptyState';
 import { SkeletonChart } from '../components/common/LoadingSpinner';
@@ -129,6 +130,12 @@ const Analytics = () => {
 
     return (
         <div className="min-h-screen bg-black p-4 sm:p-6">
+            <SEO 
+                title="Analytics"
+                description="Visualize your application progress with charts and insights. Track success rates and identify trends."
+                canonical="/analytics"
+                noindex={true}
+            />
             <div className="max-w-7xl mx-auto">
                 {/* Header */}
                 <div className="mb-6 sm:mb-8">

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { toast } from 'react-toastify';
 import { useAuth } from '@clerk/clerk-react';
+import SEO from '../components/seo/SEO';
 import StatusColumn from '../components/statusboard/StatusColumn';
 import Modal from '../components/common/Modal';
 import Button from '../components/common/Button';
@@ -161,6 +162,12 @@ const StatusBoard = () => {
 
   return (
     <div className="min-h-screen bg-black p-4 sm:p-6">
+      <SEO 
+        title="Status Board"
+        description="Kanban-style status board to track your application progress. Drag and drop opportunities between stages."
+        canonical="/status-board"
+        noindex={true}
+      />
       {/* Page Header */}
       <div className="mb-6 sm:mb-8">
         <div className="flex items-center gap-3 mb-2">

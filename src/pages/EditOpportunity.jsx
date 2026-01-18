@@ -5,6 +5,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import SEO from '../components/seo/SEO';
 import OpportunityForm from '../components/opportunities/OpportunityForm';
 import { opportunityService } from '../services/api';
 
@@ -63,6 +64,11 @@ const EditOpportunity = () => {
 
   return (
     <div className="min-h-screen bg-black p-4 sm:p-6">
+      <SEO
+        title="Edit Opportunity"
+        description="Edit your opportunity details."
+        noindex={true}
+      />
       <div className="max-w-2xl mx-auto">
         <div className="bg-[#0A0A0A] rounded-xl shadow-lg p-6 sm:p-8 border border-white/10">
           <h2 className="text-lg font-semibold text-white mb-4 border-b border-white/10 pb-2">

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FiActivity, FiBriefcase, FiCode, FiArrowRight, FiGithub, FiLinkedin, FiTwitter } from 'react-icons/fi';
 import { SignInButton, SignUpButton, SignedIn, SignedOut, UserButton } from '@clerk/clerk-react';
+import SEO from '../components/seo/SEO';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -12,7 +13,12 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-black text-white font-sans selection:bg-blue-500 selection:text-white overflow-x-hidden">
-      {/* Background Effects */}
+      <SEO
+        title={null}
+        description="Free opportunity tracker for students and developers. Organize job applications, track internship stages, never miss hackathon deadlines. Kanban boards, calendar view, and PDF reports."
+        keywords="job tracker, internship tracker, hackathon tracker, application tracker, career tracker, job application organizer, student tools, developer tools, opportunity tracker"
+        canonical="/"
+      />
       {/* Background Effects */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         {/* Grid Pattern */}

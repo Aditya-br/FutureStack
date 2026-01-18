@@ -5,6 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { FaSearch, FaPlus } from 'react-icons/fa';
+import SEO from '../components/seo/SEO';
 import OpportunityList from '../components/opportunities/OpportunityList';
 import Modal from '../components/common/Modal';
 import Button from '../components/common/Button';
@@ -110,6 +111,12 @@ const HackathonList = () => {
 
   return (
     <div className="min-h-screen bg-black text-white p-4 sm:p-6">
+      <SEO 
+        title="Hackathons"
+        description="Track and manage your hackathon applications. Never miss a deadline with our hackathon management tools."
+        canonical="/hackathons"
+        noindex={true}
+      />
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
