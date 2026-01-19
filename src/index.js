@@ -7,6 +7,8 @@ import reportWebVitals from './reportWebVitals';
 import { clerkPublishableKey } from './lib/clerk';
 import { initAnalytics } from './lib/analytics';
 
+import { Analytics } from '@vercel/analytics/react';
+
 // Initialize analytics
 initAnalytics();
 
@@ -15,6 +17,7 @@ root.render(
   <React.StrictMode>
     <ClerkProvider publishableKey={clerkPublishableKey}>
       <App />
+      <Analytics />
     </ClerkProvider>
   </React.StrictMode>
 );
