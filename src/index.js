@@ -8,6 +8,7 @@ import { clerkPublishableKey } from './lib/clerk';
 import { initAnalytics } from './lib/analytics';
 
 import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from "@vercel/speed-insights/react"
 
 // Initialize analytics
 initAnalytics();
@@ -18,6 +19,7 @@ root.render(
     <ClerkProvider publishableKey={clerkPublishableKey}>
       <App />
       <Analytics />
+      <SpeedInsights />
     </ClerkProvider>
   </React.StrictMode>
 );
