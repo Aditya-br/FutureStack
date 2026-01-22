@@ -503,7 +503,7 @@ router.post('/:id/assign', validate(documentIdParamSchema, 'params'), validate(a
         const { opportunity_id } = req.body;
 
         // Verify document belongs to user
-        const { data: doc, error: docError } = await supabase
+        const { error: docError } = await supabase
             .from('documents')
             .select('id')
             .eq('id', id)

@@ -117,9 +117,9 @@ CREATE TRIGGER update_documents_updated_at
 
 
 -- =============================================================================
--- Auto-delete documents when opportunity status changes to 'rejected'
--- This trigger fires AFTER opportunity update and deletes linked documents
--- Note: This actually auto-UNLINKS documents. Full file deletion happens in backend.
+-- Auto-unlink documents when opportunity status changes to 'rejected'
+-- This trigger fires AFTER opportunity update and removes the document links
+-- (from opportunity_documents table). The document files remain for reuse.
 -- =============================================================================
 
 CREATE OR REPLACE FUNCTION auto_unlink_documents_on_rejection()

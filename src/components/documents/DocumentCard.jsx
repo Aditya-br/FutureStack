@@ -1,4 +1,9 @@
-// DocumentCard - displays a single document with its details and actions
+/**
+ * DocumentCard - Displays a single document with its details and actions.
+ * Shows document type icon, name, version, metadata, usage count, and action buttons.
+ *
+ * @module components/documents/DocumentCard
+ */
 import React from 'react';
 import { FaFile, FaFilePdf, FaLink, FaDownload, FaEdit, FaTrash, FaBriefcase } from 'react-icons/fa';
 
@@ -23,6 +28,15 @@ const typeLabels = {
     other: 'Other'
 };
 
+/**
+ * Card component for displaying a document with actions.
+ *
+ * @param {Object} props - Component props
+ * @param {Object} props.document - Document object with id, name, type, version, file_url, file_size, notes, is_external, created_at, and opportunity_documents
+ * @param {Function} props.onEdit - Callback when edit button is clicked, receives the document object
+ * @param {Function} props.onDelete - Callback when delete button is clicked, receives the document object
+ * @returns {JSX.Element} Rendered document card
+ */
 const DocumentCard = ({ document, onEdit, onDelete }) => {
     const Icon = typeIcons[document.type] || FaFile;
     const colorClass = typeColors[document.type] || 'text-gray-400';

@@ -1,8 +1,24 @@
-// DocumentUpload - modal component styled like the Add Opportunity card form
+/**
+ * DocumentUpload - Modal component for uploading files or adding external links.
+ * Styled like the Add Opportunity card form with drag-and-drop support.
+ *
+ * @module components/documents/DocumentUpload
+ */
 import React, { useState, useRef } from 'react';
 import { FaUpload, FaLink, FaTimes, FaFile, FaSpinner } from 'react-icons/fa';
 import Button from '../common/Button';
 
+/**
+ * Modal component for adding new documents via file upload or external link.
+ *
+ * @param {Object} props - Component props
+ * @param {boolean} props.isOpen - Whether the modal is visible
+ * @param {Function} props.onClose - Callback when modal is closed
+ * @param {Function} props.onUpload - Callback for file uploads, receives (file, metadata) and returns success boolean
+ * @param {Function} props.onCreateExternal - Callback for external links, receives document data and returns success boolean
+ * @param {boolean} [props.isLoading=false] - Whether an upload/save operation is in progress
+ * @returns {JSX.Element|null} Rendered modal or null when closed
+ */
 const DocumentUpload = ({ isOpen, onClose, onUpload, onCreateExternal, isLoading = false }) => {
     const [mode, setMode] = useState('upload'); // 'upload' or 'external'
     const [file, setFile] = useState(null);
