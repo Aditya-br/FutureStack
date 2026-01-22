@@ -115,6 +115,65 @@ export const analyticsService = {
     }
 };
 
+export const documentService = {
+    getAll: async () => {
+        const response = await api.get('/documents');
+        return response.data;
+    },
+
+    getById: async (id) => {
+        const response = await api.get(`/documents/${id}`);
+        return response.data;
+    },
+
+    create: async (data) => {
+        const response = await api.post('/documents', data);
+        return response.data;
+    },
+
+    upload: async (file, metadata) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('name', metadata.name);
+        formData.append('type', metadata.type);
+        if (metadata.version) formData.append('version', metadata.version);
+        if (metadata.notes) formData.append('notes', metadata.notes);
+
+        const response = await api.post('/documents/upload', formData, {
+            headers: { 'Content-Type': 'multipart/form-data' },
+            timeout: 60000 // 60 seconds for file uploads
+        });
+        return response.data;
+    },
+
+    update: async (id, data) => {
+        const response = await api.patch(`/documents/${id}`, data);
+        return response.data;
+    },
+
+    delete: async (id) => {
+        const response = await api.delete(`/documents/${id}`);
+        return response.data;
+    },
+
+    assign: async (documentId, opportunityId) => {
+        const response = await api.post(`/documents/${documentId}/assign`, {
+            opportunity_id: opportunityId
+        });
+        return response.data;
+    },
+
+    unassign: async (documentId, opportunityId) => {
+        const response = await api.delete(`/documents/${documentId}/unassign/${opportunityId}`);
+        return response.data;
+    },
+
+    getByOpportunity: async (opportunityId) => {
+        const response = await api.get(`/documents/by-opportunity/${opportunityId}`);
+        return response.data;
+    }
+};
+
 export const healthCheck = async () => {
     const response = await api.get('/health');
     return response.data;

@@ -3,11 +3,13 @@
 // - Parent component decides what happens on submit via onSubmit callback
 import React, { useState, useEffect } from 'react';
 import Button from '../common/Button';
+import DocumentSelector from '../documents/DocumentSelector';
 
 // initialData: values to pre-fill the form in edit mode
 // onSubmit: function passed from parent (Add / Edit page) to handle API call
 // isEdit: boolean to toggle button label (Create vs Update)
-const OpportunityForm = ({ initialData = {}, onSubmit, isEdit = false }) => {
+// opportunityId: for linking documents (only in edit mode)
+const OpportunityForm = ({ initialData = {}, onSubmit, isEdit = false, opportunityId = null }) => {
   // Single state object to store all input values
   const [formData, setFormData] = useState({
     title: '',
@@ -221,6 +223,14 @@ const OpportunityForm = ({ initialData = {}, onSubmit, isEdit = false }) => {
           placeholder="Additional notes or preparation tasks"
         />
       </div>
+
+      {/* Document Selector - only for internships in edit mode */}
+      {isEdit && opportunityId && formData.category === 'internship' && (
+        <DocumentSelector
+          opportunityId={opportunityId}
+          category={formData.category}
+        />
+      )}
 
       {/* Submit Button */}
       <div className="flex gap-3 pt-4">

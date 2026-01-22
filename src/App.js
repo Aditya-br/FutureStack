@@ -29,6 +29,7 @@ const StatusBoard = lazy(() => import('./pages/StatusBoard'));
 const Calendar = lazy(() => import('./pages/Calendar'));
 const Reports = lazy(() => import('./pages/Reports'));
 const Analytics = lazy(() => import('./pages/Analytics'));
+const Documents = lazy(() => import('./pages/Documents'));
 
 // Loading fallback component for Suspense
 const PageLoader = () => (
@@ -118,6 +119,11 @@ function AppContent() {
             <Route path="/analytics" element={
               <ProtectedRoute>
                 <Analytics />
+              </ProtectedRoute>
+            } />
+            <Route path="/documents" element={
+              <ProtectedRoute>
+                <Documents />
               </ProtectedRoute>
             } />
           </Routes>

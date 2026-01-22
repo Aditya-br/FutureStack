@@ -62,6 +62,7 @@ FutureTracker is a modern, full-featured SaaS application designed to help stude
 - **📋 Status Board**: Kanban-style board with drag-and-drop status updates
 - **📈 Analytics**: Charts for status distribution, weekly trends, conversion funnels, and deadline heatmaps
 - **📄 PDF Export**: Generate professional reports with multiple export options
+- **📎 Documents**: Upload resumes, cover letters, and portfolio links; track which documents were used for each internship
 - **🎨 Modern UI**: Clean, dark-themed interface with smooth animations
 - **📱 Responsive**: Fully responsive design for all screen sizes
 

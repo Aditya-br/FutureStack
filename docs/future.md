@@ -78,10 +78,12 @@ let getAuthToken = null; // Global state
 - [ ] Visual timeline view of all interactions
 - **Value**: Track what you did and when for follow-ups
 
-#### 3. Resume/Cover Letter Tracker
-- [ ] Track which resume version was sent to each company
-- [ ] Store links to docs (Google Drive/Dropbox integration)
-- [ ] Version history per document
+#### 3. Resume/Cover Letter Tracker ✅ COMPLETED
+- [x] Track which resume version was sent to each company
+- [x] Store links to docs (Google Drive/Dropbox integration)
+- [x] Version history per document
+- [x] Documents only for internship opportunities
+- [x] Auto-unlink on status change to rejected
 - **Value**: "Stop wondering which resume you sent where"
 
 ---

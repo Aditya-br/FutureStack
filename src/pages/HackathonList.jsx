@@ -1,12 +1,19 @@
-// Page that shows only hackathon-type opportunities
-// - Logic is parallel to InternshipList but filters category === 'hackathon'
-// - Reuses the same OpportunityList + Modal pattern
+/**
+ * HackathonList - Page showing hackathon-type opportunities
+ * 
+ * Features:
+ * - Loads all opportunities from API and filters by category === 'hackathon'
+ * - Client-side search and status filtering
+ * - OpportunityDetailModal for viewing full details
+ * - Delete confirmation modal
+ */
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { FaSearch, FaPlus } from 'react-icons/fa';
 import SEO from '../components/seo/SEO';
 import OpportunityList from '../components/opportunities/OpportunityList';
+import OpportunityDetailModal from '../components/opportunities/OpportunityDetailModal';
 import Modal from '../components/common/Modal';
 import Button from '../components/common/Button';
 import { opportunityService } from '../services/api';
@@ -18,29 +25,31 @@ const HackathonList = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [loading, setLoading] = useState(true);
+
+  // Modal states
+  const [selectedOpportunity, setSelectedOpportunity] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [opportunityToDelete, setOpportunityToDelete] = useState(null);
 
-  // Fetch opportunities from backend when this page first loads
+  // Fetch opportunities on mount
   useEffect(() => {
     fetchOpportunities();
   }, []);
 
-  // Re-run client-side filters whenever search / status / base data changes
+  // Apply filters when data or filters change
   useEffect(() => {
     applyFilters();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery, statusFilter, opportunities]);
 
-  // Load ALL opportunities from API and keep only hackathons
+  /**
+   * Fetch all opportunities and filter for hackathons only
+   */
   const fetchOpportunities = async () => {
     try {
       setLoading(true);
       const response = await opportunityService.getAll();
-      // Filter for hackathons only
-      const hackathons = response.filter(
-        (opp) => opp.category === 'hackathon'
-      );
+      const hackathons = response.filter(opp => opp.category === 'hackathon');
       setOpportunities(hackathons);
     } catch (error) {
       console.error('Error fetching opportunities:', error);
@@ -50,34 +59,46 @@ const HackathonList = () => {
     }
   };
 
-  // Apply search + status filters on top of the hackathons list
+  /**
+   * Apply search and status filters
+   */
   const applyFilters = () => {
     let filtered = [...opportunities];
 
-    // Apply search filter
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(
-        (opp) =>
+        opp =>
           opp.title.toLowerCase().includes(query) ||
           (opp.description && opp.description.toLowerCase().includes(query))
       );
     }
 
-    // Apply status filter
     if (statusFilter !== 'all') {
-      filtered = filtered.filter((opp) => opp.status === statusFilter);
+      filtered = filtered.filter(opp => opp.status === statusFilter);
     }
 
     setFilteredOpportunities(filtered);
   };
 
-  // Navigate user to edit page for selected hackathon
+  // View handlers
+  const handleView = (opportunity) => {
+    setSelectedOpportunity(opportunity);
+  };
+
+  const handleCloseDetail = () => {
+    setSelectedOpportunity(null);
+  };
+
+  // Edit handler
   const handleEdit = (id) => {
+    setSelectedOpportunity(null);
     navigate(`/edit/${id}`);
   };
 
+  // Delete handlers
   const handleDeleteClick = (id) => {
+    setSelectedOpportunity(null);
     setOpportunityToDelete(id);
     setDeleteModalOpen(true);
   };
@@ -87,9 +108,7 @@ const HackathonList = () => {
 
     try {
       await opportunityService.delete(opportunityToDelete);
-      setOpportunities((prev) =>
-        prev.filter((opp) => opp.id !== opportunityToDelete)
-      );
+      setOpportunities(prev => prev.filter(opp => opp.id !== opportunityToDelete));
       toast.success('Hackathon deleted successfully!');
       setDeleteModalOpen(false);
       setOpportunityToDelete(null);
@@ -111,7 +130,7 @@ const HackathonList = () => {
 
   return (
     <div className="min-h-screen bg-black text-white p-4 sm:p-6">
-      <SEO 
+      <SEO
         title="Hackathons"
         description="Track and manage your hackathon applications. Never miss a deadline with our hackathon management tools."
         canonical="/hackathons"
@@ -166,7 +185,6 @@ const HackathonList = () => {
                 <option value="rejected" style={{ backgroundColor: '#111827', color: 'white' }}>Rejected</option>
               </select>
 
-              {/* Clear Filters Button */}
               {(searchQuery || statusFilter !== 'all') && (
                 <Button variant="secondary" onClick={clearFilters} className="w-full sm:w-auto">
                   Clear
@@ -177,8 +195,7 @@ const HackathonList = () => {
 
           {/* Results Count */}
           <div className="mt-3 text-sm text-gray-400">
-            Showing {filteredOpportunities.length} of {opportunities.length}{' '}
-            hackathons
+            Showing {filteredOpportunities.length} of {opportunities.length} hackathons
           </div>
         </div>
 
@@ -189,13 +206,22 @@ const HackathonList = () => {
             <p className="text-gray-400">Loading hackathons...</p>
           </div>
         ) : (
-          /* Opportunity List */
           <OpportunityList
             opportunities={filteredOpportunities}
+            onView={handleView}
             onEdit={handleEdit}
             onDelete={handleDeleteClick}
           />
         )}
+
+        {/* Opportunity Detail Modal */}
+        <OpportunityDetailModal
+          opportunity={selectedOpportunity}
+          isOpen={!!selectedOpportunity}
+          onClose={handleCloseDetail}
+          onEdit={handleEdit}
+          onDelete={handleDeleteClick}
+        />
 
         {/* Delete Confirmation Modal */}
         <Modal
@@ -205,8 +231,7 @@ const HackathonList = () => {
         >
           <div>
             <p className="text-gray-300 mb-6">
-              Are you sure you want to delete this hackathon? This action cannot
-              be undone.
+              Are you sure you want to delete this hackathon? This action cannot be undone.
             </p>
             <div className="flex gap-3 justify-end">
               <Button variant="secondary" onClick={handleDeleteCancel}>

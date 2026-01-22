@@ -114,3 +114,10 @@ CREATE TRIGGER update_opportunities_updated_at
   BEFORE UPDATE ON opportunities
   FOR EACH ROW
   EXECUTE FUNCTION update_updated_at_column();
+
+
+-- =============================================================================
+-- Documents Feature (Phase 1.3)
+-- =============================================================================
+-- For documents table, opportunity_documents junction table, and related
+-- RLS policies, indexes, and triggers, see: docs/documents-migration.sql

@@ -79,6 +79,7 @@ const EditOpportunity = () => {
             initialData={opportunity}
             onSubmit={handleSubmit}
             isEdit={true}
+            opportunityId={id}
           />
 
           <div className="mt-6 pt-4 border-t border-white/10">

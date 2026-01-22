@@ -1,13 +1,19 @@
-// Page that shows only internship-type opportunities
-// - Loads all opportunities from API, then filters by category === 'internship'
-// - Provides search + status filters on the client side
-// - Uses OpportunityList to render cards and a Modal for delete confirmation
+/**
+ * InternshipList - Page showing internship-type opportunities
+ * 
+ * Features:
+ * - Loads all opportunities from API and filters by category === 'internship'
+ * - Client-side search and status filtering
+ * - OpportunityDetailModal for viewing full details
+ * - Delete confirmation modal
+ */
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { FaSearch, FaPlus } from 'react-icons/fa';
 import SEO from '../components/seo/SEO';
 import OpportunityList from '../components/opportunities/OpportunityList';
+import OpportunityDetailModal from '../components/opportunities/OpportunityDetailModal';
 import Modal from '../components/common/Modal';
 import Button from '../components/common/Button';
 import { opportunityService } from '../services/api';
@@ -19,29 +25,31 @@ const InternshipList = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [loading, setLoading] = useState(true);
+
+  // Modal states
+  const [selectedOpportunity, setSelectedOpportunity] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [opportunityToDelete, setOpportunityToDelete] = useState(null);
 
-  // Fetch opportunities from backend when this page first loads
+  // Fetch opportunities on mount
   useEffect(() => {
     fetchOpportunities();
   }, []);
 
-  // Re-run client-side filters whenever search / status / base data changes
+  // Apply filters when data or filters change
   useEffect(() => {
     applyFilters();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery, statusFilter, opportunities]);
 
-  // Load ALL opportunities from API and keep only internships
+  /**
+   * Fetch all opportunities and filter for internships only
+   */
   const fetchOpportunities = async () => {
     try {
       setLoading(true);
       const response = await opportunityService.getAll();
-      // Filter for internships only
-      const internships = response.filter(
-        (opp) => opp.category === 'internship'
-      );
+      const internships = response.filter(opp => opp.category === 'internship');
       setOpportunities(internships);
     } catch (error) {
       console.error('Error fetching opportunities:', error);
@@ -51,34 +59,46 @@ const InternshipList = () => {
     }
   };
 
-  // Apply search + status filters on top of the internships list
+  /**
+   * Apply search and status filters
+   */
   const applyFilters = () => {
     let filtered = [...opportunities];
 
-    // Apply search filter
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(
-        (opp) =>
+        opp =>
           opp.title.toLowerCase().includes(query) ||
           (opp.description && opp.description.toLowerCase().includes(query))
       );
     }
 
-    // Apply status filter
     if (statusFilter !== 'all') {
-      filtered = filtered.filter((opp) => opp.status === statusFilter);
+      filtered = filtered.filter(opp => opp.status === statusFilter);
     }
 
     setFilteredOpportunities(filtered);
   };
 
-  // Navigate user to edit page for selected internship
+  // View handlers
+  const handleView = (opportunity) => {
+    setSelectedOpportunity(opportunity);
+  };
+
+  const handleCloseDetail = () => {
+    setSelectedOpportunity(null);
+  };
+
+  // Edit handler - closes detail modal and navigates to edit page
   const handleEdit = (id) => {
+    setSelectedOpportunity(null);
     navigate(`/edit/${id}`);
   };
 
+  // Delete handlers
   const handleDeleteClick = (id) => {
+    setSelectedOpportunity(null);
     setOpportunityToDelete(id);
     setDeleteModalOpen(true);
   };
@@ -88,9 +108,7 @@ const InternshipList = () => {
 
     try {
       await opportunityService.delete(opportunityToDelete);
-      setOpportunities((prev) =>
-        prev.filter((opp) => opp.id !== opportunityToDelete)
-      );
+      setOpportunities(prev => prev.filter(opp => opp.id !== opportunityToDelete));
       toast.success('Internship deleted successfully!');
       setDeleteModalOpen(false);
       setOpportunityToDelete(null);
@@ -112,7 +130,7 @@ const InternshipList = () => {
 
   return (
     <div className="min-h-screen bg-black text-white p-4 sm:p-6">
-      <SEO 
+      <SEO
         title="Internships"
         description="Track and manage your internship applications. Filter by status, search opportunities, and keep your job search organized."
         canonical="/internships"
@@ -167,7 +185,6 @@ const InternshipList = () => {
                 <option value="rejected" style={{ backgroundColor: '#111827', color: 'white' }}>Rejected</option>
               </select>
 
-              {/* Clear Filters Button */}
               {(searchQuery || statusFilter !== 'all') && (
                 <Button variant="secondary" onClick={clearFilters} className="w-full sm:w-auto">
                   Clear
@@ -178,8 +195,7 @@ const InternshipList = () => {
 
           {/* Results Count */}
           <div className="mt-3 text-sm text-gray-400">
-            Showing {filteredOpportunities.length} of {opportunities.length}{' '}
-            internships
+            Showing {filteredOpportunities.length} of {opportunities.length} internships
           </div>
         </div>
 
@@ -190,13 +206,22 @@ const InternshipList = () => {
             <p className="text-gray-400">Loading internships...</p>
           </div>
         ) : (
-          /* Opportunity List */
           <OpportunityList
             opportunities={filteredOpportunities}
+            onView={handleView}
             onEdit={handleEdit}
             onDelete={handleDeleteClick}
           />
         )}
+
+        {/* Opportunity Detail Modal */}
+        <OpportunityDetailModal
+          opportunity={selectedOpportunity}
+          isOpen={!!selectedOpportunity}
+          onClose={handleCloseDetail}
+          onEdit={handleEdit}
+          onDelete={handleDeleteClick}
+        />
 
         {/* Delete Confirmation Modal */}
         <Modal
@@ -206,8 +231,7 @@ const InternshipList = () => {
         >
           <div>
             <p className="text-gray-300 mb-6">
-              Are you sure you want to delete this internship? This action cannot
-              be undone.
+              Are you sure you want to delete this internship? This action cannot be undone.
             </p>
             <div className="flex gap-3 justify-end">
               <Button variant="secondary" onClick={handleDeleteCancel}>

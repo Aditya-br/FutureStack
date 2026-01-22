@@ -1,12 +1,20 @@
-// Generic grid component to render a collection of opportunities
-// - Keeps empty state UX in one place
-// - Delegates per-item rendering to OpportunityCard
+/**
+ * OpportunityList - Grid component for rendering opportunity cards
+ * 
+ * Renders a responsive grid of OpportunityCard components.
+ * Handles empty state and passes callbacks down to each card.
+ */
 import React from 'react';
 import OpportunityCard from './OpportunityCard';
 
-// opportunities: array of opportunity objects to display
-// onEdit, onDelete: callback functions passed down to each card
-const OpportunityList = ({ opportunities, onEdit, onDelete }) => {
+/**
+ * @param {Object} props
+ * @param {Array} props.opportunities - Array of opportunity objects to display
+ * @param {Function} props.onView - Callback when a card is clicked (receives full opportunity)
+ * @param {Function} props.onEdit - Callback when Edit is clicked (receives opportunity.id)
+ * @param {Function} props.onDelete - Callback when Delete is clicked (receives opportunity.id)
+ */
+const OpportunityList = ({ opportunities, onView, onEdit, onDelete }) => {
   if (!opportunities || opportunities.length === 0) {
     return (
       <div className="text-center py-16 sm:py-20">
@@ -27,6 +35,7 @@ const OpportunityList = ({ opportunities, onEdit, onDelete }) => {
         <OpportunityCard
           key={opportunity.id}
           opportunity={opportunity}
+          onView={onView}
           onEdit={onEdit}
           onDelete={onDelete}
         />
