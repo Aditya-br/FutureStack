@@ -23,7 +23,7 @@ const typeLabels = {
     other: 'Other'
 };
 
-const DocumentCard = ({ document, onEdit, onDelete, onView }) => {
+const DocumentCard = ({ document, onEdit, onDelete }) => {
     const Icon = typeIcons[document.type] || FaFile;
     const colorClass = typeColors[document.type] || 'text-gray-400';
 

@@ -6,7 +6,7 @@
  * - Full content display (no truncation)
  * - Attached documents for internships
  * - Fixed footer with Edit/Delete actions
- * - Responsive: drawer on desktop, bottom sheet on mobile
+ * - Responsive: drawer layout on all devices
  */
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
@@ -121,7 +121,7 @@ const OpportunityDetailModal = ({ opportunity, isOpen, onClose, onEdit, onDelete
                 onClick={onClose}
             />
 
-            {/* Drawer Panel - slides in from right on desktop, bottom on mobile */}
+            {/* Drawer Panel - slides in from right */}
             <div className="fixed inset-y-0 right-0 w-full sm:max-w-lg flex">
                 <div className="relative w-full bg-[#0A0A0A] shadow-2xl flex flex-col border-l border-white/10">
 

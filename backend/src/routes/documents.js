@@ -47,7 +47,7 @@ const upload = multer({
 function logAudit(action, userId, resourceId = null, outcome = 'success', details = {}) {
     // Sanitize details to avoid logging sensitive information
     const sanitizedDetails = {};
-    const allowedKeys = ['type', 'fileSize', 'updatedFields', 'opportunity_id', 'errorCode'];
+    const allowedKeys = ['type', 'fileSize', 'updatedFields', 'opportunity_id', 'errorCode', 'count'];
     for (const key of allowedKeys) {
         if (details[key] !== undefined) {
             sanitizedDetails[key] = details[key];

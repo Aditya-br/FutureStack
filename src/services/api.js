@@ -140,7 +140,6 @@ export const documentService = {
         if (metadata.notes) formData.append('notes', metadata.notes);
 
         const response = await api.post('/documents/upload', formData, {
-            headers: { 'Content-Type': 'multipart/form-data' },
             timeout: 60000 // 60 seconds for file uploads
         });
         return response.data;

@@ -88,9 +88,11 @@ const Documents = () => {
             toast.success('Document uploaded successfully!');
             setIsUploadOpen(false);
             fetchDocuments();
+            return true;
         } catch (error) {
             console.error('Error uploading document:', error);
             toast.error(error.response?.data?.message || error.response?.data?.error || 'Failed to upload document. Please try again.');
+            return false;
         } finally {
             setActionLoading(false);
         }
@@ -104,9 +106,11 @@ const Documents = () => {
             toast.success('Link added successfully!');
             setIsUploadOpen(false);
             fetchDocuments();
+            return true;
         } catch (error) {
             console.error('Error creating document:', error);
             toast.error(error.response?.data?.message || error.response?.data?.error || 'Failed to add link. Please try again.');
+            return false;
         } finally {
             setActionLoading(false);
         }

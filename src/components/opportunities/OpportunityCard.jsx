@@ -47,9 +47,18 @@ const OpportunityCard = ({ opportunity, onView, onEdit, onDelete }) => {
     <Card hover className="p-5">
       <div className="flex flex-col h-full">
         {/* Clickable area for viewing details */}
+        {/* Clickable area for viewing details */}
         <div
-          className="cursor-pointer flex-1"
+          className="cursor-pointer flex-1 outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 rounded-lg"
           onClick={handleCardClick}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              handleCardClick();
+            }
+          }}
         >
           {/* Header with badges */}
           <div className="flex items-start justify-between mb-3">

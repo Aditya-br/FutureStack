@@ -100,15 +100,16 @@ const DocumentUpload = ({ isOpen, onClose, onUpload, onCreateExternal, isLoading
 
         if (!validate()) return;
 
+        let success = false;
         if (mode === 'upload') {
-            await onUpload(file, {
+            success = await onUpload(file, {
                 name: formData.name,
                 type: formData.type,
                 version: formData.version || 'v1',
                 notes: formData.notes
             });
         } else {
-            await onCreateExternal({
+            success = await onCreateExternal({
                 name: formData.name,
                 type: formData.type,
                 version: formData.version || 'v1',
@@ -118,7 +119,9 @@ const DocumentUpload = ({ isOpen, onClose, onUpload, onCreateExternal, isLoading
             });
         }
 
-        resetForm();
+        if (success) {
+            resetForm();
+        }
     };
 
     const resetForm = () => {
@@ -173,8 +176,8 @@ const DocumentUpload = ({ isOpen, onClose, onUpload, onCreateExternal, isLoading
                                 type="button"
                                 onClick={() => setMode('upload')}
                                 className={`flex-1 py-2.5 px-4 rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-2 ${mode === 'upload'
-                                        ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20'
-                                        : 'bg-white/5 text-gray-400 border border-white/10 hover:bg-white/10'
+                                    ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20'
+                                    : 'bg-white/5 text-gray-400 border border-white/10 hover:bg-white/10'
                                     }`}
                             >
                                 <FaUpload size={14} />
@@ -184,8 +187,8 @@ const DocumentUpload = ({ isOpen, onClose, onUpload, onCreateExternal, isLoading
                                 type="button"
                                 onClick={() => setMode('external')}
                                 className={`flex-1 py-2.5 px-4 rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-2 ${mode === 'external'
-                                        ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20'
-                                        : 'bg-white/5 text-gray-400 border border-white/10 hover:bg-white/10'
+                                    ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20'
+                                    : 'bg-white/5 text-gray-400 border border-white/10 hover:bg-white/10'
                                     }`}
                             >
                                 <FaLink size={14} />
@@ -207,12 +210,12 @@ const DocumentUpload = ({ isOpen, onClose, onUpload, onCreateExternal, isLoading
                                         onDrop={handleDrop}
                                         onClick={() => fileInputRef.current?.click()}
                                         className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-all ${dragActive
-                                                ? 'border-blue-500 bg-blue-500/10'
-                                                : file
-                                                    ? 'border-green-500/50 bg-green-500/5'
-                                                    : errors.file
-                                                        ? 'border-red-500 bg-red-500/5'
-                                                        : 'border-white/20 hover:border-white/40 bg-white/5'
+                                            ? 'border-blue-500 bg-blue-500/10'
+                                            : file
+                                                ? 'border-green-500/50 bg-green-500/5'
+                                                : errors.file
+                                                    ? 'border-red-500 bg-red-500/5'
+                                                    : 'border-white/20 hover:border-white/40 bg-white/5'
                                             }`}
                                     >
                                         <input
