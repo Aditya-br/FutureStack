@@ -13,6 +13,7 @@ const Navbar = () => {
     { path: '/hackathons', label: 'Hackathons' },
     { path: '/status-board', label: 'Status Board' },
     { path: '/calendar', label: 'Calendar' },
+    { path: '/documents', label: 'Documents' },
     { path: '/reports', label: 'Reports' },
     { path: '/analytics', label: 'Analytics' },
   ];

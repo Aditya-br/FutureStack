@@ -9,6 +9,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 const { requireAuth } = require('./middleware/auth');
 const opportunitiesRoutes = require('./routes/opportunities');
 const analyticsRoutes = require('./routes/analytics');
+const documentsRoutes = require('./routes/documents');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -193,6 +194,7 @@ app.get('/api/health', (req, res) => {
 // Protected routes - require authentication and write rate limiting
 app.use('/api/opportunities', requireAuth, writeOperationsLimiter, opportunitiesRoutes);
 app.use('/api/analytics', requireAuth, analyticsRoutes);
+app.use('/api/documents', requireAuth, writeOperationsLimiter, documentsRoutes);
 
 // User info endpoint
 app.get('/api/me', requireAuth, (req, res) => {
