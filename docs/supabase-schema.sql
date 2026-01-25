@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS opportunities (
   link TEXT,
   deadline DATE,
   category TEXT CHECK (category IN ('internship', 'hackathon')),
-  status TEXT CHECK (status IN ('applied', 'interviewed', 'shortlisted', 'selected', 'rejected')),
+  status TEXT CHECK (status IN ('applied', 'interviewed', 'shortlisted', 'selected', 'rejected', 'ghosted')),
   notes TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()

@@ -183,6 +183,7 @@ const InternshipList = () => {
                 <option value="interviewed" style={{ backgroundColor: '#111827', color: 'white' }}>Interviewed</option>
                 <option value="selected" style={{ backgroundColor: '#111827', color: 'white' }}>Selected</option>
                 <option value="rejected" style={{ backgroundColor: '#111827', color: 'white' }}>Rejected</option>
+                <option value="ghosted" style={{ backgroundColor: '#111827', color: 'white' }}>Ghosted</option>
               </select>
 
               {(searchQuery || statusFilter !== 'all') && (

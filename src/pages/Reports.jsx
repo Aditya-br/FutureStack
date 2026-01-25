@@ -42,6 +42,7 @@ const Reports = () => {
       interviewed: opps.filter(opp => opp.status === 'interviewed').length,
       selected: opps.filter(opp => opp.status === 'selected').length,
       rejected: opps.filter(opp => opp.status === 'rejected').length,
+      ghosted: opps.filter(opp => opp.status === 'ghosted').length,
     };
   };
 
@@ -120,7 +121,7 @@ const Reports = () => {
 
   return (
     <div className="min-h-screen bg-black p-4 sm:p-6">
-      <SEO 
+      <SEO
         title="Reports"
         description="Generate and download PDF reports of your opportunities. Export your application data for record keeping."
         canonical="/reports"
@@ -226,6 +227,10 @@ const Reports = () => {
                   <span>Rejected:</span>
                   <span className="font-semibold">{statistics.rejected}</span>
                 </div>
+                <div className="flex justify-between text-slate-400">
+                  <span>Ghosted:</span>
+                  <span className="font-semibold">{statistics.ghosted}</span>
+                </div>
               </div>
             </Card>
           </div>
@@ -265,6 +270,7 @@ const Reports = () => {
                     <li>Interviewed: {statistics.interviewed}</li>
                     <li>Selected: {statistics.selected}</li>
                     <li>Rejected: {statistics.rejected}</li>
+                    <li>Ghosted: {statistics.ghosted}</li>
                   </ul>
                 </div>
               ) : (

@@ -53,7 +53,7 @@ const createOpportunitySchema = Joi.object({
         }),
 
     status: Joi.string()
-        .valid('applied', 'interviewed', 'shortlisted', 'selected', 'rejected')
+        .valid('applied', 'interviewed', 'shortlisted', 'selected', 'rejected', 'ghosted')
         .default('applied')
         .optional()
         .messages({
@@ -123,7 +123,7 @@ const updateOpportunitySchema = Joi.object({
         }),
 
     status: Joi.string()
-        .valid('applied', 'interviewed', 'shortlisted', 'selected', 'rejected')
+        .valid('applied', 'interviewed', 'shortlisted', 'selected', 'rejected', 'ghosted')
         .optional()
         .messages({
             'any.only': 'Status must be one of: applied, interviewed, shortlisted, selected, rejected'

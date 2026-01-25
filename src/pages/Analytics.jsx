@@ -38,9 +38,10 @@ const Analytics = () => {
         interviewed: '#8B5CF6',  // Purple
         selected: '#10B981',     // Green
         rejected: '#EF4444',     // Red
+        ghosted: '#94A3B8',      // Slate
     };
 
-    const PIE_COLORS = ['#3B82F6', '#F59E0B', '#8B5CF6', '#10B981', '#EF4444'];
+    const PIE_COLORS = ['#3B82F6', '#F59E0B', '#8B5CF6', '#10B981', '#EF4444', '#94A3B8'];
     const CATEGORY_COLORS = { internship: '#6366F1', hackathon: '#EC4899' };
 
     // Transform status data for pie chart
@@ -130,7 +131,7 @@ const Analytics = () => {
 
     return (
         <div className="min-h-screen bg-black p-4 sm:p-6">
-            <SEO 
+            <SEO
                 title="Analytics"
                 description="Visualize your application progress with charts and insights. Track success rates and identify trends."
                 canonical="/analytics"

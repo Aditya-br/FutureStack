@@ -29,6 +29,11 @@ const StatusColumn = ({ status, opportunities, onStatusChange, onDelete }) => {
       color: 'bg-red-500/5 border-red-500/20',
       headerColor: 'bg-red-600',
     },
+    ghosted: {
+      title: 'Ghosted',
+      color: 'bg-slate-500/5 border-slate-500/20',
+      headerColor: 'bg-slate-600',
+    },
   };
 
   const config = statusConfig[status] || {

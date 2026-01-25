@@ -51,6 +51,7 @@ export const generatePDF = (opportunities, statistics, exportType = 'all') => {
     `Interviewed: ${statistics.interviewed}`,
     `Selected: ${statistics.selected}`,
     `Rejected: ${statistics.rejected}`,
+    `Ghosted: ${statistics.ghosted}`,
   ];
 
   stats.forEach(stat => {

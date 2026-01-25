@@ -28,7 +28,8 @@ router.get('/', async (req, res) => {
             interviewed: 0,
             shortlisted: 0,
             selected: 0,
-            rejected: 0
+            rejected: 0,
+            ghosted: 0
         };
 
         // Calculate category counts
