@@ -34,31 +34,39 @@ const requireAuth = async (req, res, next) => {
         const token = authHeader.split(' ')[1];
 
         // Build verification options
-        // If CLERK_JWT_KEY is set, use networkless verification (no outbound HTTP needed)
-        // Otherwise fall back to secretKey which requires fetching JWKS from Clerk
+        let jwtKey = process.env.CLERK_JWT_KEY;
+
+        // Render sometimes saves newlines as literal '\n' strings which breaks PEM parsing
+        if (jwtKey && jwtKey.includes('\\n')) {
+            jwtKey = jwtKey.replace(/\\n/g, '\n');
+        }
+
         const verifyOptions = {};
 
-        if (process.env.CLERK_JWT_KEY) {
-            verifyOptions.jwtKey = process.env.CLERK_JWT_KEY;
+        if (jwtKey) {
+            verifyOptions.jwtKey = jwtKey;
+            console.log('Auth: Verifying strictly with local PEM key');
         } else {
             verifyOptions.secretKey = process.env.CLERK_SECRET_KEY;
+            console.log('Auth: CLERK_JWT_KEY missing or empty. Falling back to secretKey (NETWORK REQUEST REQUIRED)');
         }
 
         // Verify the JWT
         let payload;
         try {
+            console.log(`Auth: Token issuer check -> using options keys: ${Object.keys(verifyOptions)}`);
             payload = await verifyToken(token, verifyOptions);
         } catch (verifyError) {
             // If network verification fails, provide helpful error
             if (verifyError.message?.includes('fetch failed') ||
                 verifyError.message?.includes('ECONNREFUSED') ||
-                verifyError.message?.includes('ENOTFOUND')) {
+                verifyError.message?.includes('ENOTFOUND') ||
+                verifyError.message?.includes('fetch is not defined')) {
                 console.error('Auth: Network error verifying token — cannot reach Clerk API.', verifyError.message);
-                console.error('Auth: Set CLERK_JWT_KEY env var for networkless verification.');
-                console.error('Auth: Get the PEM key from Clerk Dashboard > API Keys > Advanced > PEM Public Key');
+                console.error('Auth: PLEASE CHECK YOUR RENDER ENV VARS. CLERK_JWT_KEY is not being applied correctly.');
                 return res.status(503).json({
                     error: 'Service Unavailable',
-                    message: 'Authentication service temporarily unavailable. Please try again in a moment.'
+                    message: 'Authentication service temporarily unavailable due to network restrictions. Please try again.'
                 });
             }
             throw verifyError; // Re-throw other errors (expired, malformed, etc.)
