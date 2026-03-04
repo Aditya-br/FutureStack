@@ -12,13 +12,10 @@ console.log(`Auth config: networkless verification ${hasJwtKey ? 'ENABLED (CLERK
 
 /**
  * Clerk JWT Authentication Middleware
- * Validates Bearer token and attaches user info to request.
+ * Validates Bearer token and attaches user info to request
  * 
- * Supports two verification modes:
- * 1. Network mode (default): Uses CLERK_SECRET_KEY to fetch JWKS from Clerk's API
- * 2. Networkless mode: Uses CLERK_JWT_KEY (PEM public key) for local verification
- *    - Get this from Clerk Dashboard > API Keys > Advanced > PEM Public Key
- *    - This avoids outbound HTTP requests and is more reliable on Render/Railway
+ * Uses jwtKey (PEM public key) for local verification to avoid network dependency.
+ * Get this from Clerk Dashboard > Configure > API Keys > Show JWT Public Key
  */
 const requireAuth = async (req, res, next) => {
     try {
@@ -34,6 +31,18 @@ const requireAuth = async (req, res, next) => {
         const token = authHeader.split(' ')[1];
 
         // Build verification options
+        const verifyOptions = {
+            secretKey: process.env.CLERK_SECRET_KEY
+        };
+
+        // Use JWT public key for local verification if available (recommended for production)
+        // This avoids network calls to Clerk's JWKS endpoint
+        if (process.env.CLERK_JWT_PUBLIC_KEY) {
+            verifyOptions.jwtKey = process.env.CLERK_JWT_PUBLIC_KEY;
+        }
+
+        // Verify the JWT
+        const payload = await verifyToken(token, verifyOptions);
         let jwtKey = process.env.CLERK_JWT_KEY;
 
         // Render sometimes saves newlines as literal '\n' strings which breaks PEM parsing
