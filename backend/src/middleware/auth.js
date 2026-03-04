@@ -6,9 +6,25 @@ const { supabase } = require('../lib/supabase');
 const userCache = new Map();
 const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 
-// Log configuration on startup
-const hasJwtKey = !!process.env.CLERK_JWT_KEY;
-console.log(`Auth config: networkless verification ${hasJwtKey ? 'ENABLED (CLERK_JWT_KEY set)' : 'DISABLED (no CLERK_JWT_KEY — will fetch JWKS from Clerk API)'}`);
+/**
+ * Normalize PEM key from environment variable
+ * Handles both multi-line PEM and single-line with escaped newlines (\n)
+ * Also strips surrounding quotes that some env parsers add
+ */
+function normalizePemKey(key) {
+    if (!key) return null;
+    
+    return key
+        .trim()
+        // Remove surrounding quotes (single or double) that some env parsers add
+        .replace(/^["']|["']$/g, '')
+        // Convert escaped newlines to actual newlines (common on Render, Railway, etc.)
+        .replace(/\\n/g, '\n');
+}
+
+// Log startup configuration (without exposing secrets)
+const jwtPublicKeyConfigured = !!process.env.CLERK_JWT_PUBLIC_KEY;
+console.log(`Auth: JWT public key configured: ${jwtPublicKeyConfigured} (networkless verification ${jwtPublicKeyConfigured ? 'enabled' : 'disabled'})`);
 
 /**
  * Clerk JWT Authentication Middleware
@@ -31,39 +47,21 @@ const requireAuth = async (req, res, next) => {
         const token = authHeader.split(' ')[1];
 
         // Build verification options
-        const verifyOptions = {
-            secretKey: process.env.CLERK_SECRET_KEY
-        };
+        const verifyOptions = {};
 
         // Use JWT public key for local verification if available (recommended for production)
         // This avoids network calls to Clerk's JWKS endpoint
-        if (process.env.CLERK_JWT_PUBLIC_KEY) {
-            verifyOptions.jwtKey = process.env.CLERK_JWT_PUBLIC_KEY;
-        }
-
-        // Verify the JWT
-        const payload = await verifyToken(token, verifyOptions);
-        let jwtKey = process.env.CLERK_JWT_KEY;
-
-        // Render sometimes saves newlines as literal '\n' strings which breaks PEM parsing
-        if (jwtKey && jwtKey.includes('\\n')) {
-            jwtKey = jwtKey.replace(/\\n/g, '\n');
-        }
-
-        const verifyOptions = {};
-
+        const jwtKey = normalizePemKey(process.env.CLERK_JWT_PUBLIC_KEY);
         if (jwtKey) {
             verifyOptions.jwtKey = jwtKey;
-            console.log('Auth: Verifying strictly with local PEM key');
         } else {
+            // Fallback to secret key (requires network call to Clerk)
             verifyOptions.secretKey = process.env.CLERK_SECRET_KEY;
-            console.log('Auth: CLERK_JWT_KEY missing or empty. Falling back to secretKey (NETWORK REQUEST REQUIRED)');
         }
 
         // Verify the JWT
         let payload;
         try {
-            console.log(`Auth: Token issuer check -> using options keys: ${Object.keys(verifyOptions)}`);
             payload = await verifyToken(token, verifyOptions);
         } catch (verifyError) {
             // If network verification fails, provide helpful error
@@ -72,10 +70,10 @@ const requireAuth = async (req, res, next) => {
                 verifyError.message?.includes('ENOTFOUND') ||
                 verifyError.message?.includes('fetch is not defined')) {
                 console.error('Auth: Network error verifying token — cannot reach Clerk API.', verifyError.message);
-                console.error('Auth: PLEASE CHECK YOUR RENDER ENV VARS. CLERK_JWT_KEY is not being applied correctly.');
+                console.error('Auth: Set CLERK_JWT_PUBLIC_KEY env var to enable local verification.');
                 return res.status(503).json({
                     error: 'Service Unavailable',
-                    message: 'Authentication service temporarily unavailable due to network restrictions. Please try again.'
+                    message: 'Authentication service temporarily unavailable. Please try again.'
                 });
             }
             throw verifyError; // Re-throw other errors (expired, malformed, etc.)
