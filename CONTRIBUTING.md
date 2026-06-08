@@ -53,14 +53,21 @@ Copy `.env.example` and `backend/.env.example` to `.env` files and fill in Clerk
 
 ### Before you request review
 
-```bash
-# Frontend tests
-npm test -- --watchAll=false
+See **[docs/TESTING.md](docs/TESTING.md)** for the full command list and smoke checklist.
 
-# Manual smoke test: sign in, open the page(s) you changed, test happy path + one edge case
+```bash
+npm run test:ci
+cd backend && npm test && cd ..
+npm run check:architecture
 ```
 
-If you changed backend routes or validation, restart the backend and hit the affected endpoints with a valid Clerk JWT.
+**Rules:**
+
+- **Route or validation changes** require tests in `backend/tests/` — CI will run them on every PR.
+- **No direct Supabase CRUD from the frontend** — use the Express API; `npm run check:architecture` enforces this.
+- Manual smoke test: sign in, open the page(s) you changed, test happy path + one edge case.
+
+If you changed backend routes without adding tests, request review only after adding coverage for the behavior you changed.
 
 ## What we look for in reviews
 

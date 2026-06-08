@@ -1,0 +1,100 @@
+# Testing Guide
+
+How to verify changes locally before opening or updating a PR, and what CI enforces on `main`.
+
+## Before every PR
+
+Run this from the repo root:
+
+```bash
+# Frontend — unit tests + production build
+npm run test:ci
+npm run build
+
+# Backend — API tests (mocked Supabase/Clerk; no secrets needed)
+cd backend && npm test && cd ..
+
+# Architecture guardrails
+npm run check:architecture
+```
+
+Set these env vars for local builds if they are not already in `.env`:
+
+```bash
+export REACT_APP_CLERK_PUBLISHABLE_KEY=pk_test_placeholder
+export REACT_APP_API_URL=http://localhost:3001/api
+```
+
+## If you changed…
+
+| Area changed | Required commands |
+|--------------|-------------------|
+| `src/utils/*` | `npm test -- <helper-name>` (e.g. `npm test -- dateHelpers`) |
+| `src/components/*` or `src/pages/*` | `npm run test:ci` + manual smoke steps below |
+| `backend/src/routes/*` or `backend/src/middleware/*` | `cd backend && npm test` — **add or update tests** in `backend/tests/` |
+| `backend/src/lib/validation.js` | `cd backend && npm test -- validation` |
+| `docs/*-migration.sql` | Manual: run migration on a dev Supabase project; document steps in the PR |
+
+### Backend route changes require tests
+
+Any change to `backend/src/routes/` or request validation must include tests under `backend/tests/`. CI runs `npm test` in `backend/` on every PR.
+
+### No direct Supabase CRUD from the frontend
+
+All data mutations and reads go through the Express API (`REACT_APP_API_URL`). The frontend Supabase client is for **realtime only** (`src/pages/StatusBoard.jsx`). `npm run check:architecture` fails if `supabase.from(` appears elsewhere in `src/`.
+
+## Manual smoke checklist
+
+Use this after automated tests pass:
+
+1. Start backend: `cd backend && npm run dev`
+2. Start frontend: `npm start` (separate terminal)
+3. Sign in with Clerk (Google, GitHub, or email)
+4. Open the page(s) you changed
+5. Exercise the happy path once
+6. Try one edge case (empty state, invalid input, expired deadline, etc.)
+7. If you touched auth or API wiring: hard-refresh and confirm data still loads on first paint
+
+## What CI runs
+
+GitHub Actions workflow [`.github/workflows/ci.yml`](../.github/workflows/ci.yml) runs on every PR to `main` and on pushes to `main`:
+
+| Job | What it does |
+|-----|----------------|
+| **CI / frontend** | `npm ci`, `npm run build`, `npm run test:ci` |
+| **CI / backend** | `cd backend && npm ci && npm test` |
+| **CI / architecture** | `npm run check:architecture` |
+| **CI / audit** | `npm audit --audit-level=high` (informational; does not block merge) |
+
+No Clerk or Supabase secrets are required in CI — backend tests mock auth and the database client.
+
+## Enable branch protection (maintainers)
+
+After this workflow is on `main`, require status checks so merges are blocked when CI fails:
+
+1. GitHub → **Settings** → **Branches** → branch protection rule for `main`
+2. Enable **Require status checks to pass before merging**
+3. Require at least:
+   - `CI / frontend`
+   - `CI / backend`
+   - `CI / architecture`
+4. Keep **Require pull request reviews** enabled for GSSoC assignment flow
+
+## Running a single test file
+
+```bash
+# Frontend
+npm test -- dateHelpers --watchAll=false
+
+# Backend
+cd backend && npm test -- opportunities
+```
+
+## Troubleshooting
+
+| Problem | Fix |
+|---------|-----|
+| `App.test.js` fails locally | Run `npm run test:ci` (not watch mode). Ensure `REACT_APP_*` env vars are set. |
+| Backend tests fail with missing env | Tests use defaults in `backend/tests/setup.js`; no real `.env` needed. |
+| `architecture-check` fails on `supabase.from` | Move data access to a backend route; frontend should call `src/services/api.js`. |
+| Build fails on Clerk key | Set `REACT_APP_CLERK_PUBLISHABLE_KEY` (any non-empty placeholder works for CI). |

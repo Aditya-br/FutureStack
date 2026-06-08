@@ -1,4 +1,13 @@
 import { render, screen, waitFor } from '@testing-library/react';
+
+// react-router-dom is mapped to src/testUtils/reactRouterDomMock.js via package.json jest.moduleNameMapper
+jest.mock('./hooks/useAuthToken', () => ({
+    useAuthToken: jest.fn(() => ({ isLoaded: true, isSignedIn: false })),
+}));
+jest.mock('./services/api', () => ({
+    setAuthTokenGetter: jest.fn(),
+}));
+
 import App from './App';
 
 test('renders FutureTracker application', () => {
@@ -12,8 +21,7 @@ test('renders FutureTracker application', () => {
 test('renders home page by default', async () => {
   render(<App />);
 
-  // Check for home page content
   await waitFor(() => {
-    expect(screen.getByText(/Build your future/i)).toBeInTheDocument();
+    expect(screen.getByText(/Build Your Future,/i)).toBeInTheDocument();
   });
 });
