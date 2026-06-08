@@ -37,7 +37,7 @@ describe('dateHelpers', () => {
 
     describe('formatDate', () => {
         it('formats valid dates', () => {
-            expect(formatDate('2026-06-08')).toMatch(/Jun/);
+            expect(formatDate('2026-06-08')).toBe('Jun 8, 2026');
         });
 
         it('returns empty string for falsy input', () => {

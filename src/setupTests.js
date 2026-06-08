@@ -1,6 +1,9 @@
 // jest-dom adds custom jest matchers for asserting on DOM nodes.
 import '@testing-library/jest-dom';
 
+// Stable "today" for date helper tests across contributor timezones.
+process.env.TZ = 'UTC';
+
 class IntersectionObserverMock {
     constructor() {}
     disconnect() {}

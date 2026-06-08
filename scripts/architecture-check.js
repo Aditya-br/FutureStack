@@ -16,6 +16,9 @@ const SUPABASE_FROM_ALLOWLIST = new Set([
     'src/pages/StatusBoard.jsx',
 ]);
 
+// Catches supabase.from(, supabase?.from(, supabase . from(, etc.
+const SUPABASE_FROM_PATTERN = /\bsupabase\s*(?:\?\.)?\s*\.?\s*from\s*\(/i;
+
 function walkDir(dir, files = []) {
     if (!fs.existsSync(dir)) return files;
     for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -74,7 +77,7 @@ function scanFrontendSrc() {
             errors.push(`${rel}: SUPABASE_SERVICE_ROLE must not appear in frontend`);
         }
 
-        if (content.includes('supabase.from(') && !SUPABASE_FROM_ALLOWLIST.has(rel)) {
+        if (SUPABASE_FROM_PATTERN.test(content) && !SUPABASE_FROM_ALLOWLIST.has(rel)) {
             errors.push(
                 `${rel}: direct supabase.from() — use the Express API (allowed only in ${[...SUPABASE_FROM_ALLOWLIST].join(', ')})`
             );
