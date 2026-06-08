@@ -1,0 +1,4 @@
+# Auto-request review on sensitive paths
+backend/src/middleware/   @Venkat-Kolasani
+backend/src/routes/       @Venkat-Kolasani
+docs/*-migration.sql      @Venkat-Kolasani
