@@ -21,7 +21,10 @@ Fixes #
 
 <!-- How did you verify this? Include steps a reviewer can repeat. -->
 
-- [ ] `npm test -- --watchAll=false` passes (frontend)
+- [ ] `npm run test:ci` passes (frontend)
+- [ ] `cd backend && npm test` passes (if API/backend changed)
+- [ ] Backend tests added/updated (if API changed)
+- [ ] `npm run check:architecture` passes locally
 - [ ] Tested locally with backend running (`cd backend && npm run dev`)
 - [ ] Signed in and smoke-tested affected page(s)
 - [ ] Checked mobile / responsive layout (if UI change)
@@ -38,3 +41,4 @@ Fixes #
 - [ ] Follows existing code style and patterns in this repo
 - [ ] Database migrations added under `docs/` if schema changed
 - [ ] No `console.log` debug noise left behind
+- [ ] Read [docs/TESTING.md](docs/TESTING.md) if unsure what CI expects
