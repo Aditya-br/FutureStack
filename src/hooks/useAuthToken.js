@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useLayoutEffect } from 'react';
 import { useAuth } from '@clerk/clerk-react';
 import { setAuthTokenGetter } from '../services/api';
 
@@ -16,13 +16,13 @@ export const useAuthToken = () => {
         return await getToken();
     }, [isSignedIn, getToken]);
 
-    // Set synchronously on every render (not in useEffect).
-    // This ensures getAuthToken is available before any child component's
-    // useEffect fires, eliminating the race condition where Dashboard/other
-    // pages fire API calls before the token getter is registered.
-    if (isLoaded) {
-        setAuthTokenGetter(tokenGetter);
-    }
+    // Register in commit phase before passive effects to avoid
+    // render-phase side effects under concurrent rendering.
+    useLayoutEffect(() => {
+        if (isLoaded) {
+            setAuthTokenGetter(tokenGetter);
+        }
+    }, [isLoaded, tokenGetter]);
 
     return { isLoaded, isSignedIn };
 };
