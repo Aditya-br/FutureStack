@@ -6,6 +6,8 @@
     "scripts": {
         "start": "node src/server.js",
         "dev": "nodemon src/server.js",
+        "test": "jest",
+        "test:ci": "jest --ci --coverage",
         "smoke:deps": "curl -fsS http://localhost:3001/api/health/deps | node -e \"const fs=require('fs');const d=JSON.parse(fs.readFileSync(0,'utf8'));if(d.status!=='ok'){console.error(JSON.stringify(d,null,2));process.exit(1)};console.log('Dependency health OK')\""
     },
     "keywords": [
@@ -29,6 +31,8 @@
         "multer": "^2.0.2"
     },
     "devDependencies": {
-        "nodemon": "^3.0.2"
+        "jest": "^29.7.0",
+        "nodemon": "^3.0.2",
+        "supertest": "^7.0.0"
     }
 }
