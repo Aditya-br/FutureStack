@@ -90,6 +90,13 @@ const InternshipList = () => {
     setSelectedOpportunity(null);
   };
 
+  const handleOpportunityUpdated = (updatedOpportunity) => {
+    setOpportunities((prev) =>
+      prev.map((opp) => (opp.id === updatedOpportunity.id ? updatedOpportunity : opp))
+    );
+    setSelectedOpportunity(updatedOpportunity);
+  };
+
   // Edit handler - closes detail modal and navigates to edit page
   const handleEdit = (id) => {
     setSelectedOpportunity(null);
@@ -222,6 +229,7 @@ const InternshipList = () => {
           onClose={handleCloseDetail}
           onEdit={handleEdit}
           onDelete={handleDeleteClick}
+          onOpportunityUpdated={handleOpportunityUpdated}
         />
 
         {/* Delete Confirmation Modal */}
