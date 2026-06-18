@@ -35,7 +35,7 @@ import {
     getNextRoundNumber,
     supportsInterviewRounds,
 } from '../../utils/roundHelpers';
-import { documentService, opportunityService, roundService } from '../../services/api';
+import { documentService, roundService } from '../../services/api';
 
 // Status badge color mappings
 const statusColors = {
@@ -91,17 +91,6 @@ const OpportunityDetailModal = ({
     useEffect(() => {
         setDisplayOpportunity(opportunity);
     }, [opportunity]);
-
-    const refreshOpportunityAndRounds = useCallback(async (opportunityId) => {
-        const [freshOpportunity, freshRounds] = await Promise.all([
-            opportunityService.getById(opportunityId),
-            roundService.list(opportunityId),
-        ]);
-        setDisplayOpportunity(freshOpportunity);
-        setRounds(freshRounds);
-        onOpportunityUpdated?.(freshOpportunity);
-        return { freshOpportunity, freshRounds };
-    }, [onOpportunityUpdated]);
 
     // Fetch attached documents for internships
     useEffect(() => {
@@ -202,19 +191,29 @@ const OpportunityDetailModal = ({
         setEditingRound(null);
     };
 
+    const applyRoundMutationResult = useCallback((result) => {
+        if (result?.opportunity) {
+            setDisplayOpportunity(result.opportunity);
+            onOpportunityUpdated?.(result.opportunity);
+        }
+        if (result?.rounds) {
+            setRounds(result.rounds);
+        }
+    }, [onOpportunityUpdated]);
+
     const handleRoundSubmit = async (payload) => {
+        const wasEditing = Boolean(editingRound);
+
         try {
             setRoundSaving(true);
-            if (editingRound) {
-                await roundService.update(displayOpportunity.id, editingRound.id, payload);
-                toast.success('Round updated');
-            } else {
-                await roundService.create(displayOpportunity.id, payload);
-                toast.success('Round added');
-            }
-            await refreshOpportunityAndRounds(displayOpportunity.id);
+            const result = wasEditing
+                ? await roundService.update(displayOpportunity.id, editingRound.id, payload)
+                : await roundService.create(displayOpportunity.id, payload);
+
+            applyRoundMutationResult(result);
             setRoundModalOpen(false);
             setEditingRound(null);
+            toast.success(wasEditing ? 'Round updated' : 'Round added');
         } catch (error) {
             console.error('Error saving round:', error);
             toast.error(error.response?.data?.error || 'Failed to save round');
@@ -227,9 +226,9 @@ const OpportunityDetailModal = ({
         if (!window.confirm(`Delete Round ${round.round_number}?`)) return;
 
         try {
-            await roundService.delete(displayOpportunity.id, round.id);
+            const result = await roundService.delete(displayOpportunity.id, round.id);
+            applyRoundMutationResult(result);
             toast.success('Round deleted');
-            await refreshOpportunityAndRounds(displayOpportunity.id);
         } catch (error) {
             console.error('Error deleting round:', error);
             toast.error(error.response?.data?.error || 'Failed to delete round');
