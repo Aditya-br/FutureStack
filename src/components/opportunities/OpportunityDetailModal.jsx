@@ -169,6 +169,16 @@ const OpportunityDetailModal = ({
         };
     }, [isOpen]);
 
+    const applyRoundMutationResult = useCallback((result) => {
+        if (result?.opportunity) {
+            setDisplayOpportunity(result.opportunity);
+            onOpportunityUpdated?.(result.opportunity);
+        }
+        if (result?.rounds) {
+            setRounds(result.rounds);
+        }
+    }, [onOpportunityUpdated]);
+
     if (!isOpen || !displayOpportunity) return null;
 
     const daysRemaining = getDaysRemaining(displayOpportunity.deadline);
@@ -190,16 +200,6 @@ const OpportunityDetailModal = ({
         setRoundModalOpen(false);
         setEditingRound(null);
     };
-
-    const applyRoundMutationResult = useCallback((result) => {
-        if (result?.opportunity) {
-            setDisplayOpportunity(result.opportunity);
-            onOpportunityUpdated?.(result.opportunity);
-        }
-        if (result?.rounds) {
-            setRounds(result.rounds);
-        }
-    }, [onOpportunityUpdated]);
 
     const handleRoundSubmit = async (payload) => {
         const wasEditing = Boolean(editingRound);
