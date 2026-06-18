@@ -4,11 +4,12 @@ import {
     LineChart, Line, XAxis, YAxis, CartesianGrid,
     BarChart, Bar
 } from 'recharts';
-import { FaChartPie, FaChartLine, FaFilter, FaCalendarAlt, FaTrophy } from 'react-icons/fa';
+import { FaChartPie, FaChartLine, FaFilter, FaCalendarAlt, FaTrophy, FaLayerGroup } from 'react-icons/fa';
 import SEO from '../components/seo/SEO';
 import Card from '../components/common/Card';
 import EmptyState from '../components/common/EmptyState';
 import { SkeletonChart } from '../components/common/LoadingSpinner';
+import InterviewRejectionInsights from '../components/analytics/InterviewRejectionInsights';
 import { analyticsService } from '../services/api';
 
 const Analytics = () => {
@@ -419,6 +420,20 @@ const Analytics = () => {
                         <span>More</span>
                     </div>
                 </Card>
+
+                {/* Interview pipeline — where rejections happen */}
+                <div className="mb-8">
+                    <div className="mb-4">
+                        <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                            <FaLayerGroup className="text-red-400" />
+                            Interview pipeline insights
+                        </h2>
+                        <p className="text-sm text-gray-400 mt-1">
+                            See which round and stage type you were rejected at across internships
+                        </p>
+                    </div>
+                    <InterviewRejectionInsights pipeline={analytics.pipelineAnalytics} />
+                </div>
             </div>
         </div>
     );

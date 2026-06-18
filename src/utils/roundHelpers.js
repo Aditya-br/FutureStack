@@ -105,6 +105,62 @@ export const getRoundSummaryStyle = (opportunity) => {
   return 'bg-gray-500/10 text-gray-400 border-gray-500/20';
 };
 
+/** Lookup rejection stage from analytics pipeline rejections list. */
+export const getRejectionStageForOpportunity = (opportunityId, pipelineAnalytics) => {
+  const match = pipelineAnalytics?.rejections?.find((item) => item.opportunityId === opportunityId);
+  return match?.roundTypeLabel || null;
+};
+
+/** Narrow pipeline analytics to a subset of opportunities (e.g. selected PDF export). */
+export const filterPipelineAnalyticsForOpportunities = (pipelineAnalytics, opportunities) => {
+  if (!pipelineAnalytics?.rejections?.length || !opportunities?.length) {
+    return pipelineAnalytics;
+  }
+
+  const idSet = new Set(opportunities.map((o) => o.id));
+  const rejections = pipelineAnalytics.rejections.filter((r) => idSet.has(r.opportunityId));
+
+  if (rejections.length === pipelineAnalytics.rejections.length) {
+    return pipelineAnalytics;
+  }
+
+  const rejectionByRoundNumber = {};
+  const rejectionByRoundType = {};
+  let roundsBeforeRejectionSum = 0;
+  let rejectionWithRoundNumber = 0;
+
+  for (const item of rejections) {
+    if (item.roundNumber) {
+      rejectionByRoundNumber[item.roundNumber] = (rejectionByRoundNumber[item.roundNumber] || 0) + 1;
+      rejectionWithRoundNumber += 1;
+      roundsBeforeRejectionSum += item.roundNumber;
+    }
+    if (item.roundType) {
+      rejectionByRoundType[item.roundType] = (rejectionByRoundType[item.roundType] || 0) + 1;
+    }
+  }
+
+  return {
+    ...pipelineAnalytics,
+    rejectedCount: rejections.length,
+    averageRoundsBeforeRejection:
+      rejectionWithRoundNumber > 0
+        ? Math.round((roundsBeforeRejectionSum / rejectionWithRoundNumber) * 10) / 10
+        : null,
+    rejectionByRoundNumber: Object.entries(rejectionByRoundNumber)
+      .map(([roundNumber, count]) => ({ roundNumber: Number(roundNumber), count }))
+      .sort((a, b) => a.roundNumber - b.roundNumber),
+    rejectionByRoundType: Object.entries(rejectionByRoundType)
+      .map(([roundType, count]) => ({
+        roundType,
+        label: getRoundTypeLabel(roundType),
+        count
+      }))
+      .sort((a, b) => b.count - a.count),
+    rejections
+  };
+};
+
 export const ROUND_RESULT_HINTS = {
   pending: 'Scheduled or awaiting outcome',
   cleared: 'Passed — you can add the next round',

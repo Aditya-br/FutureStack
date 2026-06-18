@@ -138,6 +138,28 @@ src/services/api.js           # roundService
 
 ---
 
+## Analytics & reports
+
+`GET /api/analytics` includes `pipelineAnalytics` — built server-side from internship opportunities and their rounds in **one batched query** (no per-internship round fetches).
+
+| Field | Meaning |
+|-------|---------|
+| `rejectedCount` | Internships with `status: rejected` |
+| `averageRoundsBeforeRejection` | Mean `rejected_round_number` across rejections |
+| `rejectionByRoundNumber` | Histogram: which round number you were cut at |
+| `rejectionByRoundType` | Histogram: OA, technical, HR, etc. |
+| `rejections` | Per-internship log: title, stage label (`Round 2 · Technical Interview`), rounds cleared before |
+
+**UI surfaces:**
+
+- **Analytics** (`InterviewRejectionInsights`) — metric cards, bar charts, rejection log table
+- **Reports** — same insights (compact), per-opportunity “Rejected at” in preview; PDF includes pipeline summary + per-internship stage
+
+**Backend:** `backend/src/lib/interviewPipelineAnalytics.js`  
+**Frontend:** `src/components/analytics/InterviewRejectionInsights.jsx`
+
+---
+
 ## Testing
 
 ```bash

@@ -1,5 +1,6 @@
 const express = require('express');
 const { supabase } = require('../lib/supabase');
+const { buildInterviewPipelineAnalytics } = require('../lib/interviewPipelineAnalytics');
 
 const router = express.Router();
 
@@ -17,10 +18,28 @@ router.get('/', async (req, res) => {
         // Get all opportunities for the user with deadline included
         const { data: opportunities, error } = await supabase
             .from('opportunities')
-            .select('status, category, created_at, deadline')
+            .select('id, title, status, category, created_at, deadline, rejected_round_number, current_round_number')
             .eq('user_id', userId);
 
         if (error) throw error;
+
+        const internshipIds = opportunities
+            .filter((opp) => opp.category === 'internship')
+            .map((opp) => opp.id);
+
+        let rounds = [];
+        if (internshipIds.length > 0) {
+            const { data: roundsData, error: roundsError } = await supabase
+                .from('opportunity_rounds')
+                .select('opportunity_id, round_number, round_type, result')
+                .eq('user_id', userId)
+                .in('opportunity_id', internshipIds);
+
+            if (roundsError) throw roundsError;
+            rounds = roundsData || [];
+        }
+
+        const pipelineAnalytics = buildInterviewPipelineAnalytics(opportunities, rounds);
 
         // Calculate status counts
         const statusCounts = {
@@ -147,7 +166,8 @@ router.get('/', async (req, res) => {
             weeklyBreakdown: weeklyData,
             monthlyBreakdown: monthlyData,
             deadlineDistribution,
-            funnelData
+            funnelData,
+            pipelineAnalytics
         });
     } catch (error) {
         console.error('Error fetching analytics:', error.message);
