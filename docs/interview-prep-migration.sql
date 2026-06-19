@@ -115,6 +115,7 @@ CREATE TABLE IF NOT EXISTS technical_topics (
   prep_id UUID REFERENCES interview_prep(id) ON DELETE CASCADE NOT NULL,
   topic TEXT NOT NULL,
   priority TEXT CHECK (priority IN ('low', 'medium', 'high')) DEFAULT 'medium',
+  priority_order INTEGER DEFAULT 2,
   is_reviewed BOOLEAN DEFAULT FALSE,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
@@ -230,7 +231,7 @@ CREATE INDEX IF NOT EXISTS idx_interview_prep_opportunity_id ON interview_prep(o
 CREATE INDEX IF NOT EXISTS idx_interview_prep_user_id ON interview_prep(user_id);
 CREATE INDEX IF NOT EXISTS idx_interview_questions_prep_id ON interview_questions(prep_id);
 CREATE INDEX IF NOT EXISTS idx_technical_topics_prep_id ON technical_topics(prep_id);
-CREATE INDEX IF NOT EXISTS idx_technical_topics_priority ON technical_topics(priority);
+CREATE INDEX IF NOT EXISTS idx_technical_topics_priority_order ON technical_topics(priority_order);
 CREATE INDEX IF NOT EXISTS idx_behavioral_prep_prep_id ON behavioral_prep(prep_id);
 
 -- =============================================================================

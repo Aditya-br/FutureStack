@@ -21,22 +21,26 @@ const TechnicalTopicsPanel = ({ topics, onCreateTopic, onUpdateTopic, onDeleteTo
     const [showAddForm, setShowAddForm] = useState(false);
     const [editingId, setEditingId] = useState(null);
     const [formData, setFormData] = useState({ topic: '', priority: 'medium', is_reviewed: false });
+    const [error, setError] = useState(null);
 
     const resetForm = () => {
         setFormData({ topic: '', priority: 'medium', is_reviewed: false });
         setShowAddForm(false);
         setEditingId(null);
+        setError(null);
     };
 
     const handleAdd = async (e) => {
         e.preventDefault();
         if (!formData.topic.trim()) return;
+        setError(null);
 
         try {
             await onCreateTopic(formData);
             resetForm();
         } catch (error) {
             console.error('Error adding topic:', error);
+            setError(error.message || 'Failed to add topic. Please try again.');
         }
     };
 
@@ -193,14 +197,16 @@ const TechnicalTopicsPanel = ({ topics, onCreateTopic, onUpdateTopic, onDeleteTo
                             <div className="flex items-center gap-1 shrink-0">
                                 <button
                                     onClick={() => handleEdit(t)}
-                                    className="p-1.5 text-gray-400 hover:text-white hover:bg-white/10 rounded transition-colors"
+                                    disabled={isLoading}
+                                    className="p-1.5 text-gray-400 hover:text-white hover:bg-white/10 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                     title="Edit"
                                 >
                                     <FaEdit size={12} />
                                 </button>
                                 <button
                                     onClick={() => handleDelete(t.id)}
-                                    className="p-1.5 text-gray-400 hover:text-red-400 hover:bg-white/10 rounded transition-colors"
+                                    disabled={isLoading}
+                                    className="p-1.5 text-gray-400 hover:text-red-400 hover:bg-white/10 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                     title="Delete"
                                 >
                                     <FaTrash size={12} />

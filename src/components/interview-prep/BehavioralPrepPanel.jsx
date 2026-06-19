@@ -19,22 +19,26 @@ const BehavioralPrepPanel = ({ behavioral, onCreateBehavioral, onUpdateBehaviora
         action: '',
         result: ''
     });
+    const [error, setError] = useState(null);
 
     const resetForm = () => {
         setFormData({ question: '', situation: '', task: '', action: '', result: '' });
         setShowAddForm(false);
         setEditingId(null);
+        setError(null);
     };
 
     const handleAdd = async (e) => {
         e.preventDefault();
         if (!formData.question.trim()) return;
+        setError(null);
 
         try {
             await onCreateBehavioral(formData);
             resetForm();
         } catch (error) {
             console.error('Error adding behavioral prep:', error);
+            setError(error.message || 'Failed to add behavioral prep entry. Please try again.');
         }
     };
 
@@ -195,14 +199,16 @@ const BehavioralPrepPanel = ({ behavioral, onCreateBehavioral, onUpdateBehaviora
                                 <div className="flex items-center gap-1 shrink-0">
                                     <button
                                         onClick={() => handleEdit(entry)}
-                                        className="p-1.5 text-gray-400 hover:text-white hover:bg-white/10 rounded transition-colors"
+                                        disabled={isLoading}
+                                        className="p-1.5 text-gray-400 hover:text-white hover:bg-white/10 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                         title="Edit"
                                     >
                                         <FaEdit size={12} />
                                     </button>
                                     <button
                                         onClick={() => handleDelete(entry.id)}
-                                        className="p-1.5 text-gray-400 hover:text-red-400 hover:bg-white/10 rounded transition-colors"
+                                        disabled={isLoading}
+                                        className="p-1.5 text-gray-400 hover:text-white hover:bg-white/10 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                         title="Delete"
                                     >
                                         <FaTrash size={12} />

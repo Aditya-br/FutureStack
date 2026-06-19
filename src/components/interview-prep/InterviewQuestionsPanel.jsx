@@ -14,22 +14,26 @@ const InterviewQuestionsPanel = ({ questions, onCreateQuestion, onUpdateQuestion
     const [showAddForm, setShowAddForm] = useState(false);
     const [editingId, setEditingId] = useState(null);
     const [formData, setFormData] = useState({ question: '', answer: '', is_prepared: false });
+    const [error, setError] = useState(null);
 
     const resetForm = () => {
         setFormData({ question: '', answer: '', is_prepared: false });
         setShowAddForm(false);
         setEditingId(null);
+        setError(null);
     };
 
     const handleAdd = async (e) => {
         e.preventDefault();
         if (!formData.question.trim()) return;
+        setError(null);
 
         try {
             await onCreateQuestion(formData);
             resetForm();
         } catch (error) {
             console.error('Error adding question:', error);
+            setError(error.message || 'Failed to add question. Please try again.');
         }
     };
 
@@ -91,6 +95,11 @@ const InterviewQuestionsPanel = ({ questions, onCreateQuestion, onUpdateQuestion
             {/* Add/Edit Form */}
             {(showAddForm || editingId) && (
                 <form onSubmit={editingId ? handleUpdate : handleAdd} className="mb-6 bg-white/5 rounded-lg p-4 border border-white/10">
+                    {error && (
+                        <div className="mb-3 p-2 bg-red-500/10 border border-red-500/20 rounded text-sm text-red-400">
+                            {error}
+                        </div>
+                    )}
                     <div className="space-y-4">
                         <div>
                             <label className="block text-sm font-medium text-gray-300 mb-1">Question</label>
@@ -165,14 +174,16 @@ const InterviewQuestionsPanel = ({ questions, onCreateQuestion, onUpdateQuestion
                                 <div className="flex items-center gap-1 shrink-0">
                                     <button
                                         onClick={() => handleEdit(q)}
-                                        className="p-1.5 text-gray-400 hover:text-white hover:bg-white/10 rounded transition-colors"
+                                        disabled={isLoading}
+                                        className="p-1.5 text-gray-400 hover:text-white hover:bg-white/10 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                         title="Edit"
                                     >
                                         <FaEdit size={12} />
                                     </button>
                                     <button
                                         onClick={() => handleDelete(q.id)}
-                                        className="p-1.5 text-gray-400 hover:text-red-400 hover:bg-white/10 rounded transition-colors"
+                                        disabled={isLoading}
+                                        className="p-1.5 text-gray-400 hover:text-white hover:bg-white/10 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                         title="Delete"
                                     >
                                         <FaTrash size={12} />

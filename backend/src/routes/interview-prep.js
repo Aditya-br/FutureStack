@@ -138,7 +138,7 @@ router.get("/:opportunityId", async (req, res) => {
         .from("technical_topics")
         .select("*")
         .eq("prep_id", prep.id)
-        .order("priority", { ascending: false }),
+        .order("created_at", { ascending: true }),
       supabase
         .from("behavioral_prep")
         .select("*")
