@@ -1,8 +1,8 @@
 /**
  * CompanyResearchPanel - Company research notes with autosave
- * 
+ *
  * Features:
- * - Rich-text notes area for company research
+ * - Text area for company research notes
  * - Debounced autosave
  * - Save indicator
  */

@@ -1,6 +1,6 @@
 /**
  * PrepProgressBar - Progress indicator for interview preparation
- * 
+ *
  * Features:
  * - Shows progress based on completed items
  * - Visual progress bar with percentage
@@ -13,19 +13,16 @@ const PrepProgressBar = ({ questions, topics, behavioral }) => {
     // Calculate progress for each category
     const questionsPrepared = questions.filter(q => q.is_prepared).length;
     const questionsTotal = questions.length;
-    const questionsProgress = questionsTotal > 0 ? (questionsPrepared / questionsTotal) * 100 : 0;
 
     const topicsReviewed = topics.filter(t => t.is_reviewed).length;
     const topicsTotal = topics.length;
-    const topicsProgress = topicsTotal > 0 ? (topicsReviewed / topicsTotal) * 100 : 0;
 
-    const behavioralComplete = behavioral.filter(b => 
+    const behavioralComplete = behavioral.filter(b =>
         b.situation && b.task && b.action && b.result
     ).length;
     const behavioralTotal = behavioral.length;
-    const behavioralProgress = behavioralTotal > 0 ? (behavioralComplete / behavioralTotal) * 100 : 0;
 
-    // Overall progress (weighted average)
+    // Overall progress
     const totalItems = questionsTotal + topicsTotal + behavioralTotal;
     const completedItems = questionsPrepared + topicsReviewed + behavioralComplete;
     const overallProgress = totalItems > 0 ? (completedItems / totalItems) * 100 : 0;

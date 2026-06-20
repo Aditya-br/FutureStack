@@ -86,16 +86,7 @@ const InterviewPrepDetail = () => {
             // Load interview prep data
             try {
                 const prepData = await interviewPrepService.getPrep(id);
-                setPrep(prepData.prep);
-                setQuestions(prepData.questions || []);
-                setTopics(prepData.topics || []);
-                setBehavioral(prepData.behavioral || []);
-            } catch (prepError) {
-                // If tables don't exist, show empty state (user needs to run migration)
-                if (prepError.response?.status === 503) {
-                    console.warn('Interview prep tables not set up yet');
-                    toast.info('Interview preparation features require database setup. See docs for migration SQL.');
-                } else if (prepError.response?.status === 404 || !prepError.response?.data?.prep) {
+                if (!prepData.prep) {
                     // Auto-create prep record if it doesn't exist
                     try {
                         const newPrep = await interviewPrepService.createPrep(id, {});
@@ -110,6 +101,21 @@ const InterviewPrepDetail = () => {
                         setTopics([]);
                         setBehavioral([]);
                     }
+                } else {
+                    setPrep(prepData.prep);
+                    setQuestions(prepData.questions || []);
+                    setTopics(prepData.topics || []);
+                    setBehavioral(prepData.behavioral || []);
+                }
+            } catch (prepError) {
+                // If tables don't exist, show empty state (user needs to run migration)
+                if (prepError.response?.status === 503) {
+                    console.warn('Interview prep tables not set up yet');
+                    toast.info('Interview preparation features require database setup. See docs for migration SQL.');
+                    setPrep(null);
+                    setQuestions([]);
+                    setTopics([]);
+                    setBehavioral([]);
                 } else {
                     throw prepError;
                 }

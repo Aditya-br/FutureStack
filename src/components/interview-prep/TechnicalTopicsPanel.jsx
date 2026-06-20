@@ -8,7 +8,7 @@
  * - Progress indicator
  */
 import React, { useState } from 'react';
-import { FaCode, FaPlus, FaEdit, FaTrash, FaCheck, FaArrowUp } from 'react-icons/fa';
+import { FaCode, FaPlus, FaEdit, FaTrash, FaCheck } from 'react-icons/fa';
 import Button from '../common/Button';
 
 const priorityColors = {
@@ -122,6 +122,11 @@ const TechnicalTopicsPanel = ({ topics, onCreateTopic, onUpdateTopic, onDeleteTo
             {/* Add/Edit Form */}
             {(showAddForm || editingId) && (
                 <form onSubmit={editingId ? handleUpdate : handleAdd} className="mb-6 bg-white/5 rounded-lg p-4 border border-white/10">
+                    {error && (
+                        <div className="mb-3 p-2 bg-red-500/10 border border-red-500/20 rounded text-sm text-red-400">
+                            {error}
+                        </div>
+                    )}
                     <div className="space-y-4">
                         <div>
                             <label className="block text-sm font-medium text-gray-300 mb-1">Topic</label>

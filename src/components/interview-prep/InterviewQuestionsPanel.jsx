@@ -7,7 +7,7 @@
  * - "Prepared" toggle
  */
 import React, { useState } from 'react';
-import { FaQuestionCircle, FaPlus, FaEdit, FaTrash, FaCheck, FaTimes } from 'react-icons/fa';
+import { FaQuestionCircle, FaPlus, FaEdit, FaTrash, FaCheck } from 'react-icons/fa';
 import Button from '../common/Button';
 
 const InterviewQuestionsPanel = ({ questions, onCreateQuestion, onUpdateQuestion, onDeleteQuestion, isLoading }) => {
