@@ -155,7 +155,7 @@ describe('Interview Prep API', () => {
             is_prepared: false,
         };
 
-        mockFrom.mockReturnValue(
+        mockFrom.mockReturnValueOnce(
             createChain({ data: prep, error: null })
         );
 
@@ -173,7 +173,7 @@ describe('Interview Prep API', () => {
     });
 
     it('POST /api/interview-prep/:opportunityId/questions returns 404 when prep does not exist', async () => {
-        mockFrom.mockReturnValue(
+        mockFrom.mockReturnValueOnce(
             createChain({ data: null, error: { code: 'PGRST116' } })
         );
 
@@ -201,7 +201,7 @@ describe('Interview Prep API', () => {
             is_reviewed: false,
         };
 
-        mockFrom.mockReturnValue(
+        mockFrom.mockReturnValueOnce(
             createChain({ data: prep, error: null })
         );
 
@@ -235,7 +235,7 @@ describe('Interview Prep API', () => {
             result: 'Delivered on time with high quality',
         };
 
-        mockFrom.mockReturnValue(
+        mockFrom.mockReturnValueOnce(
             createChain({ data: prep, error: null })
         );
 

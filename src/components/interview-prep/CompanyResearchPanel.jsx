@@ -7,6 +7,7 @@
  * - Save indicator
  */
 import React, { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 import { FaBuilding, FaSave } from 'react-icons/fa';
 
 const CompanyResearchPanel = ({ prep, onUpdate, isLoading }) => {
@@ -34,6 +35,7 @@ const CompanyResearchPanel = ({ prep, onUpdate, isLoading }) => {
                 await onUpdate({ company_research: newNotes });
             } catch (error) {
                 console.error('Error saving company research:', error);
+                toast.error('Could not save company research. Please try again.');
             } finally {
                 setIsSaving(false);
             }

@@ -79,7 +79,7 @@ const BehavioralPrepPanel = ({ behavioral, onCreateBehavioral, onUpdateBehaviora
         resetForm();
     };
 
-    const isComplete = (entry) => entry.situation && entry.task && entry.action && entry.result;
+    const isComplete = (entry) => entry.situation?.trim() && entry.task?.trim() && entry.action?.trim() && entry.result?.trim();
 
     return (
         <div className="bg-[#0A0A0A] rounded-xl p-6 border border-white/10">

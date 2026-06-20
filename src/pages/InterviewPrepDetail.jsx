@@ -96,6 +96,7 @@ const InterviewPrepDetail = () => {
                         setBehavioral([]);
                     } catch (createError) {
                         console.error('Error creating prep record:', createError);
+                        toast.error('Failed to create interview prep. Please try again.');
                         setPrep(null);
                         setQuestions([]);
                         setTopics([]);
@@ -137,6 +138,7 @@ const InterviewPrepDetail = () => {
             setPrep(updated);
         } catch (error) {
             console.error('Error updating prep:', error);
+            toast.error('Failed to save. Please try again.');
         }
     };
 
@@ -149,6 +151,7 @@ const InterviewPrepDetail = () => {
             toast.success('Question added!');
         } catch (error) {
             console.error('Error creating question:', error);
+            toast.error(error.response?.data?.error || 'Failed to add question. Please try again.');
         } finally {
             setIsLoading(false);
         }
@@ -160,6 +163,7 @@ const InterviewPrepDetail = () => {
             setQuestions(questions.map(q => q.id === questionId ? updated : q));
         } catch (error) {
             console.error('Error updating question:', error);
+            toast.error(error.response?.data?.error || 'Failed to update question. Please try again.');
         }
     };
 
@@ -170,6 +174,7 @@ const InterviewPrepDetail = () => {
             toast.success('Question deleted');
         } catch (error) {
             console.error('Error deleting question:', error);
+            toast.error(error.response?.data?.error || 'Failed to delete question. Please try again.');
         }
     };
 
@@ -182,6 +187,7 @@ const InterviewPrepDetail = () => {
             toast.success('Topic added!');
         } catch (error) {
             console.error('Error creating topic:', error);
+            toast.error(error.response?.data?.error || 'Failed to add topic. Please try again.');
         } finally {
             setIsLoading(false);
         }
@@ -193,6 +199,7 @@ const InterviewPrepDetail = () => {
             setTopics(topics.map(t => t.id === topicId ? updated : t));
         } catch (error) {
             console.error('Error updating topic:', error);
+            toast.error(error.response?.data?.error || 'Failed to update topic. Please try again.');
         }
     };
 
@@ -203,6 +210,7 @@ const InterviewPrepDetail = () => {
             toast.success('Topic deleted');
         } catch (error) {
             console.error('Error deleting topic:', error);
+            toast.error(error.response?.data?.error || 'Failed to delete topic. Please try again.');
         }
     };
 
@@ -215,6 +223,7 @@ const InterviewPrepDetail = () => {
             toast.success('Behavioral entry added!');
         } catch (error) {
             console.error('Error creating behavioral entry:', error);
+            toast.error(error.response?.data?.error || 'Failed to add behavioral entry. Please try again.');
         } finally {
             setIsLoading(false);
         }
@@ -226,6 +235,7 @@ const InterviewPrepDetail = () => {
             setBehavioral(behavioral.map(b => b.id === behavioralId ? updated : b));
         } catch (error) {
             console.error('Error updating behavioral entry:', error);
+            toast.error(error.response?.data?.error || 'Failed to update behavioral entry. Please try again.');
         }
     };
 
@@ -236,6 +246,7 @@ const InterviewPrepDetail = () => {
             toast.success('Behavioral entry deleted');
         } catch (error) {
             console.error('Error deleting behavioral entry:', error);
+            toast.error(error.response?.data?.error || 'Failed to delete behavioral entry. Please try again.');
         }
     };
 

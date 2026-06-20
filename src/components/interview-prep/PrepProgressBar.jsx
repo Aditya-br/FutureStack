@@ -49,6 +49,13 @@ const PrepProgressBar = ({ questions, topics, behavioral }) => {
                 />
             </div>
 
+            {/* Empty State Helper Text */}
+            {totalItems === 0 && (
+                <div className="text-center mb-4">
+                    <p className="text-xs text-gray-500">Add items in Questions, Topics, or Behavioral to track progress</p>
+                </div>
+            )}
+
             {/* Category Breakdown */}
             <div className="grid grid-cols-3 gap-3">
                 {/* Questions */}

@@ -1,12 +1,13 @@
 /**
  * ReflectionPanel - Post-interview reflection notes
- * 
+ *
  * Features:
- * - Rich-text notes area for reflection
+ * - Text area for reflection notes
  * - Debounced autosave
  * - Save indicator
  */
 import React, { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 import { FaLightbulb, FaSave } from 'react-icons/fa';
 
 const ReflectionPanel = ({ prep, onUpdate, isLoading }) => {
@@ -34,6 +35,7 @@ const ReflectionPanel = ({ prep, onUpdate, isLoading }) => {
                 await onUpdate({ reflection_notes: newNotes });
             } catch (error) {
                 console.error('Error saving reflection notes:', error);
+                toast.error('Could not save reflection notes. Please try again.');
             } finally {
                 setIsSaving(false);
             }
